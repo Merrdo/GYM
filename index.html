@@ -30,6 +30,8 @@
     --pt: 52px;   /* başlıkların üst boşluğu */
     --pb: 36px;   /* butonların ekran altından yüksekliği */
   }
+  /* Tarayıcıda (kurulu uygulama değil) Safari kendi çubuklarını yönetir; boşluklar küçülür */
+  html.browser { --pt: 24px; --pb: 20px; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   /* Tam ekran düzeni: html/body/stage yapısı korunuyor */
@@ -128,21 +130,23 @@
   .backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.55); opacity: 0; pointer-events: none; transition: opacity .35s var(--ease); z-index: 10; }
   .sheet-wrap.open .backdrop { opacity: 1; pointer-events: auto; }
   .sheet {
-    position: absolute; left: 0; right: 0; bottom: 0; z-index: 11;
-    max-height: 92%; display: flex; flex-direction: column;
+    position: absolute; left: 0; right: 0; bottom: var(--kb, 0px); z-index: 11;
+    /* Klavye açılınca sayfa klavyenin üstüne oturur ve görünen alana sığar */
+    max-height: min(calc(var(--full-h, 100%) * .92), calc(var(--vvh, var(--full-h, 100%)) - 20px));
+    display: flex; flex-direction: column;
     background: var(--surface); border-radius: 26px 26px 0 0;
     transform: translateY(105%); visibility: hidden;
-    transition: transform .45s var(--ease), visibility 0s .45s;
+    transition: transform .45s var(--ease), bottom .34s cubic-bezier(.22,.8,.3,1), max-height .34s cubic-bezier(.22,.8,.3,1), visibility 0s .45s;
   }
-  .sheet-wrap.open .sheet { transform: none; visibility: visible; transition: transform .45s var(--ease), visibility 0s 0s; }
+  .sheet-wrap.open .sheet { transform: none; visibility: visible; transition: transform .45s var(--ease), bottom .34s cubic-bezier(.22,.8,.3,1), max-height .34s cubic-bezier(.22,.8,.3,1), visibility 0s 0s; }
   .grab { width: 38px; height: 4px; border-radius: 2px; background: rgba(255,255,255,.18); margin: 10px auto 0; flex: none; }
   .sh-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px 8px; flex: none; }
   .sh-head h2 { font-size: 1.25rem; letter-spacing: -.02em; }
   .sh-head .icon-btn { background: var(--surface2); width: 36px; height: 36px; }
   .sh-head .icon-btn svg { width: 16px; height: 16px; }
   .sh-body { overflow-y: auto; overscroll-behavior: contain; padding: 8px 20px 12px; flex: 1; }
-  .kb .sh-body { padding-bottom: 42vh; }
-  .sh-foot { padding: 10px 20px var(--pb); display: flex; flex-direction: column; gap: 8px; flex: none; }
+  html.kbd .sh-foot { padding-bottom: 12px; }
+  .sh-foot { transition: padding .34s cubic-bezier(.22,.8,.3,1); padding: 10px 20px var(--pb); display: flex; flex-direction: column; gap: 8px; flex: none; }
   .ghost { height: 46px; border-radius: 14px; font-weight: 600; color: var(--danger); transition: background .2s, transform .15s var(--ease); }
   .ghost:active { transform: scale(.97); }
   .ghost.confirm { background: rgba(255,106,94,.14); }
@@ -298,7 +302,7 @@
   function hide(layer) {
     if (layer === 'sheet') {
       $('#sheetWrap').classList.remove('open');
-      stage.classList.remove('kb');
+      document.documentElement.style.setProperty('--kb', '0px');
       if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
     } else if (layer === 'group') {
       stage.classList.remove('in-group');
@@ -340,13 +344,34 @@
     push('sheet');
   }
   $('#shClose').onclick = $('#backdrop').onclick = function () { closeTo(stack.length - 1); };
+  // Klavye: görünür alana göre sayfayı yumuşakça yukarı taşır (zıplama yok)
+  var vv = window.visualViewport, kbRaf = 0, kbTimer;
+  function applyKb() {
+    kbRaf = 0;
+    var root = document.documentElement, h = window.innerHeight;
+    var kb = vv ? Math.max(0, h - vv.height - vv.offsetTop) : 0;
+    if (kb < 120) kb = 0;
+    root.style.setProperty('--kb', kb + 'px');
+    if (kb) root.style.setProperty('--vvh', vv.height + 'px'); else root.style.removeProperty('--vvh');
+    root.classList.toggle('kbd', kb > 0);
+    clearTimeout(kbTimer);
+    if (kb) kbTimer = setTimeout(revealFocused, 340);
+  }
+  function schedKb() { if (!kbRaf) kbRaf = requestAnimationFrame(applyKb); }
+  function revealFocused() {
+    var a = document.activeElement, body = $('#shBody');
+    if (!a || !body.contains(a)) return;
+    var br = body.getBoundingClientRect(), ar = a.getBoundingClientRect();
+    if (ar.bottom > br.bottom - 12) body.scrollBy({ top: ar.bottom - br.bottom + 24, behavior: 'smooth' });
+    else if (ar.top < br.top + 8) body.scrollBy({ top: ar.top - br.top - 24, behavior: 'smooth' });
+  }
+  if (vv) {
+    vv.addEventListener('resize', schedKb);
+    vv.addEventListener('scroll', function () { schedKb(); window.scrollTo(0, 0); });
+  }
   document.addEventListener('focusin', function (e) {
-    if (e.target.closest && e.target.closest('.sheet') && /INPUT|TEXTAREA/.test(e.target.tagName)) {
-      stage.classList.add('kb');
-      setTimeout(function () { e.target.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 300);
-    }
+    if (e.target.closest && e.target.closest('.sheet')) { clearTimeout(kbTimer); kbTimer = setTimeout(revealFocused, 360); }
   });
-  document.addEventListener('focusout', function () { setTimeout(function () { if (!/INPUT|TEXTAREA/.test((document.activeElement || {}).tagName || '')) stage.classList.remove('kb'); }, 100); });
 
   function needName(inp) {
     inp.classList.remove('shake'); void inp.offsetWidth; inp.classList.add('shake'); inp.focus();
@@ -470,7 +495,12 @@
   });
 
   /* ================= Tam ekran (dokunulmaz) ================= */
+  var standalone = window.navigator.standalone === true ||
+    (window.matchMedia && (matchMedia('(display-mode: fullscreen)').matches || matchMedia('(display-mode: standalone)').matches));
+  if (!standalone) document.documentElement.classList.add('browser');
   function setFullHeight() {
+    // Tarayıcıda gerçek görünür yükseklik kullanılır; tam ekran hesabı yalnızca kurulu uygulamada
+    if (!standalone) { document.documentElement.style.setProperty('--full-h', window.innerHeight + 'px'); return; }
     var portrait = window.innerHeight >= window.innerWidth;
     var screenH = portrait ? Math.max(screen.height, screen.width) : Math.min(screen.height, screen.width);
     var h = Math.max(window.innerHeight, document.documentElement.clientHeight, screenH);
