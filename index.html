@@ -239,7 +239,7 @@
   .ds-add b { display: block; font-size: 1rem; font-weight: 650; letter-spacing: -.01em; }
   .ds-add small { display: block; color: var(--dim); font-size: .78rem; font-weight: 500; margin-top: 2px; }
 
-  .ds-in { display: block; width: 100%; background: none; border: 0; outline: none; resize: none; padding: 18px 18px 8px; font-size: .98rem; line-height: 1.55; min-height: 88px; max-height: 240px; overflow-y: auto; caret-color: var(--accent); }
+  .ds-in { display: block; width: 100%; background: none; border: 0; outline: none; resize: none; padding: 18px 18px 8px; font-size: .98rem; line-height: 1.55; min-height: 88px; max-height: 320px; overflow-y: auto; caret-color: var(--accent); }
   .ds-in::placeholder { color: #55555a; }
   .ds-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 2px 16px 14px 14px; }
   .gcs { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -462,6 +462,17 @@
   #exview { display: none; z-index: 11; }
   .exdesc { color: var(--dim); font-size: 1.02rem; line-height: 1.6; margin-top: 12px; white-space: pre-wrap; overflow-wrap: anywhere; }
   .exdesc.none { opacity: .6; }
+  .exdesc.rich { white-space: normal; }
+  .exdesc h3 { color: var(--ink); font-size: 1.02rem; font-weight: 700; letter-spacing: -.01em; margin: 26px 0 10px; display: flex; align-items: center; gap: 8px; }
+  .exdesc h3:first-child { margin-top: 4px; }
+  .exdesc h3::before { content: ""; width: 4px; height: 16px; border-radius: 2px; background: var(--accent); flex: none; }
+  .exdesc p { margin: 0 0 8px; }
+  .exdesc .stp { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+  .exdesc .stp i { flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-style: normal; font-size: .8rem; font-weight: 800; margin-top: 1px; font-variant-numeric: tabular-nums; }
+  .exdesc .stp span { flex: 1; min-width: 0; color: var(--ink); opacity: .86; }
+  .exdesc .bl { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 9px; }
+  .exdesc .bl::before { content: ""; flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin: 10px 10px 0 10px; opacity: .8; }
+  .exdesc .bl span { flex: 1; min-width: 0; }
   .scroll.stretch { overscroll-behavior-y: auto; }
   .gw { position: relative; transform-origin: 50% 0; will-change: transform; backface-visibility: hidden; }
   .cap { position: absolute; left: 0; right: 0; bottom: 100%; height: 260px; pointer-events: none; background: var(--cov-a, #5a3d14); }
@@ -524,6 +535,33 @@
   .mbar .bar-row .primary { flex: 1; }
   .mbar .bar-row .primary.sec { background: var(--surface2); color: var(--ink); }
   .mbar .bar-row .primary.danger { flex: 1.25; }
+
+  /* ---------- Hareketler sayfası (tüm hareket listesi) + hareket seçici ---------- */
+  #library { display: none; z-index: 10; }
+  #picker { display: none; z-index: 12; }
+  .srch { flex: none; display: flex; align-items: center; gap: 10px; margin: 0 20px 6px; padding: 0 14px; height: 46px; border-radius: 14px; background: var(--surface); border: 1.5px solid var(--line); transition: border-color .2s; }
+  .srch:focus-within { border-color: rgba(var(--acc-rgb),.45); }
+  .srch > svg { width: 18px; height: 18px; color: var(--dim); flex: none; }
+  .srch input { flex: 1; min-width: 0; height: 100%; background: none; border: 0; outline: 0; font-size: 1rem; }
+  .srch input::placeholder { color: var(--dim); }
+  .srch .clr { flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--surface2); color: var(--dim); display: none; place-items: center; }
+  .srch.has .clr { display: grid; }
+  .srch .clr svg { width: 12px; height: 12px; }
+  .view.mode .srch { display: none; }
+  .it.lb { gap: 16px; padding-top: 12px; padding-bottom: 12px; }
+  .it.lb .nm { font-size: 1.15rem; font-weight: 600; }
+  .it.lb .sb { font-size: .92rem; }
+  .gcv.pkv { width: 58px; height: 58px; border-radius: 17px; font-size: 1.6rem; }
+  #libList .it:first-child::before, #pkList .it:first-child::before { display: none; }
+  #libList .empty, #pkList .empty { padding-top: 8vh; }
+  .pn { flex: none; width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--line2); display: grid; place-items: center; font-size: .88rem; font-weight: 800; color: transparent; font-variant-numeric: tabular-nums; transition: background .2s, border-color .2s, color .2s, transform .3s var(--ease); }
+  .it.pk.on { background: var(--accent-soft); }
+  .it.pk.on .pn { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); transform: scale(1.08); }
+  .pkhint { flex: none; margin: 0 24px 4px; color: var(--dim); font-size: .84rem; line-height: 1.4; }
+  #pkScroll { padding-bottom: 24px; }
+  #libScroll { padding-bottom: calc(var(--pb) + 54px + 12px + 28px); }
+  .tg { display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 6px; background: var(--surface2); color: var(--dim); font-size: .74rem; font-weight: 650; vertical-align: 1px; }
+
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
@@ -630,9 +668,9 @@
   .optg .opt .ot small { font-size: .86rem; margin-top: 3px; }
   .optg .opt.danger .oi, .optg .opt.danger .ot b { color: var(--danger); }
   .optg .opt.danger:active { background: rgba(255,90,77,.12); }
-  #ctx .primary.sec { width: calc(100% + 40px); margin: 0 -20px; height: 58px; border-radius: 0; background: none; border: 0; border-top: 1px solid var(--line); color: var(--accent); font-weight: 650; box-shadow: none; }
-  #ctx .primary.sec:active { background: var(--accent-soft); }
-  #ctx #cxCancel { margin-top: 8px; margin-bottom: -8px; }
+  #ctx .primary.sec, #addSheet .primary.sec { width: calc(100% + 40px); margin: 0 -20px; height: 58px; border-radius: 0; background: none; border: 0; border-top: 1px solid var(--line); color: var(--accent); font-weight: 650; box-shadow: none; }
+  #ctx .primary.sec:active, #addSheet .primary.sec:active { background: var(--accent-soft); }
+  #ctx #cxCancel, #addSheet #aCancel { margin-top: 8px; margin-bottom: -8px; }
 </style>
 </head>
 <body>
@@ -644,6 +682,7 @@
       <div class="ttl">
         <h1>Gruplarım</h1>
       </div>
+      <button class="icon-btn" id="openLib" aria-label="Hareketler"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg></button>
       <button class="icon-btn" id="openSettings" aria-label="Ayarlar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h8M18 7h2M4 17h2M12 17h8"/><circle cx="15" cy="7" r="2.4"/><circle cx="9" cy="17" r="2.4"/></svg></button>
     </div>
     <div class="scroll" id="homeList"></div>
@@ -661,6 +700,32 @@
     <div class="scroll" id="thBody"><p class="thdesc">Uygulamanın renklerini seç. Seçimin bu cihazda hatırlanır.</p><div id="thList"></div></div>
   </section>
 
+
+  <!-- Hareketler sayfası: uygulamadaki tüm hareketler -->
+  <section class="view" id="library" aria-label="Hareketler">
+    <div class="top">
+      <button class="icon-btn" id="libBack" aria-label="Geri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="ttl"><h1>Hareketler</h1><div class="sub" id="libSub"></div></div>
+    </div>
+    <div class="srch" id="libQS"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg><input id="libQ" type="search" placeholder="Hareket ara" aria-label="Hareket ara" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="search"><button type="button" class="clr" id="libQX" aria-label="Temizle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="scroll" id="libScroll"><div id="libList"></div></div>
+    <div class="bar">
+      <button class="primary" id="libAdd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Yeni hareket</button>
+    </div>
+  </section>
+
+  <!-- Hareket seçici: listeden seçilenler seçim sırasıyla gruba eklenir -->
+  <section class="view" id="picker" role="dialog" aria-modal="true" aria-label="Hareket seç">
+    <div class="top">
+      <button class="icon-btn" id="pkClose" aria-label="Kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <div class="ttl"><div class="eyebrow" id="pkGrp"></div><h1>Hareket seç</h1></div>
+    </div>
+    <div class="srch" id="pkQS"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg><input id="pkQ" type="search" placeholder="Hareket ara" aria-label="Hareket ara" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="search"><button type="button" class="clr" id="pkQX" aria-label="Temizle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <p class="pkhint" id="pkHint">Dokunduğun sırayla gruba eklenir. Numaralar ekleme sırasını gösterir.</p>
+    <div class="scroll" id="pkScroll"><div id="pkList"></div></div>
+    <div class="form-foot"><button class="primary" id="pkGo" disabled>Gruba ekle</button></div>
+  </section>
+
   <!-- Hareket sayfası: büyük animasyon + bilgiler -->
   <section class="view" id="exview">
     <div class="scroll stretch" id="exScroll">
@@ -669,7 +734,7 @@
         <h1 class="gt" id="exTitle"></h1>
         <div class="stats3" id="exStats"></div>
         <div class="sech"><h2>Nasıl yapılır</h2></div>
-        <p class="exdesc" id="exDesc"></p>
+        <div class="exdesc" id="exDesc"></div>
       </div>
     </div>
     <div class="ghead" id="exHead"><span id="exHeadT"></span></div>
@@ -820,6 +885,17 @@
     </div>
   </section>
 
+  <!-- Gruba hareket ekleme seçenekleri -->
+  <div class="sht" id="addSheet" style="z-index:50">
+    <div class="sht-card">
+      <h2>Hareket ekle</h2>
+      <p class="ssub" id="addSub"></p>
+      <div class="optg"><button class="opt" id="aNew"><span class="oi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></span><span class="ot"><b>Yeni hareket oluştur</b><small>Sıfırdan hareket ekle</small></span></button>
+      <button class="opt" id="aPick"><span class="oi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><path d="M7.8 9.3l1.3 1.3 2.3-2.5"/><path d="M14 9.4h2.8"/><path d="M7.8 15l1.3 1.3 2.3-2.5"/><path d="M14 15.1h2.8"/></svg></span><span class="ot"><b>Listeden seç</b><small id="aPickS"></small></span></button>
+      </div><button class="primary sec" id="aCancel">Vazgeç</button>
+    </div>
+  </div>
+
   <!-- Seçim / sıralama kipi alt çubuğu -->
   <div class="mbar" id="mbar"><div id="mbarIn"></div></div>
 
@@ -857,6 +933,78 @@
     return { groups: [], settings: {} };
   }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  // Hareket listesi: ilk açılışta gruplardaki mevcut hareketlerden (aynı ad tek kez) oluşturulur
+  function nkey(s) { return String(s).trim().toLocaleLowerCase('tr'); }
+  function libFind(name) { var k = nkey(name); return state.library.filter(function (x) { return nkey(x.name) === k; })[0]; }
+  function libPush(e) {
+    if (libFind(e.name)) return;
+    state.library.push({ id: uid(), name: e.name, desc: e.desc || '', type: e.type, value: e.value, sets: e.sets, rest: e.rest || 0, metro: !!e.metro, tempo: e.tempo || 2 });
+  }
+  if (!Array.isArray(state.library)) {
+    state.library = [];
+    state.groups.forEach(function (g) { (g.exercises || []).forEach(libPush); });
+    save();
+  }
+
+  // Tarif biçimi: "## Başlık", "1. Adım", "- Madde"; diğer satırlar düz paragraf (eski tarifler olduğu gibi görünür)
+  function descHTML(t) {
+    return String(t).split('\n').map(function (l) {
+      l = l.trim(); if (!l) return '';
+      var m;
+      if ((m = /^##\s*(.+)$/.exec(l))) return '<h3>' + esc(m[1]) + '</h3>';
+      if ((m = /^(\d+)[.)]\s*(.+)$/.exec(l))) return '<div class="stp"><i>' + m[1] + '</i><span>' + esc(m[2]) + '</span></div>';
+      if ((m = /^[-•]\s*(.+)$/.exec(l))) return '<div class="bl"><span>' + esc(m[1]) + '</span></div>';
+      return '<p>' + esc(l) + '</p>';
+    }).join('');
+  }
+  // Hazır hareketler: her biri bir kez listeye eklenir (silersen geri gelmez)
+  var PRESETS = [
+    { key: 'kol-makas', name: 'Kol makas', type: 'time', value: 30, sets: 2, rest: 20, desc: [
+      '## Hazırlık',
+      '- Ayakta dur, ayaklar omuz genişliğinde, dizler hafif esnek.',
+      '- Kollar yanlara omuz hizasında açık, avuç içleri öne dönük.',
+      '## Nasıl yapılır',
+      '1. Karnını hafifçe içeri çek, göğsünü aç, bakışını karşıya sabitle.',
+      '2. Kollarını omuz hizasında tutarak göğsünün önünde birbirine doğru getir.',
+      '3. Kollar kesişirken sağ kol üstte olsun. Makas gibi birbirinin yanından geçsin.',
+      '4. Kolları hemen yanlara aç. Göğsünün gerildiğini hissedeceğin kadar aç, daha fazla zorlama.',
+      '5. Tekrar kapatırken bu sefer sol kol üstte olsun. Her kapanışta üstteki kolu değiştir.',
+      '6. Hareket akıcı ve kontrollü kalsın. Savurma, çarpma yok.',
+      '## Nefes',
+      '- Kolları açarken burnundan nefes al, göğsün genişlesin.',
+      '- Kolları kapatırken ağzından yavaşça ver.',
+      '- Nefesini tutma. Nefes hızın hareket hızınla aynı olsun.',
+      '## Nerede ne hissetmelisin',
+      '- Kollar açılırken göğüs ve omuz önünde hafif bir gerilme.',
+      '- Kollar kapanırken göğüs kaslarında hafif bir çalışma.',
+      '- Omuz arkasında ve kürek kemiklerinin arasında hafif bir yorgunluk ya da sıcaklık.',
+      '- Boyun, bel ve bacaklar çalışmamalı. Oralarda gerginlik varsa gevşet.',
+      '## Püf noktaları',
+      '- Omuzlarını kulaklarına doğru kaldırma, aşağıda ve gevşek tut.',
+      '- Kollar omuz hizasından düşmesin.',
+      '- Dirsekleri tamamen kilitleme, hafif yumuşak bırak.',
+      '- İlk 10 saniye küçük hareketlerle başla, sonra genişlet.',
+      '- Belini içeri göçertme, karnını hafif sıkı tut.',
+      '## Sık yapılan hatalar',
+      '- Kolları savurup sertçe çarpıştırmak.',
+      '- Omuzları yukarı kasmak.',
+      '- Gövdeyi öne arkaya sallamak.',
+      '- Nefesi tutmak.',
+      '## Ne zaman dur',
+      'Omuzda keskin ağrı ya da sıkışma hissedersen dur. Daha küçük bir açıyla tekrar dene.'
+    ].join('\n') }
+  ];
+  (function () {
+    var done = state.presets = Array.isArray(state.presets) ? state.presets : [], ch = false;
+    PRESETS.forEach(function (x) {
+      if (done.indexOf(x.key) > -1) return;
+      done.push(x.key); ch = true;
+      var f = libFind(x.name); if (f && !f.desc) f.desc = x.desc;
+      state.groups.forEach(function (g) { (g.exercises || []).forEach(function (e) { if (nkey(e.name) === nkey(x.name) && !e.desc) e.desc = x.desc; }); });
+      if (!f) state.library.push({ id: uid(), name: x.name, desc: x.desc, type: x.type, value: x.value, sets: x.sets, rest: x.rest, metro: false, tempo: 2 });
+    });
+    if (ch) save();
+  })();
   // Ayarlar: eski kayıtlarda yoksa varsayılanlar devreye girer
   var PREP = { min: 0, max: 30, def: 5 };
   function getPrep() {
@@ -1198,14 +1346,14 @@
     }
     formView.style.display = 'flex';
     formView.animate([{ transform: 'translateY(100%)' }, { transform: 'none' }], { duration: 460, easing: EASE });
-    homeView.inert = true; groupView.inert = true; formOpen = true;
+    homeView.inert = true; groupView.inert = true; libView.inert = true; formOpen = true;
   }
   function closeSheet() { $('#dsh').classList.remove('open', 'go'); }
   function closeForm(cb) {
     if (!formOpen) { if (cb) cb(); return; }
     formOpen = false; closeSheet();
     if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
-    homeView.inert = groupOpen; groupView.inert = !!exId;
+    homeView.inert = groupOpen || libOpen; groupView.inert = !!exId; libView.inert = false;
     formOff.forEach(function (f) { f(); }); formOff = [];
     var a = formView.animate([{ transform: 'none' }, { transform: 'translateY(100%)' }], { duration: 380, easing: EASE, fill: 'forwards' });
     a.onfinish = function () {
@@ -1353,9 +1501,10 @@
 
   var SUGG = ['Şınav', 'Plank', 'Squat', 'Mekik', 'Barfiks', 'Lunge', 'Köprü', 'Atlama ipi', 'Esneme'];
 
-  function exForm(exId) {
-    var g = findGroup(curId); if (!g) return;
-    var ex = exId ? g.exercises.filter(function (e) { return e.id === exId; })[0] : null;
+  function exForm(exId, lib) {
+    var g = lib ? null : findGroup(curId); if (!lib && !g) return;
+    var arr = lib ? state.library : g.exercises;
+    var ex = exId ? arr.filter(function (e) { return e.id === exId; })[0] : null;
     var d = ex ? { name: ex.name, desc: ex.desc || '', type: ex.type, time: ex.type === 'time' ? ex.value : 30, reps: ex.type === 'reps' ? ex.value : 12, sets: ex.sets, rest: ex.rest || 0, metro: !!ex.metro, tempo: ex.tempo || 2 }
                : { name: '', desc: '', type: 'time', time: 30, reps: 12, sets: 3, rest: 30, metro: false, tempo: 2 };
 
@@ -1380,7 +1529,7 @@
           '<button type="button" class="ds-add" id="dsAddBtn"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span><span><b>Tarif ekle</b><small>Duruş, nefes ve dikkat noktalarını yaz</small></span></button>' +
         '</div></div>' +
         '<div class="col' + (d.desc ? '' : ' off') + '" id="dsOpen"><div>' +
-          '<textarea class="ds-in" id="fDesc" aria-label="Nasıl yapılır" maxlength="400" rows="3" placeholder="Örn. Ayaklar omuz genişliğinde, sırt dik. İnerken nefes al, kalkarken ver.">' + esc(d.desc) + '</textarea>' +
+          '<textarea class="ds-in" id="fDesc" aria-label="Nasıl yapılır" maxlength="2000" rows="3" placeholder="Örn. Ayaklar omuz genişliğinde, sırt dik. İnerken nefes al, kalkarken ver.">' + esc(d.desc) + '</textarea>' +
           '<div class="ds-foot"><div class="gcs" id="gcs"><button type="button" class="gc" tabindex="-1" data-t="Duruş">+ Duruş</button><button type="button" class="gc" tabindex="-1" data-t="Nefes">+ Nefes</button><button type="button" class="gc" tabindex="-1" data-t="Dikkat">+ Dikkat</button></div><span class="ds-ct" id="dsCt"></span></div>' +
         '</div></div>' +
       '</div></div></div>' +
@@ -1423,14 +1572,16 @@
       var inp = $('#fTitle'), v = inp.value.trim();
       if (!v) return needName(inp);
       var o = { id: ex ? ex.id : uid(), name: v, desc: $('#fDesc').value.trim(), type: d.type, value: d.type === 'time' ? d.time : d.reps, sets: d.sets, rest: d.rest, metro: d.type === 'reps' && d.metro, tempo: d.tempo };
-      if (ex) g.exercises[g.exercises.indexOf(ex)] = o; else g.exercises.push(o);
-      save(); renderGroup(false); renderHome(false); closeForm();
+      if (ex) arr[arr.indexOf(ex)] = o; else arr.push(o);
+      if (!lib) libPush(o);
+      save(); if (lib) renderLib(false); else { renderGroup(false); renderHome(false); } closeForm();
     };
 
-    openForm('', ex ? 'Hareketi düzenle' : 'Yeni hareket', html, ex ? 'Kaydet' : 'Ekle', ex ? 'Hareketi sil' : null, function () {
-      g.exercises = g.exercises.filter(function (e) { return e.id !== ex.id; });
-      save(); renderGroup(false); renderHome(false); closeForm();
-    }, ex ? '<b>' + esc(ex.name) + '</b> bu gruptan silinecek. Bu işlem geri alınamaz.' : '');
+    openForm('', ex ? 'Hareketi düzenle' : 'Yeni hareket', html, ex ? 'Kaydet' : (lib ? 'Listeye ekle' : 'Ekle'), ex ? 'Hareketi sil' : null, function () {
+      if (lib) { state.library = state.library.filter(function (e) { return e.id !== ex.id; }); save(); renderLib(false); }
+      else { g.exercises = g.exercises.filter(function (e) { return e.id !== ex.id; }); save(); renderGroup(false); renderHome(false); }
+      closeForm();
+    }, ex ? '<b>' + esc(ex.name) + '</b> ' + (lib ? 'listeden silinecek. Gruplardaki kopyaları kalır.' : 'bu gruptan silinecek. Bu işlem geri alınamaz.') : '');
 
     ['time', 'reps', 'sets', 'rest', 'tempo'].forEach(function (k) { paint(k); });
     $('#metroCol').inert = !d.metro;
@@ -1459,11 +1610,11 @@
     });
 
     /* ----- Tarif: açılan alan, otomatik büyüme, ipucu etiketleri ----- */
-    function grow() { ds.style.height = 'auto'; ds.style.height = Math.min(ds.scrollHeight, 240) + 'px'; }
+    function grow() { ds.style.height = 'auto'; ds.style.height = Math.min(ds.scrollHeight, 320) + 'px'; }
     function dsSync() {
       grow();
       var n = ds.value.length;
-      dsCt.textContent = n + '/400'; dsCt.classList.toggle('near', n >= 360);
+      dsCt.textContent = n + '/2000'; dsCt.classList.toggle('near', n >= 1800);
       Array.prototype.forEach.call(gcs.children, function (b) { b.classList.toggle('used', ds.value.indexOf(b.dataset.t + ':') > -1); });
     }
     function showDesc(focus) {
@@ -1485,7 +1636,7 @@
       var tag = b.dataset.t + ': ';
       if (ds.value.indexOf(b.dataset.t + ':') < 0) {
         var v = ds.value.replace(/\s+$/, '');
-        ds.value = ((v ? v + '\n' : '') + tag).slice(0, 400);
+        ds.value = ((v ? v + '\n' : '') + tag).slice(0, 2000);
       }
       dsSync(); ds.focus(); var L = ds.value.length; ds.setSelectionRange(L, L); ds.scrollTop = ds.scrollHeight; vib(6);
     });
@@ -2244,8 +2395,9 @@
   var ctxScope = null, ctxId = null, lp = { t: 0, x: 0, y: 0, el: null, fired: false };
   var pendDel = null;
 
-  function listEl(scope) { return $(scope === 'home' ? '#homeList' : '#groupList'); }
-  function itemsOf(scope) { var g = scope === 'group' ? findGroup(curId) : null; return scope === 'home' ? state.groups : (g ? g.exercises : []); }
+  function listEl(scope) { return $(scope === 'home' ? '#homeList' : scope === 'lib' ? '#libList' : '#groupList'); }
+  function viewOf(scope) { return scope === 'home' ? homeView : scope === 'lib' ? libView : groupView; }
+  function itemsOf(scope) { var g = scope === 'group' ? findGroup(curId) : null; return scope === 'home' ? state.groups : scope === 'lib' ? state.library : (g ? g.exercises : []); }
   function itemById(scope, id) { return itemsOf(scope).filter(function (x) { return x.id === id; })[0]; }
 
   /* --- Uzun basma algılama --- */
@@ -2277,7 +2429,7 @@
     ctxScope = scope; ctxId = id;
     $('#ctxT').textContent = it.name;
     $('#ctxS').textContent = scope === 'home' ? 'Grup' : 'Hareket';
-    $('#cxDelS').textContent = scope === 'home' ? (it.exercises.length ? 'Grup ve ' + it.exercises.length + ' hareketi silinir' : 'Grubu sil') : 'Hareketi bu gruptan sil';
+    $('#cxDelS').textContent = scope === 'home' ? (it.exercises.length ? 'Grup ve ' + it.exercises.length + ' hareketi silinir' : 'Grubu sil') : scope === 'lib' ? 'Listeden sil · gruplardaki kopyalar kalır' : 'Hareketi bu gruptan sil';
     $('#cxSort').classList.toggle('dis', itemsOf(scope).length < 2);
     $('#ctx').classList.add('open');
   }
@@ -2290,12 +2442,13 @@
 
   /* --- Kipler --- */
   function enterMode(kind, scope, id) {
+    if (scope === 'lib' && libQ) { libQ = ''; $('#libQ').value = ''; $('#libQS').classList.remove('has'); renderLib(false); }
     mm = { scope: scope, kind: kind, sel: {} };
     if (kind === 'sel' && id) mm.sel[id] = true;
     var l = listEl(scope);
     Array.prototype.forEach.call(l.querySelectorAll('.it'), function (c) { c.classList.remove('in'); });
     l.classList.add('m-' + kind);
-    (scope === 'home' ? homeView : groupView).classList.add('mode');
+    viewOf(scope).classList.add('mode');
     $('#mbarIn').innerHTML = kind === 'sel'
       ? '<div class="mhint" id="mhint"></div><div class="bar-row"><button class="primary sec" id="mbCancel">Vazgeç</button><button class="primary danger" id="mbDel">Sil</button></div>'
       : '<div class="mhint" id="mhint"></div><button class="primary" id="mbDone" style="width:100%">Bitti</button>';
@@ -2315,10 +2468,10 @@
     if (!mm) return;
     var sc = mm.scope, l = listEl(sc);
     l.classList.remove('m-sel', 'm-sort');
-    homeView.classList.remove('mode'); groupView.classList.remove('mode');
+    homeView.classList.remove('mode'); groupView.classList.remove('mode'); libView.classList.remove('mode');
     $('#mbar').classList.remove('open');
     mm = null;
-    if (!noRender) { if (sc === 'home') renderHome(false); else renderGroup(false); }
+    if (!noRender) { if (sc === 'home') renderHome(false); else if (sc === 'lib') renderLib(false); else renderGroup(false); }
   }
   $('#mbar').addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b || !mm) return;
@@ -2347,6 +2500,9 @@
       var exs = 0; ids.forEach(function (id) { var g = findGroup(id); if (g) exs += g.exercises.length; });
       if (n === 1) { var g1 = findGroup(ids[0]); t = 'Grubu sil?'; p = '<b>' + esc(g1.name) + '</b> grubu' + (exs ? ' ve içindeki ' + exs + ' hareket' : '') + ' silinecek. Bu işlem geri alınamaz.'; }
       else { t = n + ' grup silinsin mi?'; p = 'Seçili ' + n + ' grup' + (exs ? ' ve içindeki ' + exs + ' hareket' : '') + ' silinecek. Bu işlem geri alınamaz.'; }
+    } else if (scope === 'lib') {
+      if (n === 1) { var l1 = itemById('lib', ids[0]); t = 'Hareketi sil?'; p = '<b>' + esc(l1.name) + '</b> listeden silinecek. Gruplardaki kopyaları kalır.'; }
+      else { t = n + ' hareket silinsin mi?'; p = 'Seçili ' + n + ' hareket listeden silinecek. Gruplardaki kopyaları kalır.'; }
     } else {
       var gg = findGroup(curId);
       if (n === 1) { var e1 = itemById('group', ids[0]); t = 'Hareketi sil?'; p = '<b>' + esc(e1.name) + '</b> bu gruptan silinecek. Bu işlem geri alınamaz.'; }
@@ -2364,11 +2520,12 @@
     var pd = pendDel, cd = $('#cdsh'); cd.classList.add('go');
     setTimeout(function () {
       if (pd.scope === 'home') state.groups = state.groups.filter(function (g) { return pd.ids.indexOf(g.id) < 0; });
+      else if (pd.scope === 'lib') state.library = state.library.filter(function (x) { return pd.ids.indexOf(x.id) < 0; });
       else { var g = findGroup(curId); if (g) g.exercises = g.exercises.filter(function (x) { return pd.ids.indexOf(x.id) < 0; }); }
       save();
       exitMode(true);
-      listEl('home').classList.remove('m-sel', 'm-sort'); listEl('group').classList.remove('m-sel', 'm-sort');
-      renderHome(false); if (groupOpen) renderGroup(false);
+      listEl('home').classList.remove('m-sel', 'm-sort'); listEl('group').classList.remove('m-sel', 'm-sort'); listEl('lib').classList.remove('m-sel', 'm-sort');
+      renderHome(false); if (groupOpen) renderGroup(false); if (libOpen) renderLib(false);
       closeCd();
     }, 260);
   };
@@ -2418,7 +2575,7 @@
       var arr = itemsOf(sc), by = {}; arr.forEach(function (x) { by[x.id] = x; });
       var out = ids.map(function (id) { return by[id]; }).filter(Boolean);
       if (out.length !== arr.length) return;
-      if (sc === 'home') state.groups = out; else findGroup(curId).exercises = out;
+      if (sc === 'home') state.groups = out; else if (sc === 'lib') state.library = out; else findGroup(curId).exercises = out;
       save();
     }
     function down(e) {
@@ -2436,13 +2593,15 @@
     }
     $('#homeList').addEventListener('pointerdown', down);
     $('#groupList').addEventListener('pointerdown', down);
+    $('#libList').addEventListener('pointerdown', down);
   })();
 
-  wireLP('home'); wireLP('group');
+  wireLP('home'); wireLP('group'); wireLP('lib');
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
     if ($('#cdsh').classList.contains('open')) closeCd();
     else if ($('#ctx').classList.contains('open')) closeCtx();
+    else if ($('#addSheet').classList.contains('open')) closeAdd();
     else if (mm) exitMode();
   });
 
@@ -2486,7 +2645,7 @@
     $('#exHero').innerHTML = '<div class="hl" aria-hidden="true">' + esc((e.name.trim().charAt(0) || '·').toLocaleUpperCase('tr')) + '</div>';
     $('#exStats').innerHTML = '<div class="st"><b>' + e.sets + '</b><span>Set</span></div><div class="st"><b>' + (e.type === 'time' ? fmtTime(e.value) : e.value) + '</b><span>' + (e.type === 'time' ? 'Süre' : 'Tekrar') + '</span></div><div class="st"><b>' + (e.rest ? fmtTime(e.rest) : 'Yok') + '</b><span>Dinlenme</span></div>';
     var d = $('#exDesc'); d.classList.toggle('none', !e.desc);
-    d.textContent = e.desc || 'Henüz tarif eklenmemiş. Sağ üstteki düğmeyle düzenleyip duruş, nefes ve dikkat noktalarını yazabilirsin.';
+    d.classList.toggle('rich', !!e.desc); if (e.desc) d.innerHTML = descHTML(e.desc); else d.textContent = 'Henüz tarif eklenmemiş. Sağ üstteki düğmeyle düzenleyip duruş, nefes ve dikkat noktalarını yazabilirsin.';
   }
   function openEx(id) {
     if (exId) return;
@@ -2506,9 +2665,181 @@
   $('#exBack').onclick = function () { closeEx(); };
   $('#exEdit').onclick = function () { if (exId) exForm(exId); };
 
+
+  /* ================= Hareketler sayfası ================= */
+  var libView = $('#library'), libOpen = false, libDim = null, libHomeAnim = null, libQ = '';
+  function libUse(e) {
+    var k = nkey(e.name), n = 0;
+    state.groups.forEach(function (g) { if ((g.exercises || []).some(function (x) { return nkey(x.name) === k; })) n++; });
+    return n;
+  }
+  function letterOf(e) { return esc((e.name.trim().charAt(0) || '·').toLocaleUpperCase('tr')); }
+  function matchQ(e, q) { return !q || nkey(e.name).indexOf(nkey(q)) > -1; }
+  function renderLib(animate) {
+    var el = $('#libList'), n = state.library.length;
+    $('#libSub').textContent = n ? n + ' hareket' : 'Henüz hareket yok';
+    $('#libQS').style.display = n ? '' : 'none';
+    if (!n) {
+      el.innerHTML = '<div class="empty"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg></span><h2>Hareket listesi boş</h2>Hareketlerini burada topla, sonra<br>istediğin gruba sırayla ekle.</div>';
+      return;
+    }
+    var rows = state.library.filter(function (e) { return matchQ(e, libQ); });
+    if (!rows.length) { el.innerHTML = '<div class="empty"><h2>Sonuç yok</h2>“' + esc(libQ) + '” ile eşleşen hareket bulunamadı.</div>'; return; }
+    el.innerHTML = rows.map(function (e, i) {
+      var u = libUse(e);
+      return '<button class="it lb' + (animate ? ' in' : '') + picked('lib', e.id) + '" data-id="' + e.id + '" style="--i:' + Math.min(i, 12) + '"><div class="gcv pkv" aria-hidden="true">' + letterOf(e) + '</div><div class="bd"><div class="nm">' + esc(e.name) + '</div><div class="sb">' + exMeasure(e) + (u ? ' · ' + u + ' grupta' : '') + '</div></div>' + CHEVC + MK + '</button>';
+    }).join('');
+  }
+  function openLib() {
+    if (libOpen || formOpen || groupOpen || setOpen || mm || WK) return;
+    libQ = ''; $('#libQ').value = ''; $('#libQS').classList.remove('has');
+    renderLib(true); $('#libScroll').scrollTop = 0;
+    libView.style.display = 'flex';
+    libDim = document.createElement('div'); libDim.className = 'dim';
+    stage.insertBefore(libDim, libView);
+    libDim.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 480, easing: EASE });
+    libView.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 480, easing: EASE });
+    libHomeAnim = homeView.animate([{ transform: 'none' }, { transform: 'translateX(-22%)' }], { duration: 480, easing: EASE, fill: 'forwards' });
+    homeView.inert = true; libOpen = true;
+  }
+  function closeLib(from, pf, dimFrom) {
+    if (!libOpen) return;
+    libOpen = false;
+    var a = libView.animate([{ transform: from || 'none' }, { transform: 'translateX(100%)' }], { duration: 400, easing: EASE, fill: 'forwards' });
+    homeView.animate([{ transform: pf || 'translateX(-22%)' }, { transform: 'none' }], { duration: 400, easing: EASE });
+    if (libHomeAnim) { libHomeAnim.cancel(); libHomeAnim = null; }
+    var d = libDim; libDim = null;
+    if (d) d.animate([{ opacity: dimFrom == null ? 1 : dimFrom }, { opacity: 0 }], { duration: 400, easing: EASE, fill: 'forwards' }).onfinish = function () { d.remove(); };
+    homeView.inert = false;
+    renderHome(false);
+    a.onfinish = function () { libView.style.display = 'none'; a.cancel(); };
+  }
+  $('#openLib').onclick = openLib;
+  $('#libBack').onclick = function () { if (mm) { exitMode(); return; } closeLib(); };
+  $('#libAdd').onclick = function () { exForm(null, true); };
+  $('#libList').addEventListener('click', function (e) {
+    if (cardTap('lib', e)) return;
+    var c = e.target.closest('.it'); if (c) exForm(c.dataset.id, true);
+  });
+  function wireSearch(id, get, set, render) {
+    var inp = $('#' + id), box = $('#' + id + 'S');
+    function sync() { set(inp.value); box.classList.toggle('has', !!inp.value); render(); }
+    inp.addEventListener('input', sync);
+    $('#' + id + 'X').addEventListener('click', function () { inp.value = ''; sync(); inp.focus(); });
+  }
+  wireSearch('libQ', function () { return libQ; }, function (v) { libQ = v.trim(); }, function () { renderLib(false); });
+
+  // Soldan çekerek geri
+  (function () {
+    var strip = document.createElement('div'); strip.className = 'edge'; libView.appendChild(strip);
+    var sx = null, dx = 0, t0 = 0, W = 1;
+    function prevT(p) { return 'translate3d(' + (-0.22 * W * (1 - p)) + 'px,0,0)'; }
+    strip.addEventListener('touchstart', function (e) {
+      if (!libOpen || sx != null || mm) return;
+      sx = e.touches[0].clientX; dx = 0; t0 = Date.now(); W = libView.offsetWidth || innerWidth;
+      if (libHomeAnim) { libHomeAnim.cancel(); libHomeAnim = null; }
+      homeView.style.transform = prevT(0);
+    }, { passive: true });
+    strip.addEventListener('touchmove', function (e) {
+      if (sx == null) return;
+      dx = Math.min(W, Math.max(0, e.touches[0].clientX - sx)); var p = dx / W;
+      libView.style.transform = 'translate3d(' + dx + 'px,0,0)';
+      homeView.style.transform = prevT(p);
+      if (libDim) libDim.style.opacity = 1 - p;
+    }, { passive: true });
+    function end(cancel) {
+      if (sx == null) return;
+      var v = dx / Math.max(1, Date.now() - t0), p = dx / W; sx = null;
+      var from = 'translate3d(' + dx + 'px,0,0)', pf = prevT(p);
+      libView.style.transform = ''; homeView.style.transform = '';
+      if (libDim) libDim.style.opacity = '';
+      if (!cancel && (dx > W * .33 || v > .6)) { closeLib(from, pf, 1 - p); }
+      else {
+        if (dx > 0) libView.animate([{ transform: from }, { transform: 'none' }], { duration: 320, easing: EASE });
+        libHomeAnim = homeView.animate([{ transform: pf }, { transform: 'translateX(-22%)' }], { duration: 320, easing: EASE, fill: 'forwards' });
+        if (libDim) libDim.animate([{ opacity: 1 - p }, { opacity: 1 }], { duration: 320, easing: EASE });
+      }
+    }
+    strip.addEventListener('touchend', function () { end(false); });
+    strip.addEventListener('touchcancel', function () { end(true); });
+  })();
+
+  /* ================= Gruba hareket ekle: seçenekler + listeden seçici ================= */
+  var pickView = $('#picker'), pickOpen = false, pkOrder = [], pkQ = '';
+  function openAdd() {
+    if (mm) return;
+    var g = findGroup(curId); if (!g) return;
+    if (!state.library.length) { exForm(null); return; }
+    $('#addSub').textContent = g.name;
+    $('#aPickS').textContent = state.library.length + ' hareket arasından, istediğin sırayla';
+    $('#addSheet').classList.add('open');
+  }
+  function closeAdd() { $('#addSheet').classList.remove('open'); }
+  $('#addEx').onclick = openAdd;
+  $('#aCancel').onclick = closeAdd;
+  $('#addSheet').addEventListener('click', function (e) { if (e.target === this) closeAdd(); });
+  $('#aNew').onclick = function () { closeAdd(); exForm(null); };
+  $('#aPick').onclick = function () { closeAdd(); openPicker(); };
+
+  function renderPicker() {
+    var g = findGroup(curId), el = $('#pkList');
+    var has = {}; if (g) g.exercises.forEach(function (x) { has[nkey(x.name)] = 1; });
+    var rows = state.library.filter(function (e) { return matchQ(e, pkQ); });
+    if (!rows.length) { el.innerHTML = '<div class="empty"><h2>Sonuç yok</h2>“' + esc(pkQ) + '” ile eşleşen hareket bulunamadı.</div>'; }
+    else el.innerHTML = rows.map(function (e) {
+      var o = pkOrder.indexOf(e.id);
+      return '<button class="it lb pk' + (o > -1 ? ' on' : '') + '" data-id="' + e.id + '" aria-pressed="' + (o > -1) + '"><div class="gcv pkv" aria-hidden="true">' + letterOf(e) + '</div><div class="bd"><div class="nm">' + esc(e.name) + '</div><div class="sb">' + exMeasure(e) + (has[nkey(e.name)] ? '<span class="tg">Grupta</span>' : '') + '</div></div><span class="pn">' + (o > -1 ? o + 1 : '') + '</span></button>';
+    }).join('');
+    var n = pkOrder.length, b = $('#pkGo');
+    b.disabled = !n; b.textContent = n ? 'Gruba ekle (' + n + ')' : 'Gruba ekle';
+    $('#pkHint').textContent = n ? n + ' hareket seçildi. Gruba bu sırayla eklenecek.' : 'Dokunduğun sırayla gruba eklenir. Numaralar ekleme sırasını gösterir.';
+  }
+  function openPicker() {
+    if (pickOpen || formOpen) return;
+    var g = findGroup(curId); if (!g) return;
+    pkOrder = []; pkQ = ''; $('#pkQ').value = ''; $('#pkQS').classList.remove('has');
+    $('#pkGrp').textContent = g.name;
+    renderPicker(); $('#pkScroll').scrollTop = 0;
+    pickView.style.display = 'flex';
+    pickView.animate([{ transform: 'translateY(100%)' }, { transform: 'none' }], { duration: 460, easing: EASE });
+    groupView.inert = true; pickOpen = true;
+  }
+  function closePicker(cb) {
+    if (!pickOpen) { if (cb) cb(); return; }
+    pickOpen = false;
+    if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    groupView.inert = false;
+    var a = pickView.animate([{ transform: 'none' }, { transform: 'translateY(100%)' }], { duration: 380, easing: EASE, fill: 'forwards' });
+    a.onfinish = function () { pickView.style.display = 'none'; a.cancel(); if (cb) cb(); };
+  }
+  $('#pkClose').onclick = function () { closePicker(); };
+  wireSearch('pkQ', function () { return pkQ; }, function (v) { pkQ = v.trim(); }, renderPicker);
+  $('#pkList').addEventListener('click', function (e) {
+    var c = e.target.closest('.it'); if (!c) return;
+    var id = c.dataset.id, i = pkOrder.indexOf(id);
+    if (i > -1) pkOrder.splice(i, 1); else pkOrder.push(id);
+    vib(6);
+    // Yalnızca işaretleri güncelle (kaydırma konumu korunur)
+    Array.prototype.forEach.call($('#pkList').querySelectorAll('.it'), function (r) {
+      var o = pkOrder.indexOf(r.dataset.id);
+      r.classList.toggle('on', o > -1); r.setAttribute('aria-pressed', o > -1); r.querySelector('.pn').textContent = o > -1 ? o + 1 : '';
+    });
+    var n = pkOrder.length, b = $('#pkGo');
+    b.disabled = !n; b.textContent = n ? 'Gruba ekle (' + n + ')' : 'Gruba ekle';
+    $('#pkHint').textContent = n ? n + ' hareket seçildi. Gruba bu sırayla eklenecek.' : 'Dokunduğun sırayla gruba eklenir. Numaralar ekleme sırasını gösterir.';
+  });
+  $('#pkGo').onclick = function () {
+    var g = findGroup(curId); if (!g || !pkOrder.length) return;
+    pkOrder.forEach(function (id) {
+      var e = state.library.filter(function (x) { return x.id === id; })[0]; if (!e) return;
+      g.exercises.push({ id: uid(), name: e.name, desc: e.desc || '', type: e.type, value: e.value, sets: e.sets, rest: e.rest || 0, metro: !!e.metro, tempo: e.tempo || 2 });
+    });
+    save(); vib(12);
+    closePicker(function () { renderGroup(true); renderHome(false); });
+  };
+
   /* ================= Olaylar ================= */
   $('#addGroup').onclick = function () { groupForm(null); };
-  $('#addEx').onclick = function () { exForm(null); };
   $('#editGroup').onclick = function () { if (mm) return; groupForm(curId); };
   $('#back').onclick = function () { if (mm) { exitMode(); return; } closeGroup(); };
   $('#homeList').addEventListener('click', function (e) {
