@@ -721,6 +721,24 @@
   .pl-name { display: flex; align-items: center; justify-content: center; gap: 2px; }
   .pl-name > span { min-width: 0; text-wrap: balance; overflow-wrap: anywhere; }
   .pl-q { flex: none; margin: 0 -8px 0 4px; }
+
+  /* Dinlenme sonrası 3-2-1: küçük, sakin, kısa. Hazırlık ekranından farklı (dev sayı yok, "Başla" düğmesi yok) */
+  #player.is-cd #plTag { order: 1; color: rgba(238,241,244,.6); font-size: .9rem; font-weight: 700; letter-spacing: .18em; }
+  #player.is-cd .pl-num { order: 2; margin-top: 2.4vh; }
+  #player.is-cd #plVal { margin-top: 0; font-size: min(28vw, 16vh); color: var(--ph); }
+  #player.is-cd #plUnit, #player.is-cd #plPills { display: none; }
+  #player.is-cd #plFoot { order: 3; margin-top: 2.6vh; max-width: none; }
+  #player.is-cd .pl-pn { font-size: .95rem; color: rgba(238,241,244,.55); }
+  #player.is-cd #plName { order: 4; margin-top: 4px; font-size: clamp(1.25rem, 5.4vw, 1.6rem); font-weight: 700; }
+
+  /* Dinlenme: DİNLENME / sayı / Sıradaki tek bir ortalı blok; +15 sn kontrollerin hemen üstünde */
+  #player.is-rest .pl-num { width: auto; height: auto; margin-top: 2.6vh; }
+  #player.is-rest #plVal { font-size: min(30vw, 16vh); }
+  #player.is-rest .pl-up { margin-top: 5vh; }
+  .pl-ctl { gap: 22px; }
+
+  /* Saat ayracı (:) rakamların dikey ortasına hizalansın */
+  .dc.colon { transform: translateY(-.1em); margin: 0 -.02em; }
 </style>
 </head>
 <body>
@@ -881,12 +899,12 @@
             <div class="pl-val" id="plVal"></div>
             <div class="pl-unit" id="plUnit"></div>
           </div>
+          <div class="pl-up" id="plUp"></div>
           <div class="pl-pills" id="plPills"></div>
           <div class="pl-foot" id="plFoot"></div>
         </div>
       </div>
       <div class="pl-ctl" id="plCtl">
-        <div class="pl-up" id="plUp"></div>
         <button class="pl-add" id="plAdd">+15 sn</button>
         <div class="pl-row">
           <button class="rb" id="plPrev" aria-label="Önceki"></button>
@@ -1931,6 +1949,15 @@
     if (r || !m) a.push(r + ' saniye');
     return a.join(' ');
   }
+  var ORD1 = ['', 'birinci', 'ikinci', 'üçüncü', 'dördüncü', 'beşinci', 'altıncı', 'yedinci', 'sekizinci', 'dokuzuncu'];
+  var ORD10 = ['', 'onuncu', 'yirminci', 'otuzuncu', 'kırkıncı', 'ellinci', 'altmışıncı', 'yetmişinci', 'sekseninci', 'doksanıncı'];
+  var CARD10 = ['', 'on', 'yirmi', 'otuz', 'kırk', 'elli', 'altmış', 'yetmiş', 'seksen', 'doksan'];
+  function sayOrd(n) {
+    if (n < 1 || n > 99) return n + '.';
+    var t = Math.floor(n / 10), u = n % 10;
+    return u ? (t ? CARD10[t] + ' ' : '') + ORD1[u] : ORD10[t];
+  }
+  function cap(x) { return x.charAt(0).toLocaleUpperCase('tr') + x.slice(1); }
   function sayMeasure(e) { return e.type === 'time' ? sayTime(e.value) : e.value + ' tekrar'; }
   // Her adım başında kısa bir yönlendirme
   function cue(s) {
@@ -1939,16 +1966,18 @@
       if (s.ex === 0 && s.set === 0) {   // açılış: 3-2-1 sesli sayımla çakışmasın diye kısa tut
         if (s.dur >= 4500) say('Hazırlan.' + (s.dur >= 8000 ? ' İlk hareket, ' + e.name + '.' : ''), 520);
       } else {
-        t = s.set > 0 ? 'Set ' + (s.set + 1) + '.' : 'Sıradaki hareket, ' + e.name + '.';
+        t = s.set > 0 ? cap(sayOrd(s.set + 1)) + ' set.' : 'Sıradaki hareket, ' + e.name + '.';
         say(t, 520);
       }
+    } else if (s.k === 'cd') {
+      return;   // sesli sayım (Üç, İki, Bir) kare döngüsünde ve setStep'te
     } else if (s.k === 'work') {
-      if (!prevK) t = e.name + '. ' + sayMeasure(e);
-      else if (prevK === 'rest' && s.set > 0) t = 'Set ' + (s.set + 1) + '. ' + (e.type === 'time' ? sayTime(e.value) : '');
-      else t = 'Başla. ' + sayMeasure(e);
+      if (!prevK) t = e.name + '. ' + sayMeasure(e) + '.';
+      else if (prevK === 'cd' && s.set > 0) t = cap(sayOrd(s.set + 1)) + ' set. ' + sayMeasure(e) + '.';
+      else t = 'Başla. ' + sayMeasure(e) + '.';
       say(t, 480);
     } else {
-      t = s.nx.ex !== s.ex ? 'Dinlen. Sıradaki, ' + s.ne.name + '.' : 'Dinlen. Sıradaki set, ' + (s.nx.set + 1) + '.';
+      t = s.nx.ex !== s.ex ? 'Dinlen. Sıradaki hareket, ' + s.ne.name + '.' : 'Dinlen. Sırada ' + sayOrd(s.nx.set + 1) + ' set var.';
       say(t, 560);
     }
   }
@@ -1969,7 +1998,7 @@
   Digits.prototype.set = function (s, anim) {
     if (s === this.s) return;
     if (!anim || s.length !== this.s.length) {
-      this.el.innerHTML = s.split('').map(function (c) { return '<span class="dc"><span>' + c + '</span></span>'; }).join('');
+      this.el.innerHTML = s.split('').map(function (c) { return '<span class="dc' + (c === ':' ? ' colon' : '') + '"><span>' + c + '</span></span>'; }).join('');
       this.cells = [].slice.call(this.el.children);
     } else {
       for (var i = 0; i < s.length; i++) if (s.charAt(i) !== this.s.charAt(i)) roll(this.cells[i], s.charAt(i));
@@ -2004,6 +2033,7 @@
         if (!last && e.rest > 0) {
           var nx = s < e.sets - 1 ? { ex: i, set: s + 1 } : { ex: i + 1, set: 0 };
           st.push({ k: 'rest', dur: e.rest * 1000, ex: i, set: s, e: e, nx: nx, ne: ex[nx.ex] });
+          st.push({ k: 'cd', dur: 3000, ex: nx.ex, set: nx.set, e: ex[nx.ex] });   // dinlenme bitince 3-2-1
         }
       }
     });
@@ -2015,6 +2045,7 @@
   function tagText(s) {
     if (WK.run === false && s.dur && !WK.quitOpen) return s.k === 'work' ? 'Duraklatıldı' : 'DURAKLATILDI';
     if (s.k === 'work') return 'Hareket ' + (s.ex + 1) + ' / ' + WK.n;
+    if (s.k === 'cd') return 'HAZIRLAN';
     if (s.k === 'prep') return s.set > 0 ? 'SIRADAKİ SET' : s.ex > 0 ? 'SIRADAKİ HAREKET' : 'BAŞLAMAYA HAZIR';
     return 'DİNLENME';
   }
@@ -2041,7 +2072,7 @@
     if (s.k !== 'rest') $('#plUp').innerHTML = '';
     if (s.k === 'rest') {
       f.innerHTML = ''; $('#plUp').innerHTML = '<small>Sıradaki</small><b>' + esc(s.ne.name) + '</b>';
-    } else if (s.k === 'prep') {
+    } else if (s.k === 'prep' || s.k === 'cd') {
       f.innerHTML = '<div class="pl-pn">' + (s.set > 0 ? 'Set ' + (s.set + 1) + ' / ' + e.sets : 'Hareket ' + (s.ex + 1) + ' / ' + WK.n) + '</div>';
     } else {
       f.innerHTML = '';
@@ -2052,12 +2083,12 @@
     WK.secs = s.dur ? Math.ceil(rem / 1000) : -1;
     $('#plTag').textContent = tagText(s);
     $('#plNameT').textContent = s.k === 'rest' ? 'Dinlenme' : e.name;
-    $('#plQ').style.display = s.k === 'rest' ? 'none' : '';
+    $('#plQ').style.display = s.k === 'rest' || s.k === 'cd' ? 'none' : '';
     if (s.m) {
       WK.cnt = metroCount(s);
       dg.set(String(WK.cnt), false); $('#plUnit').textContent = metroUnit(s, WK.cnt);
     } else {
-      dg.set(s.k === 'prep' ? String(WK.secs) : s.dur ? clock(WK.secs) : String(e.value), false);
+      dg.set(s.k === 'prep' || s.k === 'cd' ? String(WK.secs) : s.dur ? clock(WK.secs) : String(e.value), false);
       $('#plUnit').textContent = unitText(s, WK.secs);
     }
     paintPills(s); paintFoot(s); $('#plRing')._o = null; paintRing(s);
@@ -2072,20 +2103,33 @@
   }
   function paintSegs() {
     var s = cur(), e = s.e;
-    var done = s.k === 'work' ? s.set : s.k === 'rest' ? s.set + 1 : 0;
+    var done = s.k === 'work' ? s.set : s.k === 'rest' ? s.set + 1 : s.k === 'cd' ? s.set : 0;
     var part = (s.k === 'work' && s.dur) ? Math.min(1, WK.el / s.dur) : 0;
     WK.sg.forEach(function (it, j) {
       var v = j < s.ex ? 1 : j > s.ex ? 0 : (done + part) / e.sets;
       if (Math.abs(v - it._v) > .002 || it._v == null) { it._v = v; it.style.transform = 'scaleX(' + v + ')'; }
     });
   }
-  var swapTok = 0;
+  var swapTok = 0, swapBusy = false;
+  // Ekran durumu (sınıflar) ve içerik birlikte, içerik görünmezken değişir:
+  // eski içerik yeni düzende bir an daha görünüp sonra tekrar belirmesin
+  function applyView(s) {
+    P.classList.toggle('is-rest', s.k === 'rest');
+    P.classList.toggle('is-prep', s.k === 'prep');
+    P.classList.toggle('is-cd', s.k === 'cd');
+    paintContent(s);
+  }
   function swapContent(s, instant) {
     var tok = ++swapTok, c = $('#plC');
-    if (instant || RM) { paintContent(s); return; }
-    c.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(-12px)' }], { duration: 140, easing: 'ease-in', fill: 'forwards' }).onfinish = function () {
-      if (tok !== swapTok || !WK) return;
-      paintContent(cur());
+    if (instant || RM) { swapBusy = false; c.getAnimations().forEach(function (a) { a.cancel(); }); applyView(s); return; }
+    // Önceki geçiş bitmeden yenisi gelirse, kaldığı opaklıktan devam edip sönsün (yeniden parlayıp sönmesin)
+    var cs = getComputedStyle(c), o = parseFloat(cs.opacity), tr = cs.transform;
+    if (isNaN(o)) o = 1;
+    c.getAnimations().forEach(function (a) { a.cancel(); });
+    swapBusy = true;
+    c.animate([{ opacity: o, transform: tr || 'none' }, { opacity: 0, transform: 'translateY(-12px)' }], { duration: Math.max(30, 140 * o), easing: 'ease-in', fill: 'forwards' }).onfinish = function () {
+      if (tok !== swapTok || !WK || WK.done) return;
+      applyView(cur()); swapBusy = false;
       c.getAnimations().forEach(function (a) { a.cancel(); });
       c.animate([{ opacity: 0, transform: 'translateY(18px)' }, { opacity: 1, transform: 'none' }], { duration: 460, easing: EASE });
     };
@@ -2095,11 +2139,10 @@
   function setStep(i, instant) {
     WK.i = i; WK.el = 0; WK.cnt = 0;
     var s = cur();
-    P.classList.toggle('is-rest', s.k === 'rest');
-    P.classList.toggle('is-prep', s.k === 'prep');
     swapContent(s, instant); paintMb(); paintSegs();
     if (s.k === 'work') sfx('work'); else if (s.k === 'rest') sfx('rest');
-    if (s.k !== 'prep') vib(18);
+    else if (s.k === 'cd') { sfx('tick', 3); say('Üç.', 0); }
+    if (s.k !== 'prep' && s.k !== 'cd') vib(18);
     cue(s);
   }
   function setRun(b, quiet) {
@@ -2134,9 +2177,10 @@
   }
   function finish() {
     WK.done = true; WK.run = false; WK.quitOpen = false;
+    swapBusy = false;
     sfx('done'); vib([60, 50, 60, 50, 120]); unlock();
-    say('Antrenman tamam. Eline sağlık.', 1000);
-    P.classList.remove('paused', 'is-rest', 'is-prep'); P.classList.add('is-done');
+    say('Antrenman tamamlandı. Eline sağlık!', 1000);
+    P.classList.remove('paused', 'is-rest', 'is-prep', 'is-cd'); P.classList.add('is-done');
     $('#dnGroup').textContent = WK.g.name;
     $('#dnTime').textContent = clock(Math.round(WK.total / 1000));
     $('#dnEx').textContent = WK.n;
@@ -2159,6 +2203,7 @@
           if (s.k === 'work') WK.ok[WK.i] = true;
           advance(); return;
         }
+        if (swapBusy) return;   // geçiş sürerken ekrana ve sese dokunma (çift tık / çift rakam olmasın)
         if (s.m) {
           var c = metroCount(s);
           if (c !== WK.cnt) {
@@ -2174,15 +2219,15 @@
         }
         var secs = Math.ceil(rem / 1000);
         if (secs !== WK.secs) {
-          WK.secs = secs; dg.set(s.k === 'prep' ? String(secs) : clock(secs), true);
+          WK.secs = secs; dg.set(s.k === 'prep' || s.k === 'cd' ? String(secs) : clock(secs), true);
           $('#plUnit').textContent = unitText(s, secs);
           if (s.k === 'work') {
             if (s.dur >= 40000 && secs === Math.round(s.dur / 2000)) say('Yarısı geçti.', 0);
-            else if (s.dur >= 20000 && secs === 10) say('Son 10 saniye.', 0);
+            else if (s.dur >= 20000 && secs === 10) say('Son on saniye.', 0);
           }
           if (secs <= 3) {
             sfx('tick', secs);
-            if (s.k === 'prep' && s.ex === 0 && s.set === 0) say(secs === 3 ? 'Üç' : secs === 2 ? 'İki' : 'Bir', 0);
+            if ((s.k === 'prep' && s.ex === 0 && s.set === 0) || s.k === 'cd') say(secs === 3 ? 'Üç.' : secs === 2 ? 'İki.' : 'Bir.', 0);
             if (!RM) $('#plVal').animate([{ transform: 'scale(1)' }, { transform: 'scale(1.07)' }, { transform: 'scale(1)' }], { duration: 380, easing: EASE });
           }
         }
@@ -2204,8 +2249,9 @@
     audioInit(); unlockVoice();
     var steps = buildSteps(g);
     WK = { g: g, steps: steps, n: g.exercises.length, i: 0, el: 0, run: true, total: 0, done: false, ok: {}, pp: [], secs: -1, quitOpen: false };
+    swapBusy = false; swapTok++;
     P.style.display = 'flex';
-    P.classList.remove('is-done', 'paused', 'is-rest', 'is-prep', 'is-rest');
+    P.classList.remove('is-done', 'paused', 'is-rest', 'is-prep', 'is-cd');
     var d = $('#plDone'); d.style.display = 'none'; d.classList.remove('go');
     $('#plQuit').classList.remove('open'); $('#plMore').classList.remove('open'); $('#plInfo').classList.remove('open');
     $('#plSegs').innerHTML = g.exercises.map(function () { return '<span class="sg"><i></i></span>'; }).join('');
@@ -2219,7 +2265,7 @@
   }
   function closePlayer() {
     if (!WK) return;
-    cancelAnimationFrame(raf); unlock(); WK = null; swapTok++; cancelSpeech(); fadeTo(0, .12);
+    cancelAnimationFrame(raf); unlock(); WK = null; swapTok++; swapBusy = false; cancelSpeech(); fadeTo(0, .12);
     $('#plMore').classList.remove('open'); $('#plInfo').classList.remove('open');
     groupView.inert = false;
     var a = reveal(false);
@@ -2337,7 +2383,7 @@
   $('#plMb').onclick = function () { if (WK && !WK.done && cur().k === 'prep') { setRun(true, true); advance(); } else primary(); };
   $('#plPrev').onclick = prev;
   $('#plNext').onclick = skip;
-  $('#plAdd').onclick = function () {
+  $('#plAdd').onclick = function (ev) { if (ev) ev.stopPropagation();
     if (!WK || WK.done) return; var s = cur(); if (s.k !== 'rest') return;
     s.dur += 15000; WK.secs = -1; sfx('resume'); vib(15);
   };
