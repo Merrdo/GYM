@@ -439,6 +439,7 @@
   .gw { position: relative; transform-origin: 50% 0; will-change: transform; backface-visibility: hidden; }
   .cap { position: absolute; left: 0; right: 0; bottom: 100%; height: 260px; pointer-events: none; background: var(--cov-a, #5a3d14); }
   .hero { position: relative; overflow: hidden; background: var(--cov-a, #5a3d14); height: clamp(176px, calc(var(--full-h, 100vh) * .22), 228px); }
+  .hero .hl { position: absolute; right: -14px; bottom: -78px; font-size: 330px; line-height: 1; font-weight: 800; letter-spacing: -.06em; color: rgba(var(--acc-rgb), .17); user-select: none; pointer-events: none; }
   .hero svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
   .gbody { position: relative; z-index: 3; margin-top: -30px; background: var(--bg); border-radius: 30px 30px 0 0; padding: 28px 20px calc(var(--pb) + 54px + 12px + 60px); min-height: calc(var(--full-h, 100vh) - 90px); }
   .gt { font-size: 1.9rem; font-weight: 750; letter-spacing: -.035em; line-height: 1.1; overflow-wrap: anywhere; }
@@ -460,7 +461,8 @@
   .ghead span { position: absolute; left: 76px; right: 76px; top: calc(var(--pt) - 6px); height: 42px; line-height: 42px; text-align: center; font-size: 1.02rem; font-weight: 650; letter-spacing: -.015em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transform: translateY(calc((1 - var(--p)) * 10px)); }
   .hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
   .xa { flex: none; width: 68px; height: 68px; border-radius: 18px; background: var(--tile); border: 1px solid var(--line); display: block; }
-  .it.x { gap: 16px; }
+  .it.x, .it.g { gap: 16px; }
+  .gcv { flex: none; width: 68px; height: 68px; border-radius: 18px; background: var(--cov-a); display: grid; place-items: center; overflow: hidden; font-size: 1.9rem; font-weight: 800; letter-spacing: -.04em; color: rgba(var(--acc-rgb), .9); }
 
   /* ---------- Uzun basma: seçenek paneli, seçim ve sıralama kipi ---------- */
   .opt.danger .oi { background: rgba(255,90,77,.12); color: var(--danger); }
@@ -534,18 +536,72 @@
   .tcard.on .trd { background: var(--accent); border-color: var(--accent); }
   .tcard.on .trd::after { content: ""; position: absolute; left: 8px; top: 4px; width: 6px; height: 11px; border: solid var(--accent-ink); border-width: 0 2.2px 2.2px 0; transform: rotate(45deg); }
 
+  /* ---------- Haftalık gün seçici ---------- */
+  /* Grup formu: düz, kartsız; ad · açıklama · günler */
+  .gf-sec { margin-bottom: 38px; }
+  .gf-lab { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 8px; font-size: .9rem; font-weight: 600; color: var(--dim); }
+  .gf-lab span:last-child { font-weight: 500; font-variant-numeric: tabular-nums; text-align: right; min-width: 0; }
+  .gf-lab .near { color: var(--danger); }
+  .gf-in, .gf-ta { display: block; width: 100%; background: none; border: 0; border-bottom: 1.5px solid var(--line); border-radius: 0; outline: none; resize: none; caret-color: var(--accent); color: var(--ink); transition: border-color .2s; }
+  .gf-in:focus, .gf-ta:focus { border-bottom-color: var(--accent); }
+  .gf-in { padding: 4px 0 14px; font-size: 2rem; font-weight: 700; letter-spacing: -.035em; line-height: 1.15; text-overflow: ellipsis; }
+  .gf-ta { padding: 6px 0 14px; font-size: 1.08rem; line-height: 1.5; min-height: 72px; max-height: 220px; overflow-y: auto; }
+  .gf-in::placeholder, .gf-ta::placeholder { color: #4d4d52; font-weight: 400; }
+  .gf-in::placeholder { font-weight: 600; }
+  .gf-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 16px -20px 2px; padding: 0 20px; touch-action: pan-x pan-y; overscroll-behavior-x: contain; }
+  .gf-chips::-webkit-scrollbar { display: none; }
+  .gf-chip { flex: none; height: 36px; padding: 0 15px; border-radius: 18px; border: 1px solid var(--line); color: var(--dim); font-size: .9rem; font-weight: 550; white-space: nowrap; transition: background .15s, color .15s, border-color .15s; }
+  .gf-chip:active { background: var(--surface2); }
+  .gf-chip.act { border-color: var(--accent); color: var(--accent); }
+  .gf-wk { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 12px; }
+  .gf-d { position: relative; height: 80px; border-radius: 14px; background: var(--surface2); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; transition: background .15s, color .15s; -webkit-tap-highlight-color: transparent; }
+  .gf-d small { font-size: .76rem; font-weight: 600; color: var(--dim); transition: color .15s; }
+  .gf-d b { font-size: 1.28rem; font-weight: 650; letter-spacing: -.02em; font-variant-numeric: tabular-nums; transition: color .15s; }
+  .gf-d.today::after { content: ""; position: absolute; bottom: 9px; width: 4px; height: 4px; border-radius: 50%; background: var(--dim); }
+  .gf-d:active { opacity: .72; }
+  .gf-d.on { background: var(--accent); }
+  .gf-d.on small { color: var(--accent-ink); opacity: .7; }
+  .gf-d.on b { color: var(--accent-ink); }
+  .gf-d.on.today::after { background: var(--accent-ink); }
+  .gf-pre { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 14px -20px 0; padding: 0 20px; touch-action: pan-x pan-y; }
+  .gf-pre::-webkit-scrollbar { display: none; }
+  .dots7 { display: inline-flex; gap: 3px; vertical-align: middle; margin-left: 8px; }
+  .dots7 u { width: 5px; height: 5px; border-radius: 50%; background: var(--line); text-decoration: none; }
+  .dots7 u.on { background: var(--accent); }
+  #gfDesc { min-height: 76px; }
+  .gdesc { color: var(--dim); font-size: .98rem; line-height: 1.5; margin-top: 8px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .gwk { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .gwk:empty { display: none; }
+  .gwk span { height: 28px; padding: 0 11px; border-radius: 14px; display: inline-flex; align-items: center; font-size: .82rem; font-weight: 600; background: var(--surface2); color: var(--dim); }
+
   /* ---------- Uzun basma paneli: tutamaç, başlık, gruplu seçenekler ---------- */
+  .sht-card { background: var(--bg); border-top: 1px solid var(--line); }
   .sht-card::before { content: ""; order: -2; display: block; flex: none; width: 40px; height: 5px; border-radius: 3px; background: var(--line2); margin: -10px auto 20px; }
-  #ctxS { order: -1; margin: 0 0 6px; color: var(--accent); font-size: .74rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
-  #ctxT { font-size: 1.65rem; font-weight: 750; letter-spacing: -.03em; margin-bottom: 18px; }
-  .optg { background: var(--card); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; }
-  .optg .opt { border-radius: 0; padding: 14px 16px; }
-  .optg .opt + .opt { border-top: 1px solid var(--line); }
-  .optg .opt:active { transform: none; background: var(--press); }
-  .sht.open .optg .opt { animation: rise .5s var(--ease) both; }
-  .sht.open .optg .opt:nth-child(2) { animation-delay: .05s; }
-  .sht.open .optg .opt:nth-child(3) { animation-delay: .1s; }
-  #cxCancel { margin-top: 12px; }
+  #ctxS { order: -1; margin: 0 0 4px; color: var(--accent); font-size: .9rem; font-weight: 600; letter-spacing: 0; text-transform: none; }
+  #ctxT { font-size: 1.65rem; font-weight: 750; letter-spacing: -.03em; margin-bottom: 14px; }
+  /* Ses paneli: aynı satır dili */
+  #vSheet h2 { font-size: 1.65rem; font-weight: 750; letter-spacing: -.03em; }
+  #vSheet .ssub { font-size: .9rem; margin: 4px 0 8px; }
+  #vSheet .sht-list { margin: 0 -20px 4px; }
+  #vSheet .opt { position: relative; gap: 16px; padding: 16px 20px; border-radius: 0; }
+  #vSheet .opt + .opt::before { content: ""; position: absolute; left: 20px; right: 20px; top: 0; height: 1px; background: var(--line); }
+  #vSheet .opt:active { transform: none; background: var(--accent-soft); }
+  #vSheet .opt .ot b { font-size: 1.08rem; font-weight: 600; }
+  #vSheet .opt .ot small { font-size: .86rem; margin-top: 3px; }
+  #vSheet .vhint { padding: 12px 0 6px; }
+  .optg { margin: 0 -20px 0; }
+  .optg .opt { position: relative; width: 100%; gap: 16px; padding: 16px 20px; border-radius: 0; }
+  .optg .opt + .opt::before { content: ""; position: absolute; left: 20px; right: 20px; top: 0; height: 1px; background: var(--line); }
+  .optg .opt:active { transform: none; background: var(--accent-soft); }
+  .optg .opt .oi { width: 24px; height: 24px; border-radius: 0; background: none; color: var(--accent); }
+  .optg .opt .oi svg { width: 24px; height: 24px; }
+  .optg .opt .ot b { font-size: 1.08rem; font-weight: 600; }
+  .optg .opt .ot small { font-size: .86rem; margin-top: 3px; }
+  .optg .opt.danger .oi, .optg .opt.danger .ot b { color: var(--danger); }
+  .optg .opt.danger:active { background: rgba(255,90,77,.12); }
+  #ctx .primary.sec { width: calc(100% + 40px); margin: 0 -20px; height: 58px; border-radius: 0; background: none; border: 0; border-top: 1px solid var(--line); color: var(--accent); font-weight: 650; box-shadow: none; }
+  #ctx .primary.sec:active { background: var(--accent-soft); }
+  #ctx #cxCancel { margin-top: 8px; margin-bottom: -8px; }
 </style>
 </head>
 <body>
@@ -555,9 +611,7 @@
   <section class="view" id="home">
     <div class="top">
       <div class="ttl">
-        <div class="eyebrow">Antrenman</div>
         <h1>Gruplarım</h1>
-        <div class="sub" id="hSub"></div>
       </div>
       <button class="icon-btn" id="openSettings" aria-label="Ayarlar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h8M18 7h2M4 17h2M12 17h8"/><circle cx="15" cy="7" r="2.4"/><circle cx="9" cy="17" r="2.4"/></svg></button>
     </div>
@@ -598,6 +652,8 @@
       <div class="gw" id="gw"><div class="cap"></div><div class="hero" id="hero"></div></div>
       <div class="gbody">
         <h1 class="gt" id="gTitle"></h1>
+        <p class="gdesc" id="gDesc"></p>
+        <div class="gwk" id="gWk"></div>
         <div class="stats3" id="gStats"></div>
         <div class="sech" id="gSech"><h2>Hareketler</h2><span id="gCount"></span></div>
         <div id="groupList"></div>
@@ -741,9 +797,9 @@
     <div class="sht-card">
       <h2 id="ctxT"></h2>
       <p class="ssub" id="ctxS"></p>
-      <div class="optg"><button class="opt" id="cxSort"><span class="oi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M7 4L3.5 7.5M7 4l3.5 3.5"/><path d="M17 20V4M17 20l-3.5-3.5M17 20l3.5-3.5"/></svg></span><span class="ot"><b>Sırala</b><small>Sürükleyerek yeniden düzenle</small></span></button>
-      <button class="opt" id="cxSel"><span class="oi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.3l2.6 2.6 4.6-5.2"/></svg></span><span class="ot"><b>Seç</b><small>Birden fazla öğe seç</small></span></button>
-      <button class="opt danger" id="cxDel"><span class="oi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 8l1 11a2 2 0 002 1.8h7a2 2 0 002-1.8l1-11"/><path d="M10 12v5M14 12v5"/><path d="M4 7.5h16"/><path d="M9 7.5V5.5a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></span><span class="ot"><b>Sil</b><small id="cxDelS"></small></span></button>
+      <div class="optg"><button class="opt" id="cxSort"><span class="oi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M7 4L3.5 7.5M7 4l3.5 3.5"/><path d="M17 20V4M17 20l-3.5-3.5M17 20l3.5-3.5"/></svg></span><span class="ot"><b>Sırala</b><small>Sürükleyerek yeniden düzenle</small></span></button>
+      <button class="opt" id="cxSel"><span class="oi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.3l2.6 2.6 4.6-5.2"/></svg></span><span class="ot"><b>Seç</b><small>Birden fazla öğe seç</small></span></button>
+      <button class="opt danger" id="cxDel"><span class="oi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M9.5 7V5.2c0-.9.7-1.7 1.7-1.7h1.6c1 0 1.7.8 1.7 1.7V7"/><path d="M6.2 7l.8 11.3A2 2 0 009 20.2h6a2 2 0 002-1.9L17.8 7"/><path d="M10 11v5.2M14 11v5.2"/></svg></span><span class="ot"><b>Sil</b><small id="cxDelS"></small></span></button>
       </div><button class="primary sec" id="cxCancel">Vazgeç</button>
     </div>
   </div>
@@ -898,33 +954,35 @@
     var an = Math.atan2(dy, dx) + k * Math.acos(d / (2 * l));
     return [a[0] + l * Math.cos(an), a[1] + l * Math.sin(an)];
   }
+  /* ----- Sade siluet: düz zemin, tek renk, temiz yuvarlak çizgiler ----- */
   function drawFig(c, t) {
     var P = XP[c.dataset.k] || XP.stretch, wide = c.classList.contains('xh'), d = sizeCv(c, wide), CW = c.width, CH = wide ? c.height : c.width; if (!CW || !CH) return;
-    var W = Math.min(CW, CH), ox = (CW - W) / 2, x = c.getContext('2d'), s = W / 100, sc = wide ? .9 : .86, i;
+    var x = c.getContext('2d'), W = Math.min(CW, CH), s = W / 100, sc = wide ? .86 : .8;
     x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, CW, CH);
-    var g = x.createLinearGradient(0, 0, 0, CH); g.addColorStop(0, wide ? COVER[0] : TH.t0); g.addColorStop(1, wide ? COVER[1] : TH.t1); x.fillStyle = g; x.fillRect(0, 0, CW, CH);
-    var gl = x.createRadialGradient(CW * .5, CH * .6, 0, CW * .5, CH * .6, W * .6); gl.addColorStop(0, 'rgba(' + (wide ? TH.glow + ',.28' : GOLD + ',.17') + ')'); gl.addColorStop(1, 'rgba(' + GOLD + ',0)'); x.fillStyle = gl; x.fillRect(0, 0, CW, CH);
-    x.setTransform(s * sc, 0, 0, s * sc, ox + s * 50 * (1 - sc), (wide ? (CH - W) / 2 - s * 7 : 0) + s * 82 * (1 - sc));
+    x.fillStyle = wide ? COVER[0] : TH.t0; x.fillRect(0, 0, CW, CH);
+    x.setTransform(s * sc, 0, 0, s * sc, (CW - 100 * s * sc) / 2, (wide ? (CH - 100 * s * sc) / 2 - s * 4 : (CH - 100 * s * sc) / 2));
     x.lineCap = 'round'; x.lineJoin = 'round';
-    x.lineWidth = 1.2; x.strokeStyle = 'rgba(' + GOLD + ',.3)';
-    x.beginPath(); if (P.bar) { x.moveTo(30, 14); x.lineTo(70, 14); x.strokeStyle = TH.bar; x.lineWidth = 2; } else { x.moveTo(8, 82); x.lineTo(92, 82); } x.stroke();
+    var ink = 'rgb(' + GOLD + ')', soft = 'rgba(' + GOLD + ',.4)';
+    // zemin / bar
+    x.beginPath(); x.lineWidth = 1.4; x.strokeStyle = 'rgba(' + GOLD + ',.35)';
+    if (P.bar) { x.moveTo(30, 14); x.lineTo(70, 14); x.strokeStyle = ink; x.lineWidth = 2.2; } else { x.moveTo(10, 82); x.lineTo(90, 82); }
+    x.stroke();
     var p = .5 - .5 * Math.cos(t / P.T * TAU), q = P.A.map(function (v, j) { return v + (P.B[j] - v) * p; });
     var H = [q[0], q[1]], N = [q[2], q[3]], F = [q[4], q[5]], G = [q[6], q[7]];
     var F2 = q[8] != null ? [q[8], q[9]] : [F[0] - 3, F[1]], G2 = [G[0] - 3, G[1]];
     if (P.rope) {
-      var per = 198, ex = G[0] - 8;
-      x.beginPath(); x.ellipse(ex, 48, 26, 36, 0, 0, TAU); x.strokeStyle = TH.rope; x.lineWidth = 1; x.stroke();
-      x.setLineDash([42, per - 42]); x.lineDashOffset = -(t / P.T) * per; x.strokeStyle = 'rgba(' + GOLD + ',.85)'; x.lineWidth = 1.6; x.stroke(); x.setLineDash([]);
+      var ex = G[0] - 8, per = 198;
+      x.beginPath(); x.ellipse(ex, 48, 26, 36, 0, 0, TAU); x.strokeStyle = 'rgba(' + GOLD + ',.18)'; x.lineWidth = 1; x.stroke();
+      x.setLineDash([46, per - 46]); x.lineDashOffset = -(t / P.T) * per; x.strokeStyle = ink; x.lineWidth = 1.6; x.stroke(); x.setLineDash([]);
     }
-    x.shadowColor = 'rgba(' + GOLD + ',.55)'; x.shadowBlur = 7 * d;
     function limb(a, b, e, col, w) { x.beginPath(); x.moveTo(a[0], a[1]); x.lineTo(b[0], b[1]); x.lineTo(e[0], e[1]); x.strokeStyle = col; x.lineWidth = w; x.stroke(); }
-    limb(H, ik(H, F2, P.kd, 18), F2, 'rgba(' + GOLD + ',.38)', 4.2);
-    limb(N, ik(N, G2, P.ed, 14), G2, 'rgba(' + GOLD + ',.38)', 3.8);
-    x.beginPath(); x.moveTo(H[0], H[1]); x.lineTo(N[0], N[1]); x.strokeStyle = TH.torso; x.lineWidth = 7; x.stroke();
-    limb(H, ik(H, F, P.kd, 18), F, 'rgb(' + GOLD + ')', 4.8);
-    limb(N, ik(N, G, P.ed, 14), G, 'rgb(' + GOLD + ')', 4.4);
+    limb(H, ik(H, F2, P.kd, 18), F2, soft, 5);
+    limb(N, ik(N, G2, P.ed, 14), G2, soft, 4.2);
+    x.beginPath(); x.moveTo(H[0], H[1]); x.lineTo(N[0], N[1]); x.strokeStyle = ink; x.lineWidth = 8.5; x.stroke();
+    limb(H, ik(H, F, P.kd, 18), F, ink, 5);
+    limb(N, ik(N, G, P.ed, 14), G, ink, 4.2);
     var dx = N[0] - H[0], dy = N[1] - H[1], dl = Math.hypot(dx, dy) || 1;
-    x.fillStyle = TH.head; x.beginPath(); x.arc(N[0] + dx / dl * 8.4, N[1] + dy / dl * 8.4, 5.4, 0, TAU); x.fill();
+    x.fillStyle = ink; x.beginPath(); x.arc(N[0] + dx / dl * 9, N[1] + dy / dl * 9, 5.2, 0, TAU); x.fill();
   }
   function xaLoop(ts) {
     if (groupOpen && document.visibilityState !== 'hidden') {
@@ -943,14 +1001,14 @@
   function renderHome(animate) {
     var el = $('#homeList');
     var nEx = state.groups.reduce(function (a, g) { return a + g.exercises.length; }, 0);
-    $('#hSub').textContent = state.groups.length ? state.groups.length + ' grup · ' + nEx + ' hareket' : '';
     if (!state.groups.length) {
       el.innerHTML = '<div class="empty"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg></span><h2>Henüz grup yok</h2>Antrenmanını gruplara ayır.<br>Örn. “Üst vücut” veya “Sabah esneme”.</div>';
       return;
     }
     el.innerHTML = state.groups.map(function (g, i) {
       var sub = g.exercises.length ? g.exercises.length + ' hareket · ' + fmtEst(estSec(g)) : 'Henüz hareket yok';
-      return '<button class="it g' + (animate ? ' in' : '') + picked('home', g.id) + '" data-id="' + g.id + '" style="--i:' + i + '"><div class="bd"><div class="nm">' + esc(g.name) + '</div><div class="sb">' + sub + '</div></div>' + CHEVC + MK + '</button>';
+      var ch = (g.name.trim().charAt(0) || '·').toLocaleUpperCase('tr');
+      return '<button class="it g' + (animate ? ' in' : '') + picked('home', g.id) + '" data-id="' + g.id + '" style="--i:' + i + '"><div class="gcv" aria-hidden="true">' + esc(ch) + '</div><div class="bd"><div class="nm">' + esc(g.name) + '</div><div class="sb">' + sub + '</div></div>' + CHEVC + MK + '</button>';
     }).join('');
   }
 
@@ -958,8 +1016,13 @@
     var g = findGroup(curId); if (!g) return;
     if (exId) renderEx();
     var n = g.exercises.length, sets = g.exercises.reduce(function (a, e) { return a + e.sets; }, 0);
+    $('#gDesc').textContent = g.desc || ''; $('#gDesc').style.display = g.desc ? '' : 'none';
+    (function () {
+      var dn = (g.days || []).slice().sort(function (x, y) { return x - y; });
+      $('#gWk').innerHTML = dn.length === 7 ? '<span>Her gün</span>' : dn.map(function (i) { return '<span>' + DAYS3[i] + '</span>'; }).join('');
+    })();
     $('#gTitle').textContent = g.name; $('#gHeadT').textContent = g.name; $('#gHead').style.setProperty('--p', 0); $('#group').style.setProperty('--hp', 0);
-    $('#hero').innerHTML = '<canvas class="hc" data-seed="' + g.id + '"></canvas>';
+    $('#hero').innerHTML = '<div class="hl" aria-hidden="true">' + esc((g.name.trim().charAt(0) || '·').toLocaleUpperCase('tr')) + '</div>';
     $('#gStats').innerHTML = n ? '<div class="st"><b>' + n + '</b><span>Hareket</span></div><div class="st"><b>' + fmtEst(estSec(g)) + '</b><span>Süre</span></div><div class="st"><b>' + sets + '</b><span>Set</span></div>' : '';
     $('#gSech').style.display = n ? '' : 'none';
     $('#gCount').textContent = n ? '(' + n + ')' : '';
@@ -1043,7 +1106,7 @@
   });
 
   function needName(inp) {
-    var box = inp.closest('.fcard') || inp;
+    var box = inp.closest('.fcard, .gf-sec') || inp;
     box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake'); inp.focus();
   }
 
@@ -1127,30 +1190,97 @@
   }
 
   /* ----- Grup formu ----- */
+  var MONTHS = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+  var DAYS3 = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'];
+  function daysText(d) {
+    d = d.slice().sort(function (a, b) { return a - b; }); var k = d.join('');
+    if (k === '0123456') return 'Her gün'; if (k === '01234') return 'Hafta içi'; if (k === '56') return 'Hafta sonu';
+    return d.map(function (i) { return DAYS3[i]; }).join(', ');
+  }
+  var DAYF = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'];
   function groupForm(id) {
-    var g = id ? findGroup(id) : null;
+    var g = id ? findGroup(id) : null, days = g && g.days ? g.days.slice() : [], gname = g ? g.name : '';
     formSave = function () {
       var inp = $('#gfName'), v = inp.value.trim();
       if (!v) return needName(inp);
-      if (g) { g.name = v; save(); renderHome(false); renderGroup(false); closeForm(); }
+      var desc = $('#gfDesc').value.trim(), dd = days.slice().sort(function (a, b) { return a - b; });
+      if (g) { g.name = v; g.desc = desc; g.days = dd; save(); renderHome(false); renderGroup(false); closeForm(); }
       else {
-        var n = { id: uid(), name: v, exercises: [] };
+        var n = { id: uid(), name: v, desc: desc, days: dd, exercises: [] };
         state.groups.push(n); save(); renderHome(false);
         closeForm(function () { openGroup(n.id); });
       }
     };
-    // Yeni özellikler (renk, simge, hatırlatma vb.) için buraya yeni bir .fsec bölümü eklenir
+    // Yeni özellikler (renk, simge, hatırlatma vb.) için buraya yeni bir .gf-sec bölümü eklenir
     openForm('', g ? 'Grubu düzenle' : 'Yeni grup',
-      '<div class="fsec stg" style="--k:0"><div class="fcard">' +
-      nameBlock('gfName', 'Grup adı', 40, g ? g.name : '', GSUGG) +
-      '</div></div>',
+      '<div class="gf-sec stg" style="--k:0"><div class="gf-lab"><label for="gfName">Grup adı</label><span id="gfNmCt"></span></div>' +
+        '<input class="gf-in" id="gfName" maxlength="40" placeholder="Örn. Üst vücut" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="done" value="' + esc(gname) + '">' +
+        '<div class="col' + (gname ? ' off' : '') + '" id="gfSgWrap"><div><div class="gf-chips" id="gfSgRow">' +
+          GSUGG.map(function (x) { return '<button type="button" class="gf-chip" data-s="' + esc(x) + '">' + esc(x) + '</button>'; }).join('') +
+        '</div></div></div></div>' +
+      '<div class="gf-sec stg" style="--k:1"><div class="gf-lab"><label for="gfDesc">Açıklama</label><span id="gfCt"></span></div>' +
+        '<textarea class="gf-ta" id="gfDesc" maxlength="160" rows="2" placeholder="Bu grup ne için? (isteğe bağlı)">' + esc(g && g.desc || '') + '</textarea></div>' +
+      '<div class="gf-sec stg" style="--k:2"><div class="gf-lab"><span>Çalışma günleri</span><span id="wkSum"></span></div>' +
+        '<div class="gf-wk" id="wk">' + wkHTML(days) + '</div>' +
+        '<div class="gf-pre" id="wkPre"><button type="button" class="gf-chip" data-p="01234">Hafta içi</button><button type="button" class="gf-chip" data-p="56">Hafta sonu</button><button type="button" class="gf-chip" data-p="0123456">Her gün</button><button type="button" class="gf-chip" data-p="">Temizle</button></div></div>',
       g ? 'Kaydet' : 'Oluştur', g ? 'Grubu sil' : null,
       function () {
         state.groups = state.groups.filter(function (x) { return x.id !== id; });
         save(); renderHome(false); closeForm(function () { if (groupOpen) closeGroup(); });
       },
       g ? '<b>' + esc(g.name) + '</b> grubu' + (g.exercises.length ? ' ve içindeki ' + g.exercises.length + ' hareket' : '') + ' silinecek. Bu işlem geri alınamaz.' : '');
-    wireName(40);
+
+    /* ad */
+    var nm = $('#gfName'), nct = $('#gfNmCt'), sgW = $('#gfSgWrap');
+    function syncName() {
+      var n = nm.value.length;
+      nct.textContent = n ? n + '/40' : ''; nct.classList.toggle('near', n >= 34);
+      sgW.classList.toggle('off', n > 0); sgW.inert = n > 0;
+    }
+    nm.addEventListener('input', syncName);
+    $('#gfSgRow').addEventListener('click', function (e) {
+      var b = e.target.closest('.gf-chip'); if (!b) return;
+      nm.value = b.dataset.s; syncName(); vib(8);
+    });
+    syncName();
+
+    /* açıklama */
+    var gd = $('#gfDesc'), ct = $('#gfCt');
+    function syncDesc() {
+      var n = gd.value.length; ct.textContent = n ? n + '/160' : ''; ct.classList.toggle('near', n >= 140);
+      gd.style.height = 'auto'; gd.style.height = Math.min(gd.scrollHeight, 220) + 'px';
+    }
+    gd.addEventListener('input', syncDesc);
+    requestAnimationFrame(syncDesc);
+
+    /* günler */
+    var wk = $('#wk'), sum = $('#wkSum'), pre = $('#wkPre');
+    function paintDays() {
+      Array.prototype.forEach.call(wk.children, function (b) { var on = days.indexOf(+b.dataset.i) > -1; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
+      var key = days.slice().sort(function (a, b) { return a - b; }).join('');
+      Array.prototype.forEach.call(pre.children, function (b) { b.classList.toggle('act', key !== '' && b.dataset.p === key); });
+      sum.textContent = days.length ? daysText(days) : 'İsteğe bağlı';
+    }
+    pre.addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      days = b.dataset.p.split('').filter(Boolean).map(Number); vib(8); paintDays();
+    });
+    wk.addEventListener('click', function (e) {
+      var b = e.target.closest('.gf-d'); if (!b) return;
+      var i = +b.dataset.i, k = days.indexOf(i); if (k > -1) days.splice(k, 1); else days.push(i);
+      vib(6); paintDays();
+    });
+    paintDays();
+  }
+  // Bu haftanın 7 günü (Pzt–Paz), bugün küçük noktayla işaretli
+  function wkHTML(days) {
+    var n = new Date(), t = (n.getDay() + 6) % 7, h = '', i, d;
+    for (i = 0; i < 7; i++) {
+      d = new Date(n.getFullYear(), n.getMonth(), n.getDate() - t + i);
+      var on = days.indexOf(i) > -1;
+      h += '<button type="button" class="gf-d' + (on ? ' on' : '') + (i === t ? ' today' : '') + '" data-i="' + i + '" aria-pressed="' + on + '" aria-label="' + DAYF[i] + '"><small>' + DAYS3[i] + '</small><b>' + d.getDate() + '</b></button>';
+    }
+    return h;
   }
 
   /* ----- Hareket formu ----- */
