@@ -194,6 +194,33 @@
   .nm-in.pop { animation: nmpop .45s var(--ease); }
   @keyframes nmpop { 0% { opacity: 0; transform: translateY(8px); } 100% { opacity: 1; transform: none; } }
 
+
+  /* ---------- Hareket formu v2: ad + tarif ---------- */
+  .fcard:has(.xn-in:focus, .ds-in:focus) { border-color: rgba(var(--acc-rgb),.45); box-shadow: 0 0 0 4px rgba(var(--acc-rgb),.06); }
+  .xn > * + * { border-top: 0; }
+  .xn-field { position: relative; display: flex; align-items: center; gap: 14px; padding: 18px 18px 24px; }
+  .xn-ic { flex: none; width: 46px; height: 46px; border-radius: 15px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; transition: transform .4s var(--ease), background .3s; }
+  .xn-ic svg { width: 23px; height: 23px; }
+  .xn-field:focus-within .xn-ic { transform: rotate(-8deg) scale(1.06); }
+  .xn-in { flex: 1; min-width: 0; display: block; background: none; border: 0; outline: none; padding: 6px 48px 6px 0; font-size: 1.45rem; font-weight: 700; letter-spacing: -.03em; line-height: 1.25; caret-color: var(--accent); text-overflow: ellipsis; }
+  .xn-in::placeholder { color: #55555a; font-weight: 600; }
+  .xn-in.pop { animation: nmpop .45s var(--ease); }
+  .xn-field .nm-ct { position: absolute; right: 18px; top: 50%; margin-top: -14px; font-size: .72rem; font-weight: 600; color: var(--dim); font-variant-numeric: tabular-nums; opacity: 0; transition: opacity .25s, color .25s; }
+  .xn-field:focus-within .nm-ct { opacity: 1; }
+  .xn-field.near .nm-ct { color: var(--danger); }
+  .xn-field .nm-bar { position: absolute; left: 18px; right: 18px; bottom: 12px; }
+  .xn-field.near .nm-bar::after { background: var(--danger); }
+  .xn-sgl { padding: 0 18px; color: var(--dim); font-size: .72rem; font-weight: 650; letter-spacing: .08em; text-transform: uppercase; }
+  .xn .sg-row { margin: 0; padding: 10px 18px 18px; }
+  .xn .sgc { height: 38px; padding: 0 16px; border-radius: 19px; font-size: .9rem; }
+  .xd-cap { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .xd-cap em { font-style: normal; text-transform: none; letter-spacing: 0; font-weight: 500; font-size: .78rem; }
+  .xd .ds-add { padding: 16px 18px; }
+  .xd .ds-add .ic { width: 40px; height: 40px; border-radius: 13px; }
+  .xd .ds-add .ic svg { width: 19px; height: 19px; }
+  .xd .ds-in { padding: 18px 18px 10px; font-size: 1.02rem; min-height: 112px; }
+  .xd .ds-foot { margin-top: 6px; padding: 12px 16px 14px 14px; border-top: 1px solid var(--line); }
+
   /* Aç-kapa bölümleri: yükseklik yumuşakça değişir */
   .col { display: grid; grid-template-rows: 1fr; transition: grid-template-rows .5s var(--ease), opacity .35s; }
   .col > div { min-height: 0; overflow: hidden; }
@@ -460,8 +487,12 @@
     background: var(--bg); border-bottom: 1px solid var(--line); }
   .ghead span { position: absolute; left: 76px; right: 76px; top: calc(var(--pt) - 6px); height: 42px; line-height: 42px; text-align: center; font-size: 1.02rem; font-weight: 650; letter-spacing: -.015em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transform: translateY(calc((1 - var(--p)) * 10px)); }
   .hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-  .xa { flex: none; width: 68px; height: 68px; border-radius: 18px; background: var(--tile); border: 1px solid var(--line); display: block; }
+  .xa { flex: none; width: 96px; height: 96px; border-radius: 26px; background: var(--tile); border: 1px solid var(--line); display: block; box-shadow: 0 12px 26px -16px rgba(0,0,0,.75); }
   .it.x, .it.g { gap: 16px; }
+  .gcv.xcv { width: 96px; height: 96px; border-radius: 26px; font-size: 2.9rem; }
+  .it.x { gap: 18px; padding-top: 14px; padding-bottom: 14px; }
+  .it.x .nm { font-size: 1.27rem; font-weight: 600; letter-spacing: -.02em; }
+  .it.x .sb { font-size: 1.02rem; margin-top: 5px; }
   .gcv { flex: none; width: 68px; height: 68px; border-radius: 18px; background: var(--cov-a); display: grid; place-items: center; overflow: hidden; font-size: 1.9rem; font-weight: 800; letter-spacing: -.04em; color: rgba(var(--acc-rgb), .9); }
 
   /* ---------- Uzun basma: seçenek paneli, seçim ve sıralama kipi ---------- */
@@ -675,7 +706,7 @@
   <section class="view" id="settings" aria-label="Ayarlar">
     <div class="top">
       <button class="icon-btn" id="setBack" aria-label="Geri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
-      <div class="ttl"><div class="eyebrow">Antrenman</div><h1>Ayarlar</h1></div>
+      <div class="ttl"><h1>Ayarlar</h1></div>
     </div>
     <div class="scroll" id="setBody">
       <!-- Yeni ayar = .fcard içine yeni .frow; yeni grup = yeni .fsec -->
@@ -870,8 +901,8 @@
   var COVER = ['#5e4016', '#2b1d09'];
   // Canvas çizimlerinin renkleri (CSS değişkenleriyle aynı temaya bağlıdır)
   var THEMES = {
-    altin: { name: 'Siyah Altın', desc: 'Saf siyah zemin, parlak altın detaylar ve net kontrast.', dark: 1, gold: '255,185,56', cov: ['#5e4016', '#2b1d09'], ring: '255,214,150', glow: '255,205,120', torso: '#ffcf70', head: '#ffe3a8', t0: '#15120d', t1: '#050505', bar: 'rgba(255,255,255,.6)', rope: 'rgba(255,255,255,.14)', meta: '#000000' },
-    mavi:  { name: 'Mavi Sabah', desc: 'Ferah taş-fildişi zemin; butonlar ve detaylar mavi.', gold: '42,104,173', cov: ['#cfe0f3', '#a9c6e6'], ring: '27,74,128', glow: '255,255,255', torso: '#3a7bc8', head: '#1b3f6b', t0: '#eef4fb', t1: '#dce8f5', bar: 'rgba(27,42,61,.55)', rope: 'rgba(27,42,61,.16)', meta: '#f5f2ec' }
+    altin: { name: 'Siyah Altın', desc: 'Saf siyah zemin, parlak altın detaylar ve net kontrast.', dark: 1, gold: '255,185,56', cov: ['#5e4016', '#2b1d09'], ring: '255,214,150', glow: '255,205,120', torso: '#ffcf70', head: '#ffe3a8', t0: '#15120d', t1: '#050505', bar: 'rgba(255,255,255,.6)', rope: 'rgba(255,255,255,.14)', meta: '#000000', fig: '255,196,82', figHi: '255,238,184', figLo: '168,110,26', bg0: '#2a1f0d', bg1: '#090705', spot: '255,196,90', spotA: .26, sh: '0,0,0', shA: .55 },
+    mavi:  { name: 'Mavi Sabah', desc: 'Ferah taş-fildişi zemin; butonlar ve detaylar mavi.', gold: '42,104,173', cov: ['#cfe0f3', '#a9c6e6'], ring: '27,74,128', glow: '255,255,255', torso: '#3a7bc8', head: '#1b3f6b', t0: '#eef4fb', t1: '#dce8f5', bar: 'rgba(27,42,61,.55)', rope: 'rgba(27,42,61,.16)', meta: '#f5f2ec', fig: '42,104,173', figHi: '150,196,240', figLo: '24,62,108', bg0: '#e8f1fa', bg1: '#b6cfeb', spot: '255,255,255', spotA: .8, sh: '27,42,61', shA: .3 }
   }, TH = THEMES.altin, THEME_ORDER = ['altin', 'mavi'];
   $('#thList').innerHTML = THEME_ORDER.map(function (k) {
     var T = THEMES[k];
@@ -922,18 +953,23 @@
     x.fillStyle = 'rgb(' + GOLD + ')'; x.beginPath(); x.arc(cx, cy, 3.4 * d, 0, TAU); x.fill();
   }
 
-  // Pozlar: [kalça x,y, boyun x,y, ayak x,y, el x,y, (arka ayak x,y)] · 100x100 birim, sağa bakan yan görünüş
-  // kd/ed: diz/dirsek bükülme yönü (0 = düz), T: tekrar süresi (sn)
+  // Pozlar (iskelet, açı tabanlı): [kalça x,y, gövde açısı, baş açısı, ön kol (üst,alt), arka kol (üst,alt), ön bacak (üst,alt), arka bacak (üst,alt), gövde ölçeği?]
+  // Açı: 0 = aşağı, 90 = sağ, 180 = yukarı, -90 = sol. v: 's' yan görünüm, 'f' ön görünüm. K: döngüdeki anahtar pozlar, T: tekrar süresi (sn)
+  function mir(p) { return [100 - p[0], p[1], -p[2], -p[3], -p[6], -p[7], -p[4], -p[5], -p[10], -p[11], -p[8], -p[9], p[12]]; }
+  var SD = [50,47,180,180,80,85,78,85,0,0,0,0], SW = [50,47,180,180,10,20,-10,15,3,0,-3,0];
+  var CR = [[50,47,180,180,90,90,-90,-90,12,12,-12,-12], [50,49,350,350,-12,-12,-200,-200,14,14,-14,-14,.42]];
+  var SR = [50,47,168,170,160,160,168,168,6,6,-6,-6], SC = [50,47,180,180,175,175,-175,-175,6,6,-6,-6];
   var XP = {
-    push:   { kd: 0, ed: 1, T: 2.2, A: [48,62,72,50,16,78,72,78], B: [48,72,72,68,16,78,72,78] },
-    plank:  { kd: 0, ed: 1, T: 3.4, A: [48,70,72,64,14,78,86,78], B: [48,68.5,72,62.5,14,78,86,78] },
-    squat:  { kd: -1, ed: 1, T: 2.6, A: [48,44,50,18,50,80,76,24], B: [36,62,52,36,50,80,78,40] },
-    crunch: { kd: -1, ed: -1, T: 2.2, A: [52,76,28,74,68,80,22,70], B: [52,76,40,57,68,80,36,52] },
-    pull:   { kd: 1, ed: -1, T: 2.8, bar: 1, A: [50,68,50,44,46,78,50,14], B: [50,48,50,26,44,70,50,14] },
-    lunge:  { kd: -1, ed: 1, T: 2.8, A: [50,44,50,18,54,80,64,40,46,80], B: [50,58,50,32,70,80,64,52,28,80] },
-    bridge: { kd: -1, ed: 1, T: 2.6, A: [52,76,28,74,68,80,46,79], B: [52,56,30,74,68,80,46,79] },
-    rope:   { kd: -1, ed: 1, T: .8, rope: 1, A: [48,44,50,18,50,80,62,46], B: [48,36,50,10,48,72,62,38] },
-    stretch:{ kd: -1, ed: 1, T: 3.4, A: [48,44,46,18,48,80,48,-8], B: [46,44,62,20,48,80,78,-2] }
+    squat:  { v: 's', T: 2.6, K: [SD, [36,60,150,155,90,90,88,90,75,-5,75,-5]] },
+    lunge:  { v: 's', T: 3.6, K: [SW, [50,62,180,180,10,30,-5,25,80,-6,-20,-80], SW, [50,62,180,180,10,30,-5,25,-20,-80,80,-6]] },
+    push:   { v: 's', T: 2.2, K: [[41,67,110,105,0,0,0,0,-70,-70,-70,-70], [40,75,100,100,-50,70,-50,70,-78,-78,-78,-78]] },
+    plank:  { v: 's', T: 3.4, K: [[41,73,98,100,0,90,0,90,-77,-77,-77,-77], [41,71.5,98,100,0,90,0,90,-77,-77,-77,-77]] },
+    crunch: { v: 's', T: 2.2, K: [[52,76,-90,-90,100,100,100,100,130,10,130,10], [52,76,-130,-125,85,85,85,85,130,10,130,10]] },
+    pull:   { v: 's', T: 2.8, bar: 1, K: [[50,61,180,180,180,180,180,180,8,-95,8,-95], [46,54,175,170,135,221,135,221,8,-95,8,-95]] },
+    bridge: { v: 's', T: 2.6, K: [[46.5,76,-90,-90,100,100,100,100,127,18,127,18], [44,60,-48,-70,100,100,100,100,75,15,75,15]] },
+    rope:   { v: 's', T: .8, rope: 1, K: [[50,47,180,180,10,70,8,70,3,-3,3,-3], [50,41,180,180,15,80,12,80,10,-30,10,-30]] },
+    cross:  { v: 'f', T: 5, K: [CR[0], CR[1], CR[0], mir(CR[1])] },
+    stretch:{ v: 'f', T: 5, K: [SR, SC, mir(SR), SC] }
   };
   function xaKind(n) {
     n = String(n).toLocaleLowerCase('tr').replace(/ş/g, 's').replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ü/g, 'u').replace(/ç/g, 'c').replace(/ğ/g, 'g');
@@ -945,44 +981,63 @@
     if (/lunge|hamle/.test(n)) return 'lunge';
     if (/kopru|bridge/.test(n)) return 'bridge';
     if (/atlama|jump|rope|\bip\b/.test(n)) return 'rope';
+    if (/capraz|cross|dokun/.test(n)) return 'cross';
     return 'stretch';
   }
-  // İki kemikli uzuv: eklem (diz/dirsek) konumu
-  function ik(a, t, k, l) {
-    var dx = t[0] - a[0], dy = t[1] - a[1], d = Math.min(Math.hypot(dx, dy) || 1, 2 * l - .01);
-    if (!k) return [(a[0] + t[0]) / 2, (a[1] + t[1]) / 2];
-    var an = Math.atan2(dy, dx) + k * Math.acos(d / (2 * l));
-    return [a[0] + l * Math.cos(an), a[1] + l * Math.sin(an)];
+  // Anahtar pozlar arasında yumuşak geçiş (açılar en kısa yoldan döner)
+  function poseAt(P, t) {
+    var K = P.K, n = K.length, f = (t / P.T % 1) * n, i = Math.floor(f), u = f - i, a = K[i % n], b = K[(i + 1) % n], q = [], j, d;
+    u = .5 - .5 * Math.cos(u * Math.PI);
+    for (j = 0; j < 12; j++) { if (j < 2) q[j] = a[j] + (b[j] - a[j]) * u; else { d = ((b[j] - a[j] + 540) % 360) - 180; q[j] = a[j] + d * u; } }
+    var ta = a[12] == null ? 1 : a[12], tb = b[12] == null ? 1 : b[12]; q[12] = ta + (tb - ta) * u;
+    return q;
   }
-  /* ----- Sade siluet: düz zemin, tek renk, temiz yuvarlak çizgiler ----- */
+  function fk(P, t) {
+    var q = poseAt(P, t), fr = P.v === 'f', hw = fr ? 3.5 : 0, sw = fr ? 5 : 0, r = Math.PI / 180, o = {};
+    function sg(a, ang, l) { return [a[0] + l * Math.sin(ang * r), a[1] + l * Math.cos(ang * r)]; }
+    var H = [q[0], q[1]], N = sg(H, q[2], 24 * q[12]), px = -Math.cos(q[2] * r) * sw, py = Math.sin(q[2] * r) * sw;
+    o.H = H; o.N = N; o.head = sg(N, q[3], 9);
+    o.arm = [0, 1].map(function (s) { var k = s ? -1 : 1, S = [N[0] + k * px, N[1] + k * py], E = sg(S, q[4 + s * 2], 12); return [S, E, sg(E, q[5 + s * 2], 11)]; });
+    o.leg = [0, 1].map(function (s) { var k = s ? -1 : 1, Hp = [H[0] + k * hw, H[1]], Kn = sg(Hp, q[8 + s * 2], 18); return [Hp, Kn, sg(Kn, q[9 + s * 2], 17)]; });
+    if (!P.bar) { var m = Math.max(o.leg[0][2][1], o.leg[1][2][1]), dy = m > 82 ? 82 - m : 0; if (dy) { [o.H, o.N, o.head].concat(o.arm, o.leg).forEach(function (p) { if (p.length === 3 && p[0].length) p.forEach(function (v) { v[1] += dy; }); else p[1] += dy; }); } }
+    return o;
+  }
+  /* ----- Statik kapak: ışıklı sahne + harekete göre soyut desen (animasyon yok, sadece değişince çizilir) ----- */
   function drawFig(c, t) {
-    var P = XP[c.dataset.k] || XP.stretch, wide = c.classList.contains('xh'), d = sizeCv(c, wide), CW = c.width, CH = wide ? c.height : c.width; if (!CW || !CH) return;
-    var x = c.getContext('2d'), W = Math.min(CW, CH), s = W / 100, sc = wide ? .86 : .8;
+    var kind = c.dataset.k || 'stretch', wide = c.classList.contains('xh'), d = sizeCv(c, wide), CW = c.width, CH = wide ? c.height : c.width; if (!CW || !CH) return;
+    var key = kind + '|' + TH.name + '|' + CW + 'x' + CH; if (c._k === key) return; c._k = key;
+    var x = c.getContext('2d'), W = Math.min(CW, CH), s = W / 100, sc = wide ? .78 : .86, i, g;
+    var base = 'rgb(' + TH.fig + ')', hi = 'rgb(' + TH.figHi + ')', lo = 'rgb(' + TH.figLo + ')', fl = TH.dark ? GOLD : TH.fig;
     x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, CW, CH);
-    x.fillStyle = wide ? COVER[0] : TH.t0; x.fillRect(0, 0, CW, CH);
-    x.setTransform(s * sc, 0, 0, s * sc, (CW - 100 * s * sc) / 2, (wide ? (CH - 100 * s * sc) / 2 - s * 4 : (CH - 100 * s * sc) / 2));
+    g = x.createLinearGradient(0, 0, CW * .35, CH); g.addColorStop(0, TH.bg0); g.addColorStop(1, TH.bg1); x.fillStyle = g; x.fillRect(0, 0, CW, CH);
+    g = x.createRadialGradient(CW * .5, CH * .45, 0, CW * .5, CH * .45, Math.max(CW, CH) * .75);
+    g.addColorStop(0, 'rgba(' + TH.spot + ',' + TH.spotA + ')'); g.addColorStop(1, 'rgba(' + TH.spot + ',0)'); x.fillStyle = g; x.fillRect(0, 0, CW, CH);
+    /* ince arka halkalar */
+    x.lineWidth = d; x.strokeStyle = 'rgba(' + fl + ',.12)';
+    for (i = 1; i < 4; i++) { x.beginPath(); x.arc(CW / 2, CH / 2, W * (.2 + i * .17), 0, TAU); x.stroke(); }
+    x.setTransform(s * sc, 0, 0, s * sc, (CW - 100 * s * sc) / 2, (CH - 100 * s * sc) / 2);
     x.lineCap = 'round'; x.lineJoin = 'round';
-    var ink = 'rgb(' + GOLD + ')', soft = 'rgba(' + GOLD + ',.4)';
-    // zemin / bar
-    x.beginPath(); x.lineWidth = 1.4; x.strokeStyle = 'rgba(' + GOLD + ',.35)';
-    if (P.bar) { x.moveTo(30, 14); x.lineTo(70, 14); x.strokeStyle = ink; x.lineWidth = 2.2; } else { x.moveTo(10, 82); x.lineTo(90, 82); }
-    x.stroke();
-    var p = .5 - .5 * Math.cos(t / P.T * TAU), q = P.A.map(function (v, j) { return v + (P.B[j] - v) * p; });
-    var H = [q[0], q[1]], N = [q[2], q[3]], F = [q[4], q[5]], G = [q[6], q[7]];
-    var F2 = q[8] != null ? [q[8], q[9]] : [F[0] - 3, F[1]], G2 = [G[0] - 3, G[1]];
-    if (P.rope) {
-      var ex = G[0] - 8, per = 198;
-      x.beginPath(); x.ellipse(ex, 48, 26, 36, 0, 0, TAU); x.strokeStyle = 'rgba(' + GOLD + ',.18)'; x.lineWidth = 1; x.stroke();
-      x.setLineDash([46, per - 46]); x.lineDashOffset = -(t / P.T) * per; x.strokeStyle = ink; x.lineWidth = 1.6; x.stroke(); x.setLineDash([]);
+    g = x.createLinearGradient(0, 15, 0, 85); g.addColorStop(0, hi); g.addColorStop(1, base);
+    x.shadowColor = 'rgba(' + fl + ',.55)'; x.shadowBlur = 14 * d;
+    function st(w, col, a) { x.strokeStyle = col || g; x.lineWidth = w; x.globalAlpha = a == null ? 1 : a; x.stroke(); x.globalAlpha = 1; }
+    function ln(x1, y1, x2, y2, w, col, a) { x.beginPath(); x.moveTo(x1, y1); x.lineTo(x2, y2); st(w, col, a); }
+    function arc(cx, cy, r, a0, a1, w, a) { x.beginPath(); x.arc(cx, cy, r, a0 * Math.PI / 180, a1 * Math.PI / 180); st(w, null, a); }
+    function chev(y, up, w, a, hw) { hw = hw || 28; x.beginPath(); x.moveTo(50 - hw, y + (up ? 12 : -12)); x.lineTo(50, y + (up ? -8 : 8)); x.lineTo(50 + hw, y + (up ? 12 : -12)); st(w, null, a); }
+    switch (kind) {
+      case 'push': chev(70, 1, 9, .35); chev(52, 1, 9, .65); chev(34, 1, 9, 1); break;
+      case 'squat': chev(30, 0, 9, .35); chev(48, 0, 9, .65); chev(66, 0, 9, 1); break;
+      case 'plank': ln(18, 34, 82, 34, 9, null, .35); ln(18, 50, 82, 50, 9, null, .65); ln(18, 66, 82, 66, 9, null, 1); ln(18, 66, 18, 66, 9); break;
+      case 'crunch': arc(24, 76, 18, 270, 360, 8, 1); arc(24, 76, 34, 270, 360, 8, .65); arc(24, 76, 50, 270, 360, 8, .35); x.beginPath(); x.arc(24, 76, 5, 0, TAU); x.fillStyle = hi; x.fill(); break;
+      case 'bridge': arc(50, 74, 16, 180, 360, 8, 1); arc(50, 74, 31, 180, 360, 8, .65); arc(50, 74, 46, 180, 360, 8, .35); break;
+      case 'pull': ln(18, 24, 82, 24, 7); ln(32, 36, 32, 62, 8, null, .45); ln(50, 36, 50, 78, 8, null, 1); ln(68, 36, 68, 54, 8, null, .45); break;
+      case 'lunge': ln(26, 74, 50, 26, 9, null, .45); ln(44, 74, 68, 26, 9, null, .75); ln(62, 74, 86, 26, 9, null, 1); break;
+      case 'rope': x.beginPath(); x.ellipse(50, 50, 18, 32, 0, 0, TAU); st(7, null, 1); x.beginPath(); x.ellipse(50, 50, 33, 40, 0, 0, TAU); st(4, null, .4); x.beginPath(); x.arc(50, 50, 5, 0, TAU); x.fillStyle = hi; x.fill(); break;
+      case 'cross': ln(26, 26, 74, 74, 9, null, 1); ln(74, 26, 26, 74, 9, null, .6); x.fillStyle = hi; [[26, 26], [74, 26], [26, 74], [74, 74]].forEach(function (p) { x.beginPath(); x.arc(p[0], p[1], 5.5, 0, TAU); x.fill(); }); break;
+      default:
+        for (i = 0; i < 8; i++) { var an = i * Math.PI / 4 + Math.PI / 8; ln(50 + Math.cos(an) * 20, 50 + Math.sin(an) * 20, 50 + Math.cos(an) * 38, 50 + Math.sin(an) * 38, 7, null, i % 2 ? .5 : 1); }
+        x.beginPath(); x.arc(50, 50, 8, 0, TAU); x.fillStyle = hi; x.fill();
     }
-    function limb(a, b, e, col, w) { x.beginPath(); x.moveTo(a[0], a[1]); x.lineTo(b[0], b[1]); x.lineTo(e[0], e[1]); x.strokeStyle = col; x.lineWidth = w; x.stroke(); }
-    limb(H, ik(H, F2, P.kd, 18), F2, soft, 5);
-    limb(N, ik(N, G2, P.ed, 14), G2, soft, 4.2);
-    x.beginPath(); x.moveTo(H[0], H[1]); x.lineTo(N[0], N[1]); x.strokeStyle = ink; x.lineWidth = 8.5; x.stroke();
-    limb(H, ik(H, F, P.kd, 18), F, ink, 5);
-    limb(N, ik(N, G, P.ed, 14), G, ink, 4.2);
-    var dx = N[0] - H[0], dy = N[1] - H[1], dl = Math.hypot(dx, dy) || 1;
-    x.fillStyle = ink; x.beginPath(); x.arc(N[0] + dx / dl * 9, N[1] + dy / dl * 9, 5.2, 0, TAU); x.fill();
+    x.shadowBlur = 0;
   }
   function xaLoop(ts) {
     if (groupOpen && document.visibilityState !== 'hidden') {
@@ -1034,8 +1089,9 @@
       return;
     }
     el.innerHTML = g.exercises.map(function (e, i) {
-      return '<button class="it x' + (animate ? ' in' : '') + picked('group', e.id) + '" data-id="' + e.id + '" style="--i:' + i + '"><canvas class="xa" data-k="' + xaKind(e.name) + '"></canvas><div class="bd"><div class="nm">' + esc(e.name) + '</div><div class="sb">' + exMeasure(e) + '</div></div>' + MK + '</button>';
+      return '<button class="it x' + (animate ? ' in' : '') + picked('group', e.id) + '" data-id="' + e.id + '" style="--i:' + i + '"><div class="gcv xcv" aria-hidden="true">' + esc((e.name.trim().charAt(0) || '·').toLocaleUpperCase('tr')) + '</div><div class="bd"><div class="nm">' + esc(e.name) + '</div><div class="sb">' + exMeasure(e) + '</div></div>' + MK + '</button>';
     }).join('');
+    var gs = $('#groupScroll'); if (gs && gs._hdUpd) gs._hdUpd();
   }
 
   /* ================= Sayfa geçişleri (Web Animations) ================= */
@@ -1305,38 +1361,39 @@
 
     // Her .fsec bir bölüm; yeni özellik için yeni bölüm veya satır eklemek yeterli
     var html =
-      '<div class="fsec stg" style="--k:0"><div class="fcard">' +
-        '<div class="nmbox">' +
-          '<div class="nm-field" id="nmField">' +
-            '<input class="nm-in" id="fTitle" aria-label="Hareket adı" maxlength="50" placeholder=" " autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="next" value="' + esc(d.name) + '">' +
-            '<span class="nm-lb" aria-hidden="true">Hareket adı</span>' +
-            '<span class="nm-ct" id="nmCt"></span>' +
-            '<div class="nm-bar"></div>' +
-          '</div>' +
-          '<div class="col' + (d.name ? ' off' : '') + '" id="sgWrap"><div><div class="sg-row" id="sgRow">' +
+      '<div class="fsec stg" style="--k:0"><div class="fcap">Hareket adı</div><div class="fcard xn">' +
+        '<div class="xn-field" id="nmField">' +
+          '<span class="xn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg></span>' +
+          '<input class="xn-in" id="fTitle" aria-label="Hareket adı" maxlength="50" placeholder="Örn. Şınav" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="next" value="' + esc(d.name) + '">' +
+          '<span class="nm-ct" id="nmCt"></span>' +
+          '<div class="nm-bar"></div>' +
+        '</div>' +
+        '<div class="col' + (d.name ? ' off' : '') + '" id="sgWrap"><div>' +
+          '<div class="xn-sgl">Hızlı seç</div>' +
+          '<div class="sg-row" id="sgRow">' +
             SUGG.map(function (s) { return '<button type="button" class="sgc" data-s="' + esc(s) + '">' + esc(s) + '</button>'; }).join('') +
-          '</div></div></div>' +
-        '</div>' +
-        '<div class="dsbox">' +
-          '<div class="col' + (d.desc ? ' off' : '') + '" id="dsAdd"><div>' +
-            '<button type="button" class="ds-add" id="dsAddBtn"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span><span><b>Nasıl yapılır?</b><small>İsteğe bağlı · duruş, nefes, dikkat noktaları</small></span></button>' +
-          '</div></div>' +
-          '<div class="col' + (d.desc ? '' : ' off') + '" id="dsOpen"><div>' +
-            '<textarea class="ds-in" id="fDesc" aria-label="Nasıl yapılır" maxlength="400" rows="3" placeholder="Hareketi kısaca anlat…">' + esc(d.desc) + '</textarea>' +
-            '<div class="ds-foot"><div class="gcs" id="gcs"><button type="button" class="gc" tabindex="-1" data-t="Duruş">+ Duruş</button><button type="button" class="gc" tabindex="-1" data-t="Nefes">+ Nefes</button><button type="button" class="gc" tabindex="-1" data-t="Dikkat">+ Dikkat</button></div><span class="ds-ct" id="dsCt"></span></div>' +
-          '</div></div>' +
-        '</div>' +
+          '</div>' +
+        '</div></div>' +
       '</div></div>' +
-      '<div class="fsec stg" style="--k:1"><div class="fcap">Ölçü</div><div class="fcard">' +
+      '<div class="fsec stg" style="--k:1"><div class="fcap xd-cap"><span>Nasıl yapılır</span><em>İsteğe bağlı</em></div><div class="fcard xd"><div class="dsbox">' +
+        '<div class="col' + (d.desc ? ' off' : '') + '" id="dsAdd"><div>' +
+          '<button type="button" class="ds-add" id="dsAddBtn"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span><span><b>Tarif ekle</b><small>Duruş, nefes ve dikkat noktalarını yaz</small></span></button>' +
+        '</div></div>' +
+        '<div class="col' + (d.desc ? '' : ' off') + '" id="dsOpen"><div>' +
+          '<textarea class="ds-in" id="fDesc" aria-label="Nasıl yapılır" maxlength="400" rows="3" placeholder="Örn. Ayaklar omuz genişliğinde, sırt dik. İnerken nefes al, kalkarken ver.">' + esc(d.desc) + '</textarea>' +
+          '<div class="ds-foot"><div class="gcs" id="gcs"><button type="button" class="gc" tabindex="-1" data-t="Duruş">+ Duruş</button><button type="button" class="gc" tabindex="-1" data-t="Nefes">+ Nefes</button><button type="button" class="gc" tabindex="-1" data-t="Dikkat">+ Dikkat</button></div><span class="ds-ct" id="dsCt"></span></div>' +
+        '</div></div>' +
+      '</div></div></div>' +
+      '<div class="fsec stg" style="--k:2"><div class="fcap">Ölçü</div><div class="fcard">' +
         '<div class="frow seg-row"><div class="seg" id="seg"><i></i><button type="button" data-t="time">Süre</button><button type="button" data-t="reps">Tekrar</button></div></div>' +
         '<div class="frow" id="fTime"><span class="fl">Süre<small>Her set için</small></span>' + stepperHTML('time') + '</div>' +
         '<div class="frow hide" id="fReps"><span class="fl">Tekrar<small>Her set için</small></span>' + stepperHTML('reps') + '</div>' +
       '</div></div>' +
-      '<div class="fsec stg" style="--k:2"><div class="fcap">Set düzeni</div><div class="fcard">' +
+      '<div class="fsec stg" style="--k:3"><div class="fcap">Set düzeni</div><div class="fcard">' +
         '<div class="frow"><span class="fl">Set sayısı</span>' + stepperHTML('sets') + '</div>' +
         '<div class="frow"><span class="fl">Dinlenme<small>Setler arası</small></span>' + stepperHTML('rest') + '</div>' +
       '</div></div>' +
-      '<div class="fsec stg' + (d.type === 'reps' ? '' : ' hide') + '" id="fMetro" style="--k:3"><div class="fcap">Tempo</div><div class="fcard">' +
+      '<div class="fsec stg' + (d.type === 'reps' ? '' : ' hide') + '" id="fMetro" style="--k:4"><div class="fcap">Tempo</div><div class="fcard">' +
         '<div class="frow"><span class="fl">Metronom<small>Tekrarları otomatik sayar</small></span><button type="button" class="sw' + (d.metro ? ' on' : '') + '" id="swMetro" role="switch" aria-checked="' + (d.metro ? 'true' : 'false') + '" aria-label="Metronom"></button></div>' +
         '<div class="col' + (d.metro ? '' : ' off') + '" id="metroCol"><div><div class="frow bt"><span class="fl">Tekrar süresi<small>Her tekrar için</small></span>' + stepperHTML('tempo') + '</div></div></div>' +
       '</div></div>';
@@ -2410,7 +2467,12 @@
   function bindHead(sc, hero, head, view) {
     var raf = 0;
     function upd() { raf = 0; var H = hero.offsetHeight || 200, p = Math.min(1, Math.max(0, (sc.scrollTop - (H - 130)) / 70)); p = p * p * (3 - 2 * p); head.style.setProperty('--p', p.toFixed(3)); view.style.setProperty('--hp', p.toFixed(3)); }
-    sc.addEventListener('scroll', function () { if (!raf) raf = requestAnimationFrame(upd); }, { passive: true });
+    function req() { if (!raf) raf = requestAnimationFrame(upd); }
+    sc.addEventListener('scroll', req, { passive: true });
+    // İçerik/ekran boyu değişince (hareket ekleme, klavye, form kapanması) kaydırma olayı gelmeyebilir: başlığı yeniden hesapla
+    sc._hdUpd = req;
+    if (window.ResizeObserver) { var ro = new ResizeObserver(req); ro.observe(sc); if (sc.lastElementChild) ro.observe(sc.lastElementChild); }
+    window.addEventListener('resize', req);
   }
   bindHead($('#groupScroll'), $('#hero'), $('#gHead'), groupView);
   bindHead($('#exScroll'), $('#exHero'), $('#exHead'), $('#exview'));
@@ -2421,9 +2483,7 @@
     var g = findGroup(curId), e = g && g.exercises.filter(function (x) { return x.id === exId; })[0];
     if (!e) { closeEx(true); return; }
     $('#exTitle').textContent = e.name; $('#exHeadT').textContent = e.name;
-    var h = $('#exHero'), k = xaKind(e.name), cv = h.querySelector('canvas');
-    if (!cv) { cv = document.createElement('canvas'); cv.className = 'xh'; h.appendChild(cv); }
-    cv.dataset.k = k;
+    $('#exHero').innerHTML = '<div class="hl" aria-hidden="true">' + esc((e.name.trim().charAt(0) || '·').toLocaleUpperCase('tr')) + '</div>';
     $('#exStats').innerHTML = '<div class="st"><b>' + e.sets + '</b><span>Set</span></div><div class="st"><b>' + (e.type === 'time' ? fmtTime(e.value) : e.value) + '</b><span>' + (e.type === 'time' ? 'Süre' : 'Tekrar') + '</span></div><div class="st"><b>' + (e.rest ? fmtTime(e.rest) : 'Yok') + '</b><span>Dinlenme</span></div>';
     var d = $('#exDesc'); d.classList.toggle('none', !e.desc);
     d.textContent = e.desc || 'Henüz tarif eklenmemiş. Sağ üstteki düğmeyle düzenleyip duruş, nefes ve dikkat noktalarını yazabilirsin.';
