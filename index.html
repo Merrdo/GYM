@@ -5,7 +5,7 @@
 <title>Antrenman</title>
 <!-- viewport-fit=cover: içerik çentik/ada ve ev çubuğu altına kadar uzanır -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-<meta name="theme-color" content="#0c0f13">
+<meta name="theme-color" content="#000000">
 <meta name="color-scheme" content="dark">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -16,16 +16,16 @@
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <style>
   :root {
-    --bg: #0c0f13;
-    --surface: #151a21;
-    --surface2: #1d242d;
-    --line: rgba(255,255,255,.07);
-    --ink: #eef1f4;
-    --dim: #8b96a3;
-    --accent: #d4ff3f;
-    --accent-ink: #0c0f13;
-    --danger: #ff6a5e;
-    --accent-soft: rgba(212,255,63,.12);
+    --bg: #000000;
+    --surface: #0f0f10;
+    --surface2: #1b1b1d;
+    --line: rgba(255,255,255,.09);
+    --ink: #f7f7f5;
+    --dim: #8e8e93;
+    --accent: #ffb938;
+    --accent-ink: #120a00;
+    --danger: #ff5a4d;
+    --accent-soft: rgba(255,185,56,.16);
     --r: 20px;    /* kart / form kartı yuvarlaklığı */
     --ease: cubic-bezier(.32,.72,0,1);
     /* Safe area kullanılmıyor: sabit boşluklar. Arka plan ve içerik uçlara kadar uzanır */
@@ -59,6 +59,7 @@
     width: 100%;
     height: var(--full-h, 100%);
     overflow: hidden;
+    overflow: clip;
   }
   /* Klavye açılıp kapanırken yükseklik yumuşakça değişir (ilk açılışta animasyon yok) */
   html.ready .stage { transition: height .32s cubic-bezier(.22,.9,.24,1); }
@@ -72,6 +73,8 @@
     display: flex; flex-direction: column;
     background: var(--bg);
     will-change: transform;
+    overflow: hidden;
+    overflow: clip;
   }
   #group { display: none; z-index: 10; }
   #gform { display: none; z-index: 12; }
@@ -80,7 +83,7 @@
   .edge { position: absolute; left: 0; top: 0; bottom: 0; width: 18px; z-index: 60; touch-action: none; }
   html.kbd .bar { opacity: 0; transition: opacity .2s; }
 
-  .scroll { flex: 1; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; padding: 4px 20px calc(var(--pb) + 54px + 32px); }
+  .scroll { flex: 1; overflow-x: hidden; overflow-y: auto; touch-action: pan-y; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; padding: 4px 20px calc(var(--pb) + 54px + 12px + 28px); }
 
   .top { padding: var(--pt) 20px 14px; display: flex; align-items: center; gap: 12px; flex: none; }
   .top h1 { font-size: 1.7rem; letter-spacing: -.03em; font-weight: 700; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -93,9 +96,7 @@
   .eyebrow { color: var(--dim); font-size: .8rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
 
   /* Buton listenin üstünde yüzer; liste ekranın en altına kadar uzanır */
-  .bar { position: absolute; left: 0; right: 0; bottom: 0; padding: 0 20px var(--pb); z-index: 5; pointer-events: none; }
-  .bar::before { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--pb) + 54px + 40px); background: linear-gradient(to top, var(--bg) 35%, rgba(12,15,19,0)); z-index: -1; }
-  .bar .primary { pointer-events: auto; }
+  .bar { position: absolute; left: 0; right: 0; bottom: 0; padding: 12px 20px var(--pb); z-index: 5; background: var(--bg); border-top: 1px solid var(--line); }
   .primary {
     width: 100%; height: 54px; border-radius: 16px;
     background: var(--accent); color: var(--accent-ink);
@@ -105,7 +106,7 @@
   }
   .primary:active { transform: scale(.975); filter: brightness(.92); }
   .primary svg { width: 18px; height: 18px; }
-  .bar .primary:not(.sec), .form-foot .primary { box-shadow: 0 10px 28px -12px rgba(212,255,63,.5); }
+  .bar .primary:not(.sec), .form-foot .primary { box-shadow: 0 10px 28px -12px rgba(255,185,56,.5); }
 
   /* ---------- Kartlar ---------- */
   .card {
@@ -133,7 +134,7 @@
   .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
   .chip { background: var(--surface2); border-radius: 8px; padding: 5px 10px; font-size: .82rem; color: var(--dim); font-weight: 500; }
   .chip b { color: var(--ink); }
-  .chip.main { background: rgba(212,255,63,.12); color: var(--accent); }
+  .chip.main { background: rgba(255,185,56,.12); color: var(--accent); }
   .chip.main b { color: var(--accent); }
 
   .empty { text-align: center; color: var(--dim); padding: 12vh 32px 0; line-height: 1.5; font-size: .95rem; animation: rise .6s var(--ease) both; }
@@ -151,16 +152,17 @@
   html.kbd .form-foot { padding-bottom: 12px; }
   .ghost { height: 46px; border-radius: 14px; font-weight: 600; color: var(--danger); transition: background .2s, transform .15s var(--ease); }
   .ghost:active { transform: scale(.97); }
-  .ghost.confirm { background: rgba(255,106,94,.14); }
+  .ghost.confirm { background: rgba(255,90,77,.14); }
 
   /* Yeni özellik = yeni .fsec bölümü. Bölüm: başlık (.fcap) + kart (.fcard) içinde satırlar */
   .fsec { margin-bottom: 26px; }
   .fcap { color: var(--dim); font-size: .76rem; font-weight: 650; letter-spacing: .08em; text-transform: uppercase; padding: 0 4px 10px; }
   .fcard { background: var(--surface); border: 1.5px solid var(--line); border-radius: var(--r); overflow: hidden; transition: border-color .2s; }
-  .fcard:has(.finput:focus) { border-color: rgba(212,255,63,.45); }
+  .fcard:has(.finput:focus) { border-color: rgba(255,185,56,.45); }
   .fcard > * + * { border-top: 1px solid var(--line); }
+  .fcard, .nmbox, .nm-field, .nm-in, .finput, .ds-in { max-width: 100%; min-width: 0; }
   .finput { display: block; width: 100%; background: none; border: 0; outline: none; resize: none; padding: 16px 18px; font-size: 1.05rem; line-height: 1.45; }
-  .finput::placeholder { color: #566170; }
+  .finput::placeholder { color: #55555a; }
   textarea.finput { min-height: 104px; font-size: .96rem; }
   .frow { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 64px; padding: 10px 12px 10px 18px; }
   .frow.seg-row { min-height: 0; padding: 8px; }
@@ -170,14 +172,14 @@
 
   /* ---------- Hareket formu: ad + tarif ---------- */
   .stg { animation: rise .6s var(--ease) both; animation-delay: calc(120ms + var(--k, 0) * 80ms); }
-  .fcard:has(.nm-in:focus, .ds-in:focus) { border-color: rgba(212,255,63,.45); }
-  .fcard:has(.nm-in:focus, .ds-in:focus) { box-shadow: 0 0 0 4px rgba(212,255,63,.06); }
+  .fcard:has(.nm-in:focus, .ds-in:focus) { border-color: rgba(255,185,56,.45); }
+  .fcard:has(.nm-in:focus, .ds-in:focus) { box-shadow: 0 0 0 4px rgba(255,185,56,.06); }
   .fcard { transition: border-color .2s, box-shadow .3s; }
 
   .nmbox { padding: 10px 18px 0; }
   .nm-field { position: relative; }
   .nm-in { display: block; width: 100%; background: none; border: 0; outline: none; padding: 26px 40px 10px 0; font-size: 1.5rem; font-weight: 700; letter-spacing: -.03em; line-height: 1.2; caret-color: var(--accent); text-overflow: ellipsis; }
-  .nm-lb { position: absolute; left: 0; top: 26px; font-size: 1.5rem; font-weight: 700; letter-spacing: -.03em; line-height: 1.2; color: #566170; pointer-events: none; transform-origin: left top; transition: transform .4s var(--ease), color .3s; white-space: nowrap; }
+  .nm-lb { position: absolute; left: 0; top: 26px; font-size: 1.5rem; font-weight: 700; letter-spacing: -.03em; line-height: 1.2; color: #55555a; pointer-events: none; transform-origin: left top; transition: transform .4s var(--ease), color .3s; white-space: nowrap; }
   .nm-in:focus + .nm-lb, .nm-in:not(:placeholder-shown) + .nm-lb { transform: translateY(-22px) scale(.5); color: var(--dim); }
   .nm-in:focus + .nm-lb { color: var(--accent); }
   .nm-ct { position: absolute; right: 0; top: 7px; font-size: .72rem; font-weight: 600; color: var(--dim); font-variant-numeric: tabular-nums; opacity: 0; transition: opacity .25s, color .25s; }
@@ -194,7 +196,7 @@
   .col > div { min-height: 0; overflow: hidden; }
   .col.off { grid-template-rows: 0fr; opacity: 0; }
 
-  .sg-row { display: flex; gap: 8px; overflow-x: auto; padding: 14px 18px 14px; margin: 0 -18px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .sg-row { display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain; touch-action: pan-x pan-y; padding: 14px 18px 14px; margin: 0 -18px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .sg-row::-webkit-scrollbar { display: none; }
   .sgc { flex: none; height: 34px; padding: 0 14px; border-radius: 17px; background: var(--surface2); color: var(--dim); font-size: .86rem; font-weight: 600; transition: transform .15s var(--ease), background .2s, color .2s; }
   .sgc:active { transform: scale(.92); background: var(--accent-soft); color: var(--accent); }
@@ -208,7 +210,7 @@
   .ds-add small { display: block; color: var(--dim); font-size: .78rem; font-weight: 500; margin-top: 2px; }
 
   .ds-in { display: block; width: 100%; background: none; border: 0; outline: none; resize: none; padding: 18px 18px 8px; font-size: .98rem; line-height: 1.55; min-height: 88px; max-height: 240px; overflow-y: auto; caret-color: var(--accent); }
-  .ds-in::placeholder { color: #566170; }
+  .ds-in::placeholder { color: #55555a; }
   .ds-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 2px 16px 14px 14px; }
   .gcs { display: flex; flex-wrap: wrap; gap: 6px; }
   .gc { height: 30px; padding: 0 11px; border-radius: 10px; background: var(--surface2); color: var(--dim); font-size: .8rem; font-weight: 600; transition: transform .15s var(--ease), background .25s, color .25s; }
@@ -218,13 +220,13 @@
   .ds-ct.near { color: var(--danger); }
 
   /* ---------- Silme paneli ---------- */
-  .icon-btn.trash { color: var(--danger); background: rgba(255,106,94,.12); }
-  .icon-btn.trash:active { background: rgba(255,106,94,.22); }
+  .icon-btn.trash { color: var(--danger); background: rgba(255,90,77,.12); }
+  .icon-btn.trash:active { background: rgba(255,90,77,.22); }
   .dsh { position: absolute; inset: 0; z-index: 20; display: flex; align-items: flex-end; background: rgba(0,0,0,.5); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); opacity: 0; pointer-events: none; transition: opacity .35s var(--ease); }
   .dsh.open { opacity: 1; pointer-events: auto; }
   .dsh-card { width: 100%; background: var(--surface); border-radius: 28px 28px 0 0; padding: 30px 20px var(--pb); text-align: center; transform: translateY(100%); transition: transform .5s var(--ease); }
   .dsh.open .dsh-card { transform: none; }
-  .dsh-ico { width: 64px; height: 64px; border-radius: 22px; background: rgba(255,106,94,.12); color: var(--danger); display: grid; place-items: center; margin: 0 auto 18px; opacity: 0; transform: scale(.6); transition: transform .6s var(--ease) .12s, opacity .3s .12s; }
+  .dsh-ico { width: 64px; height: 64px; border-radius: 22px; background: rgba(255,90,77,.12); color: var(--danger); display: grid; place-items: center; margin: 0 auto 18px; opacity: 0; transform: scale(.6); transition: transform .6s var(--ease) .12s, opacity .3s .12s; }
   .dsh.open .dsh-ico { opacity: 1; transform: none; }
   .dsh-ico svg { width: 30px; height: 30px; overflow: visible; }
   .dsh-ico .lid { transform-box: fill-box; transform-origin: 15% 100%; transition: transform .45s var(--ease) .4s; }
@@ -237,7 +239,7 @@
   .dsh-row button { flex: 1; height: 54px; border-radius: 16px; font-weight: 700; font-size: 1rem; transition: transform .15s var(--ease), filter .2s; }
   .dsh-row button:active { transform: scale(.96); filter: brightness(.92); }
   .dsh-no { background: var(--surface2); }
-  .dsh-ok { background: var(--danger); color: var(--accent-ink); box-shadow: 0 10px 28px -12px rgba(255,106,94,.55); }
+  .dsh-ok { background: var(--danger); color: var(--accent-ink); box-shadow: 0 10px 28px -12px rgba(255,90,77,.55); }
   .shake { animation: shake .4s; }
   @keyframes shake { 20%,60% { transform: translateX(-6px); } 40%,80% { transform: translateX(6px); } }
 
@@ -256,16 +258,19 @@
   @keyframes pop { from { transform: scale(1.18); } to { transform: none; } }
 
   /* ---------- Başlat çubuğu ---------- */
-  .bar-row { display: flex; gap: 10px; }
-  .bar-row .primary { flex: 1.25; }
-  .bar-row .primary.sec { flex: 1; background: var(--surface2); color: var(--ink); }
+  .bar-row { display: flex; gap: 10px; align-items: center; }
+  .bar-row .primary { flex: 1; }
+  .bsec { flex: none; width: 76px; height: 54px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 14px; font-size: .78rem; font-weight: 600; color: var(--ink); transition: background .2s, transform .15s var(--ease); }
+  .bsec svg { width: 22px; height: 22px; }
+  .bsec:active { transform: scale(.94); background: var(--surface); }
+  .bar-row.no-ex .bsec { flex: 1; width: auto; flex-direction: row; gap: 8px; font-size: 1rem; font-weight: 700; background: var(--accent); color: var(--accent-ink); box-shadow: 0 10px 28px -12px rgba(255,185,56,.5); }
+  .bar-row.no-ex .bsec svg { width: 18px; height: 18px; }
   .bar-row.no-ex #startBtn { display: none; }
-  .bar-row.no-ex .primary.sec { background: var(--accent); color: var(--accent-ink); }
 
   /* ---------- Antrenman oynatıcı ---------- */
-  #player { display: none; z-index: 40; --ph: #d4ff3f; background: #0c0f13; overflow: hidden; }
-  #player.is-rest { --ph: #62d6ff; }
-  #player.is-prep { --ph: #eef1f4; }
+  #player { display: none; z-index: 40; --ph: #ffb938; background: #000000; overflow: hidden; }
+  #player.is-rest { --ph: #5ec2ff; }
+  #player.is-prep { --ph: #ffffff; }
   #wave { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
   .pl-in { position: relative; z-index: 1; flex: 1; min-height: 0; display: flex; flex-direction: column; }
 
@@ -313,7 +318,7 @@
   .rb { width: 58px; height: 58px; border-radius: 50%; background: rgba(255,255,255,.07); display: grid; place-items: center; flex: none; transition: transform .15s var(--ease), background .2s; }
   .rb svg { width: 24px; height: 24px; }
   .rb:active { transform: scale(.86); background: rgba(255,255,255,.14); }
-  .mb { height: 88px; width: 88px; border-radius: 44px; background: var(--ph); color: #0c0f13; display: flex; align-items: center; justify-content: center; gap: 8px; flex: none;
+  .mb { height: 88px; width: 88px; border-radius: 44px; background: var(--ph); color: #120a00; display: flex; align-items: center; justify-content: center; gap: 8px; flex: none;
     font-weight: 750; font-size: 1.05rem; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; box-shadow: 0 10px 40px -10px var(--ph);
     transition: width .55s var(--ease), background .5s, box-shadow .5s, transform .15s var(--ease); }
   .mb:active { transform: scale(.93); }
@@ -365,7 +370,7 @@
 
   /* ---------- Anahtar (switch) ---------- */
   .sw { position: relative; flex: none; width: 52px; height: 32px; border-radius: 16px; background: var(--surface2); transition: background .3s var(--ease); }
-  .sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 26px; height: 26px; border-radius: 16px; background: #aab4bf;
+  .sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 26px; height: 26px; border-radius: 16px; background: #b0b0b5;
     transition: transform .4s var(--ease), width .25s var(--ease), background .3s; }
   .sw.on { background: var(--accent); }
   .sw.on::after { transform: translateX(20px); background: var(--accent-ink); }
@@ -408,6 +413,71 @@
   .stepper .val.dimv { color: var(--dim); }
   .stepper button.lim { opacity: .3; }
 
+
+  /* ---------- Liste satırları (sade) ---------- */
+  .it { position: relative; display: flex; align-items: center; gap: 14px; width: calc(100% + 40px); margin: 0 -20px; padding: 17px 20px; text-align: left; transition: background .2s; }
+  .it + .it::before { content: ""; position: absolute; left: 20px; right: 20px; top: 0; height: 1px; background: var(--line); }
+  .it:active { background: rgba(255,255,255,.04); }
+  .it.in { animation: rise .5s var(--ease) both; animation-delay: calc(var(--i) * 40ms); }
+  .it .bd { flex: 1; min-width: 0; }
+  .it .nm { font-size: 1.14rem; font-weight: 560; letter-spacing: -.015em; line-height: 1.25; overflow-wrap: anywhere; }
+  .it .sb { color: var(--dim); font-size: .96rem; margin-top: 3px; font-variant-numeric: tabular-nums; }
+  .it > svg.cv { width: 16px; height: 16px; color: #55555a; flex: none; }
+  #homeList .it:first-child::before { display: none; }
+  #homeList .it { padding-top: 19px; padding-bottom: 19px; }
+  #homeList .it .nm { font-size: 1.22rem; }
+
+  /* ---------- Grup sayfası: hero + gövde (aşağı çekince görsel büyür) ---------- */
+  #groupScroll { position: absolute; inset: 0; padding: 0; }
+  .scroll.stretch { overscroll-behavior-y: auto; }
+  .gw { position: relative; transform-origin: 50% 0; will-change: transform; backface-visibility: hidden; }
+  .cap { position: absolute; left: 0; right: 0; bottom: 100%; height: 260px; pointer-events: none; background: #0b0a08; }
+  .hero { position: relative; overflow: hidden; background: #0b0a08; height: clamp(230px, calc(var(--full-h, 100vh) * .3), 330px); }
+  .hero svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .gbody { position: relative; z-index: 3; margin-top: -30px; background: var(--bg); border-radius: 30px 30px 0 0; padding: 28px 20px calc(var(--pb) + 54px + 12px + 60px); min-height: calc(var(--full-h, 100vh) - 90px); }
+  .gt { font-size: 1.9rem; font-weight: 750; letter-spacing: -.035em; line-height: 1.1; overflow-wrap: anywhere; }
+  .stats3 { display: flex; margin-top: 22px; }
+  .stats3:empty { display: none; }
+  .stats3 .st { flex: 1; min-width: 0; padding: 2px 14px; border-left: 1px solid var(--line); }
+  .stats3 .st:first-child { padding-left: 0; border-left: 0; }
+  .stats3 .st b { display: block; font-size: 1.12rem; font-weight: 650; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+  .stats3 .st span { display: block; color: var(--dim); font-size: .9rem; margin-top: 3px; }
+  .sech { display: flex; align-items: baseline; gap: 8px; margin: 34px 0 4px; }
+  .sech h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -.025em; }
+  .sech span { color: var(--dim); font-size: 1.15rem; }
+  #groupList .empty { padding-top: 5vh; }
+  .fbtn { position: absolute; top: calc(var(--pt) - 6px); z-index: 6; background: rgba(21,26,33,.72); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: 0 8px 20px -8px rgba(0,0,0,.5); }
+
+  /* ---------- Uzun basma: seçenek paneli, seçim ve sıralama kipi ---------- */
+  .opt.danger .oi { background: rgba(255,90,77,.12); color: var(--danger); }
+  .opt.danger .ot b { color: var(--danger); }
+  .sht .primary.sec { background: var(--surface2); color: var(--ink); }
+  #ctxT { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .primary.danger { background: var(--danger); color: var(--accent-ink); }
+  .primary:disabled { opacity: .4; pointer-events: none; }
+
+  .it.holding { background: rgba(255,255,255,.07); }
+  .mk { display: none; flex: none; }
+  .mk svg { display: block; }
+  .m-sel .mk.cm { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; border: 2px solid rgba(255,255,255,.22); color: transparent; transition: background .2s, border-color .2s, color .2s, transform .3s var(--ease); }
+  .m-sel .mk.cm svg { width: 15px; height: 15px; }
+  .m-sel .it.picked { background: var(--accent-soft); }
+  .m-sel .it.picked .mk.cm { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); transform: scale(1.06); }
+  .m-sel .it > svg.cv, .m-sort .it > svg.cv { display: none; }
+  .m-sort .mk.gp { display: grid; place-items: center; width: 44px; height: 44px; margin: -10px -8px -10px 0; color: var(--dim); touch-action: none; cursor: grab; }
+  .m-sort .mk.gp svg { width: 22px; height: 22px; }
+  .it.drag { z-index: 4; scale: 1.01; width: calc(100% + 24px); margin: 0 -12px; padding-left: 32px; padding-right: 32px; background: var(--surface2); border-radius: 16px; box-shadow: 0 16px 36px -12px rgba(0,0,0,.7); transition: scale .2s var(--ease), box-shadow .2s, background .2s; }
+  .it.drag::before { display: none; }
+  .view.mode .bar { visibility: hidden; }
+
+  .mbar { position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 20px var(--pb); z-index: 11; pointer-events: none; opacity: 0; transform: translateY(24px); background: var(--bg); border-top: 1px solid var(--line); transition: opacity .3s var(--ease), transform .45s var(--ease); }
+  .mbar.open { opacity: 1; transform: none; }
+  .mbar.open .primary { pointer-events: auto; }
+  .mhint { text-align: center; color: var(--dim); font-size: .86rem; font-weight: 500; padding: 0 0 10px; }
+  .mbar .bar-row .primary { flex: 1; }
+  .mbar .bar-row .primary.sec { background: var(--surface2); color: var(--ink); }
+  .mbar .bar-row .primary.danger { flex: 1.25; }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
   }
@@ -432,18 +502,23 @@
     </div>
   </section>
 
-  <!-- Grup ekranı: hareketler -->
+  <!-- Grup ekranı: hero + hareket listesi -->
   <section class="view" id="group">
-    <div class="top">
-      <button class="icon-btn" id="back" aria-label="Geri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
-      <div class="ttl"><h1 id="gTitle"></h1><div class="sub" id="gSub"></div></div>
-      <button class="icon-btn" id="editGroup" aria-label="Grubu düzenle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2.8 2.8 0 00-4-4L4 16v4z"/></svg></button>
+    <div class="scroll stretch" id="groupScroll">
+      <div class="gw" id="gw"><div class="cap"></div><div class="hero" id="hero"></div></div>
+      <div class="gbody">
+        <h1 class="gt" id="gTitle"></h1>
+        <div class="stats3" id="gStats"></div>
+        <div class="sech" id="gSech"><h2>Hareketler</h2><span id="gCount"></span></div>
+        <div id="groupList"></div>
+      </div>
     </div>
-    <div class="scroll" id="groupList"></div>
+    <button class="icon-btn fbtn" id="back" style="left:20px" aria-label="Geri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button class="icon-btn fbtn" id="editGroup" style="right:20px" aria-label="Grubu düzenle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2.8 2.8 0 00-4-4L4 16v4z"/></svg></button>
     <div class="bar">
       <div class="bar-row" id="barRow">
-        <button class="primary sec" id="addEx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Hareket ekle</button>
-        <button class="primary" id="startBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.6v12.8a1 1 0 001.5.86l10.4-6.4a1 1 0 000-1.72L9.5 4.74A1 1 0 008 5.6z"/></svg>Başlat</button>
+        <button class="bsec" id="addEx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span>Ekle</span></button>
+        <button class="primary" id="startBtn">Başla</button>
       </div>
     </div>
   </section>
@@ -566,6 +641,31 @@
     </div>
   </section>
 
+  <!-- Seçim / sıralama kipi alt çubuğu -->
+  <div class="mbar" id="mbar"><div id="mbarIn"></div></div>
+
+  <!-- Uzun basma seçenek paneli -->
+  <div class="sht" id="ctx" style="z-index:50">
+    <div class="sht-card">
+      <h2 id="ctxT"></h2>
+      <p class="ssub" id="ctxS"></p>
+      <button class="opt" id="cxSort"><span class="oi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M7 4L3.5 7.5M7 4l3.5 3.5"/><path d="M17 20V4M17 20l-3.5-3.5M17 20l3.5-3.5"/></svg></span><span class="ot"><b>Sırala</b><small>Sürükleyerek yeniden düzenle</small></span></button>
+      <button class="opt" id="cxSel"><span class="oi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.3l2.6 2.6 4.6-5.2"/></svg></span><span class="ot"><b>Seç</b><small>Birden fazla öğe seç</small></span></button>
+      <button class="opt danger" id="cxDel"><span class="oi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 8l1 11a2 2 0 002 1.8h7a2 2 0 002-1.8l1-11"/><path d="M10 12v5M14 12v5"/><path d="M4 7.5h16"/><path d="M9 7.5V5.5a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></span><span class="ot"><b>Sil</b><small id="cxDelS"></small></span></button>
+      <button class="primary sec" id="cxCancel">Vazgeç</button>
+    </div>
+  </div>
+
+  <!-- Silme onayı (liste / seçim) -->
+  <div class="dsh" id="cdsh" style="z-index:55">
+    <div class="dsh-card" role="alertdialog" aria-labelledby="cdT">
+      <div class="dsh-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 8l1 11a2 2 0 002 1.8h7a2 2 0 002-1.8l1-11"/><path d="M10 12v5M14 12v5"/><g class="lid"><path d="M4 7.5h16"/><path d="M9 7.5V5.5a1 1 0 011-1h4a1 1 0 011 1v2"/></g></svg></div>
+      <h2 id="cdT"></h2>
+      <p id="cdP"></p>
+      <div class="dsh-row"><button class="dsh-no" id="cdNo">Vazgeç</button><button class="dsh-ok" id="cdOk">Sil</button></div>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -598,7 +698,36 @@
   }
   function fmtTempo(t) { return String(t).replace('.', ',') + ' sn'; }
   function bold(t) { return String(t).replace(/(\d+)/g, '<b>$1</b>'); }
+  var MK = '<span class="mk cm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="mk gp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg></span>';
+  var mm = null;   // aktif kip: { scope:'home'|'group', kind:'sel'|'sort', sel:{} }
+  function picked(scope, id) { return mm && mm.scope === scope && mm.sel[id] ? ' picked' : ''; }
+
+  // Tahmini toplam süre (oynatıcıdaki adımlarla uyumlu)
+  function estSec(g) {
+    var n = g.exercises.length, t = n ? getPrep() : 0;
+    g.exercises.forEach(function (e, i) {
+      var w = e.type === 'time' ? e.value : (e.metro ? 2.2 + (e.tempo || 2) * e.value : e.value * 3);
+      t += w * e.sets + (i === n - 1 ? Math.max(0, e.sets - 1) : e.sets) * (e.rest || 0);
+    });
+    return t;
+  }
+  function fmtEst(sec) { return sec < 60 ? Math.max(1, Math.round(sec)) + ' sn' : '~' + Math.round(sec / 60) + ' dk'; }
+  function exMeasure(e) { return e.sets + ' × ' + (e.type === 'time' ? fmtTime(e.value) : e.value + ' tekrar'); }
+
+  // Grup için kendine özgü hero görseli: sade, ince halkalar (grubun kimliğinden üretilir)
+  function hashStr(str) { var h = 2166136261; for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  function prng(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function heroArt(seed) {
+    var r = prng(hashStr(String(seed))), cx = 250 + r() * 110, cy = 70 + r() * 80, rings = '', rr = [64, 112, 164, 222], op = [.55, .32, .17, .08], i;
+    for (i = 0; i < rr.length; i++) rings += '<circle cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" r="' + rr[i] + '" fill="none" stroke="#ffb938" stroke-opacity="' + op[i] + '" stroke-width="1"/>';
+    return '<svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs>' +
+      '<linearGradient id="hbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b0a08"/><stop offset="1" stop-color="#030303"/></linearGradient>' +
+      '<radialGradient id="hgl" cx="' + (cx / 400).toFixed(3) + '" cy="' + (cy / 300).toFixed(3) + '" r=".7"><stop offset="0" stop-color="#ffb938" stop-opacity=".26"/><stop offset="1" stop-color="#ffb938" stop-opacity="0"/></radialGradient></defs>' +
+      '<rect width="400" height="300" fill="url(#hbg)"/><rect width="400" height="300" fill="url(#hgl)"/>' + rings +
+      '<circle cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" r="3.2" fill="#ffb938"/></svg>';
+  }
   var CHEV = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>';
+  var CHEVC = CHEV.replace('<svg ', '<svg class="cv" ');
 
   /* ================= Ekranlar ================= */
   var stage = $('#stage'), curId = null;
@@ -612,31 +741,28 @@
       return;
     }
     el.innerHTML = state.groups.map(function (g, i) {
-      var sets = g.exercises.reduce(function (a, e) { return a + e.sets; }, 0);
-      var sub = g.exercises.length ? g.exercises.length + ' hareket · ' + sets + ' set' : 'Henüz hareket yok';
-      return '<button class="card grp' + (animate ? ' in' : '') + '" data-id="' + g.id + '" style="--i:' + i + '"><span class="tile">' + esc(Array.from(g.name.trim())[0].toLocaleUpperCase('tr')) + '</span><div class="gi"><div class="name">' + esc(g.name) + '</div><div class="sub">' + sub + '</div></div>' + CHEV + '</button>';
+      var sub = g.exercises.length ? g.exercises.length + ' hareket · ' + fmtEst(estSec(g)) : 'Henüz hareket yok';
+      return '<button class="it g' + (animate ? ' in' : '') + picked('home', g.id) + '" data-id="' + g.id + '" style="--i:' + i + '"><div class="bd"><div class="nm">' + esc(g.name) + '</div><div class="sb">' + sub + '</div></div>' + CHEVC + MK + '</button>';
     }).join('');
   }
 
   function renderGroup(animate) {
     var g = findGroup(curId); if (!g) return;
+    var n = g.exercises.length, sets = g.exercises.reduce(function (a, e) { return a + e.sets; }, 0);
     $('#gTitle').textContent = g.name;
-    var sets = g.exercises.reduce(function (a, e) { return a + e.sets; }, 0);
-    $('#gSub').textContent = g.exercises.length ? g.exercises.length + ' hareket · ' + sets + ' set' : 'Henüz hareket yok';
-    $('#barRow').classList.toggle('no-ex', !g.exercises.length);
+    $('#hero').innerHTML = heroArt(g.id);
+    $('#gStats').innerHTML = n ? '<div class="st"><b>' + n + '</b><span>Hareket</span></div><div class="st"><b>' + fmtEst(estSec(g)) + '</b><span>Süre</span></div><div class="st"><b>' + sets + '</b><span>Set</span></div>' : '';
+    $('#gSech').style.display = n ? '' : 'none';
+    $('#gCount').textContent = n ? '(' + n + ')' : '';
+    $('#barRow').classList.toggle('no-ex', !n);
+    $('#addEx span').textContent = n ? 'Ekle' : 'Hareket ekle';
     var el = $('#groupList');
-    if (!g.exercises.length) {
-      el.innerHTML = '<div class="empty"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg></span><h2>Bu grup boş</h2>İlk hareketini ekleyerek başla.</div>';
+    if (!n) {
+      el.innerHTML = '<div class="empty"><h2>Bu grup boş</h2>İlk hareketini ekleyerek başla.</div>';
       return;
     }
     el.innerHTML = g.exercises.map(function (e, i) {
-      var main = e.type === 'time' ? fmtTime(e.value) : e.value + ' tekrar';
-      var chips = '<span class="chip main">' + bold(main) + '</span><span class="chip">' + bold(e.sets + ' set') + '</span>';
-      if (e.rest > 0) chips += '<span class="chip">' + bold(fmtTime(e.rest)) + ' dinlenme</span>';
-      if (e.type === 'reps' && e.metro) chips += '<span class="chip">' + bold(fmtTempo(e.tempo || 2)) + ' tempo</span>';
-      return '<button class="card ex' + (animate ? ' in' : '') + '" data-id="' + e.id + '" style="--i:' + i + '">' +
-        '<span class="tile">' + String(i + 1).padStart(2, '0') + '</span><div class="bd"><div class="name">' + esc(e.name) + '</div>' +
-        (e.desc ? '<div class="desc">' + esc(e.desc) + '</div>' : '') + '<div class="chips">' + chips + '</div></div></button>';
+      return '<button class="it x' + (animate ? ' in' : '') + picked('group', e.id) + '" data-id="' + e.id + '" style="--i:' + i + '"><div class="bd"><div class="nm">' + esc(e.name) + '</div><div class="sb">' + exMeasure(e) + '</div></div>' + MK + '</button>';
     }).join('');
   }
 
@@ -646,7 +772,7 @@
 
   function openGroup(id) {
     curId = id; renderGroup(true);
-    $('#groupList').scrollTop = 0;
+    $('#groupScroll').scrollTop = 0;
     groupView.style.display = 'flex';
     dimEl = document.createElement('div'); dimEl.className = 'dim';
     stage.insertBefore(dimEl, groupView);
@@ -673,7 +799,7 @@
     var sx = null, dx = 0, t0 = 0, W = 1;
     function prevT(p) { return 'translate3d(' + (-0.22 * W * (1 - p)) + 'px,0,0)'; }
     strip.addEventListener('touchstart', function (e) {
-      if (!groupOpen || formOpen || sx != null) return;
+      if (!groupOpen || formOpen || mm || sx != null) return;
       sx = e.touches[0].clientX; dx = 0; t0 = Date.now(); W = groupView.offsetWidth || innerWidth;
       if (homeAnim) { homeAnim.cancel(); homeAnim = null; }
       homeView.style.transform = prevT(0);
@@ -1657,7 +1783,7 @@
   });
 
   function openSettings() {
-    if (setOpen || formOpen || groupOpen || WK) return;
+    if (setOpen || formOpen || groupOpen || mm || WK) return;
     paintPrep(false); paintVoice();
     $('#setBody').scrollTop = 0;
     setView.style.display = 'flex';
@@ -1718,16 +1844,241 @@
     strip.addEventListener('touchcancel', function () { end(true); });
   })();
 
+  /* ================= Uzun basma: Sırala / Seç / Sil ================= */
+  var ctxScope = null, ctxId = null, lp = { t: 0, x: 0, y: 0, el: null, fired: false };
+  var pendDel = null;
+
+  function listEl(scope) { return $(scope === 'home' ? '#homeList' : '#groupList'); }
+  function itemsOf(scope) { var g = scope === 'group' ? findGroup(curId) : null; return scope === 'home' ? state.groups : (g ? g.exercises : []); }
+  function itemById(scope, id) { return itemsOf(scope).filter(function (x) { return x.id === id; })[0]; }
+
+  /* --- Uzun basma algılama --- */
+  function lpCancel() { clearTimeout(lp.t); if (lp.el) lp.el.classList.remove('holding'); lp.el = null; }
+  function wireLP(scope) {
+    var list = listEl(scope);
+    list.addEventListener('pointerdown', function (e) {
+      lp.fired = false;
+      if (mm || e.button > 0) return;
+      var c = e.target.closest('.it'); if (!c) return;
+      lpCancel();
+      lp.x = e.clientX; lp.y = e.clientY; lp.el = c;
+      c.classList.add('holding');
+      lp.t = setTimeout(function () {
+        lp.fired = true; c.classList.remove('holding'); lp.el = null;
+        vib(14); openCtx(scope, c.dataset.id);
+      }, 480);
+    });
+    list.addEventListener('pointermove', function (e) {
+      if (lp.el && Math.abs(e.clientX - lp.x) + Math.abs(e.clientY - lp.y) > 10) lpCancel();
+    });
+    ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (t) { list.addEventListener(t, lpCancel); });
+    (list.closest('.scroll') || list).addEventListener('scroll', lpCancel, { passive: true });
+  }
+
+  /* --- Seçenek paneli --- */
+  function openCtx(scope, id) {
+    var it = itemById(scope, id); if (!it) return;
+    ctxScope = scope; ctxId = id;
+    $('#ctxT').textContent = it.name;
+    $('#ctxS').textContent = scope === 'home' ? 'Grup' : 'Hareket';
+    $('#cxDelS').textContent = scope === 'home' ? (it.exercises.length ? 'Grup ve ' + it.exercises.length + ' hareketi silinir' : 'Grubu sil') : 'Hareketi bu gruptan sil';
+    $('#cxSort').classList.toggle('dis', itemsOf(scope).length < 2);
+    $('#ctx').classList.add('open');
+  }
+  function closeCtx() { $('#ctx').classList.remove('open'); }
+  $('#cxCancel').onclick = closeCtx;
+  $('#ctx').addEventListener('click', function (e) { if (e.target === this) closeCtx(); });
+  $('#cxSort').onclick = function () { var s = ctxScope; closeCtx(); enterMode('sort', s); };
+  $('#cxSel').onclick = function () { var s = ctxScope, i = ctxId; closeCtx(); enterMode('sel', s, i); };
+  $('#cxDel').onclick = function () { var s = ctxScope, i = ctxId; closeCtx(); askDelete(s, [i]); };
+
+  /* --- Kipler --- */
+  function enterMode(kind, scope, id) {
+    mm = { scope: scope, kind: kind, sel: {} };
+    if (kind === 'sel' && id) mm.sel[id] = true;
+    var l = listEl(scope);
+    Array.prototype.forEach.call(l.querySelectorAll('.it'), function (c) { c.classList.remove('in'); });
+    l.classList.add('m-' + kind);
+    (scope === 'home' ? homeView : groupView).classList.add('mode');
+    $('#mbarIn').innerHTML = kind === 'sel'
+      ? '<div class="mhint" id="mhint"></div><div class="bar-row"><button class="primary sec" id="mbCancel">Vazgeç</button><button class="primary danger" id="mbDel">Sil</button></div>'
+      : '<div class="mhint" id="mhint"></div><button class="primary" id="mbDone" style="width:100%">Bitti</button>';
+    $('#mbar').classList.add('open');
+    syncMode();
+  }
+  function syncMode() {
+    if (!mm) return;
+    var sub = $('#mhint');
+    if (mm.kind === 'sort') { sub.textContent = 'Tutamaçtan sürükleyerek sırala'; return; }
+    var n = Object.keys(mm.sel).length;
+    sub.textContent = n ? n + ' seçildi' : 'Seçmek için dokun';
+    var b = $('#mbDel'); if (b) { b.textContent = n ? 'Sil (' + n + ')' : 'Sil'; b.disabled = !n; }
+    Array.prototype.forEach.call(listEl(mm.scope).querySelectorAll('.it'), function (c) { c.classList.toggle('picked', !!mm.sel[c.dataset.id]); });
+  }
+  function exitMode(noRender) {
+    if (!mm) return;
+    var sc = mm.scope, l = listEl(sc);
+    l.classList.remove('m-sel', 'm-sort');
+    homeView.classList.remove('mode'); groupView.classList.remove('mode');
+    $('#mbar').classList.remove('open');
+    mm = null;
+    if (!noRender) { if (sc === 'home') renderHome(false); else renderGroup(false); }
+  }
+  $('#mbar').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b || !mm) return;
+    if (b.id === 'mbCancel' || b.id === 'mbDone') exitMode();
+    else if (b.id === 'mbDel') { var ids = Object.keys(mm.sel); if (ids.length) askDelete(mm.scope, ids); }
+  });
+
+  /* --- Dokunma: seçim kipinde işaretle --- */
+  function cardTap(scope, e) {
+    if (lp.fired) { lp.fired = false; return true; }
+    var c = e.target.closest('.it'); if (!c) return true;
+    if (mm) {
+      if (mm.scope === scope && mm.kind === 'sel') {
+        if (mm.sel[c.dataset.id]) delete mm.sel[c.dataset.id]; else mm.sel[c.dataset.id] = true;
+        vib(6); syncMode();
+      }
+      return true;
+    }
+    return false;
+  }
+
+  /* --- Silme onayı --- */
+  function askDelete(scope, ids) {
+    var list = itemsOf(scope), n = ids.length, t, p;
+    if (scope === 'home') {
+      var exs = 0; ids.forEach(function (id) { var g = findGroup(id); if (g) exs += g.exercises.length; });
+      if (n === 1) { var g1 = findGroup(ids[0]); t = 'Grubu sil?'; p = '<b>' + esc(g1.name) + '</b> grubu' + (exs ? ' ve içindeki ' + exs + ' hareket' : '') + ' silinecek. Bu işlem geri alınamaz.'; }
+      else { t = n + ' grup silinsin mi?'; p = 'Seçili ' + n + ' grup' + (exs ? ' ve içindeki ' + exs + ' hareket' : '') + ' silinecek. Bu işlem geri alınamaz.'; }
+    } else {
+      var gg = findGroup(curId);
+      if (n === 1) { var e1 = itemById('group', ids[0]); t = 'Hareketi sil?'; p = '<b>' + esc(e1.name) + '</b> bu gruptan silinecek. Bu işlem geri alınamaz.'; }
+      else { t = n + ' hareket silinsin mi?'; p = 'Seçili ' + n + ' hareket <b>' + esc(gg.name) + '</b> grubundan silinecek. Bu işlem geri alınamaz.'; }
+    }
+    pendDel = { scope: scope, ids: ids };
+    $('#cdT').textContent = t; $('#cdP').innerHTML = p;
+    var cd = $('#cdsh'); cd.classList.remove('go'); cd.classList.add('open');
+  }
+  function closeCd() { $('#cdsh').classList.remove('open', 'go'); pendDel = null; }
+  $('#cdNo').onclick = closeCd;
+  $('#cdsh').addEventListener('click', function (e) { if (e.target === this) closeCd(); });
+  $('#cdOk').onclick = function () {
+    if (!pendDel) return;
+    var pd = pendDel, cd = $('#cdsh'); cd.classList.add('go');
+    setTimeout(function () {
+      if (pd.scope === 'home') state.groups = state.groups.filter(function (g) { return pd.ids.indexOf(g.id) < 0; });
+      else { var g = findGroup(curId); if (g) g.exercises = g.exercises.filter(function (x) { return pd.ids.indexOf(x.id) < 0; }); }
+      save();
+      exitMode(true);
+      listEl('home').classList.remove('m-sel', 'm-sort'); listEl('group').classList.remove('m-sel', 'm-sort');
+      renderHome(false); if (groupOpen) renderGroup(false);
+      closeCd();
+    }, 260);
+  };
+
+  /* --- Sürükleyerek sıralama --- */
+  (function () {
+    var list = null, scr = null, card = null, sy = 0, ly = 0, auto = 0;
+    function update() {
+      card.style.transform = 'translateY(' + (ly - sy) + 'px)';
+      var r = card.getBoundingClientRect(), cy = r.top + r.height / 2;
+      var nx = card.nextElementSibling, pv = card.previousElementSibling, q;
+      if (nx && nx.classList.contains('it')) { q = nx.getBoundingClientRect(); if (cy > q.top + q.height / 2) { swap(nx, true); return; } }
+      if (pv && pv.classList.contains('it')) { q = pv.getBoundingClientRect(); if (cy < q.top + q.height / 2) swap(pv, false); }
+    }
+    function swap(sib, down) {
+      var t0 = sib.getBoundingClientRect().top, o0 = card.offsetTop;
+      if (down) list.insertBefore(sib, card); else list.insertBefore(card, sib);
+      sy += card.offsetTop - o0;
+      card.style.transform = 'translateY(' + (ly - sy) + 'px)';
+      var t1 = sib.getBoundingClientRect().top;
+      sib.animate([{ transform: 'translateY(' + (t0 - t1) + 'px)' }, { transform: 'none' }], { duration: 220, easing: EASE });
+      vib(5);
+    }
+    function move(e) { ly = e.clientY; update(); }
+    function tick() {
+      var lr = scr.getBoundingClientRect(), z = 70, v = 0;
+      if (ly < lr.top + z) v = -Math.ceil((lr.top + z - ly) / z * 14);
+      else if (ly > lr.bottom - z - 40) v = Math.ceil((ly - (lr.bottom - z - 40)) / z * 14);
+      if (!v) return;
+      var b = scr.scrollTop; scr.scrollTop = b + v;
+      var m = scr.scrollTop - b; if (m) { sy -= m; update(); }
+    }
+    function up() {
+      document.removeEventListener('pointermove', move);
+      document.removeEventListener('pointerup', up);
+      document.removeEventListener('pointercancel', up);
+      clearInterval(auto);
+      if (!card) return;
+      var from = card.style.transform || 'none';
+      card.style.transform = ''; card.classList.remove('drag');
+      card.animate([{ transform: from }, { transform: 'none' }], { duration: 240, easing: EASE });
+      commit(); card = null;
+    }
+    function commit() {
+      var sc = mm ? mm.scope : null; if (!sc) return;
+      var ids = Array.prototype.map.call(list.querySelectorAll('.it'), function (c) { return c.dataset.id; });
+      var arr = itemsOf(sc), by = {}; arr.forEach(function (x) { by[x.id] = x; });
+      var out = ids.map(function (id) { return by[id]; }).filter(Boolean);
+      if (out.length !== arr.length) return;
+      if (sc === 'home') state.groups = out; else findGroup(curId).exercises = out;
+      save();
+    }
+    function down(e) {
+      if (!mm || mm.kind !== 'sort' || card) return;
+      var gp = e.target.closest('.mk.gp'); if (!gp) return;
+      e.preventDefault();
+      card = gp.closest('.it'); list = card.parentNode; scr = list.closest('.scroll') || list;
+      sy = ly = e.clientY;
+      try { gp.setPointerCapture(e.pointerId); } catch (x) {}
+      card.classList.add('drag'); vib(10);
+      document.addEventListener('pointermove', move);
+      document.addEventListener('pointerup', up);
+      document.addEventListener('pointercancel', up);
+      auto = setInterval(tick, 16);
+    }
+    $('#homeList').addEventListener('pointerdown', down);
+    $('#groupList').addEventListener('pointerdown', down);
+  })();
+
+  wireLP('home'); wireLP('group');
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    if ($('#cdsh').classList.contains('open')) closeCd();
+    else if ($('#ctx').classList.contains('open')) closeCtx();
+    else if (mm) exitMode();
+  });
+
+  /* Aşağı çekince hero görseli büyür: scroll olayı yalnızca hedefi günceller, görsel her karede hedefe yaklaşır */
+  (function () {
+    var sc = $('#groupScroll'), gw = $('#gw'), H = 0, tgt = 0, cur = 0, raf = 0;
+    function loop() {
+      cur += (tgt - cur) * .5;
+      if (Math.abs(tgt - cur) < .2) cur = tgt;
+      if (cur > 0) { var k = 1 + cur / H; gw.style.transform = 'translate3d(0,' + (-cur) + 'px,0) scale3d(' + k + ',' + k + ',1)'; }
+      else gw.style.transform = '';
+      raf = (tgt > 0 || cur > 0) ? requestAnimationFrame(loop) : 0;
+    }
+    sc.addEventListener('scroll', function () {
+      var t = sc.scrollTop; tgt = t < 0 ? -t : 0;
+      if (tgt > 0) H = gw.offsetHeight || 1;
+      if (!raf && (tgt > 0 || cur > 0)) raf = requestAnimationFrame(loop);
+    }, { passive: true });
+  })();
+
   /* ================= Olaylar ================= */
   $('#addGroup').onclick = function () { groupForm(null); };
   $('#addEx').onclick = function () { exForm(null); };
-  $('#editGroup').onclick = function () { groupForm(curId); };
-  $('#back').onclick = function () { closeGroup(); };
+  $('#editGroup').onclick = function () { if (mm) return; groupForm(curId); };
+  $('#back').onclick = function () { if (mm) { exitMode(); return; } closeGroup(); };
   $('#homeList').addEventListener('click', function (e) {
-    var c = e.target.closest('.grp'); if (c) openGroup(c.dataset.id);
+    if (cardTap('home', e)) return;
+    var c = e.target.closest('.it'); if (c) openGroup(c.dataset.id);
   });
   $('#groupList').addEventListener('click', function (e) {
-    var c = e.target.closest('.ex'); if (c) exForm(c.dataset.id);
+    if (cardTap('group', e)) return;
+    var c = e.target.closest('.it'); if (c) exForm(c.dataset.id);
   });
 
   /* ================= Tam ekran + klavye ================= */
