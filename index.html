@@ -2212,7 +2212,7 @@
     save();
     var o = { app: 'antrenman', format: 1, exportedAt: new Date().toISOString(), data: bkSnapshot() }, txt = JSON.stringify(o);
     var t = new Date(), pad = function (n) { return (n < 10 ? '0' : '') + n; };
-    var name = 'antrenman-yedek-' + t.getFullYear() + '-' + pad(t.getMonth() + 1) + '-' + pad(t.getDate()) + '.json', file = null;
+    var name = 'Antrenman Yedek - ' + pad(t.getDate()) + '-' + pad(t.getMonth() + 1) + '-' + t.getFullYear() + '.json', file = null;
     try { file = new File([txt], name, { type: 'application/json' }); } catch (e) {}
     function done() { lsSet('antrenman.lastBackup', String(Date.now())); bkPaint(); if (cb) cb(true); }
     function dl() {
@@ -2220,7 +2220,7 @@
       document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 2500); done();
     }
     if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
-      navigator.share({ files: [file], title: 'Antrenman yedeği' }).then(done).catch(function (e) { if (!e || e.name !== 'AbortError') dl(); else if (cb) cb(false); });
+      navigator.share({ files: [file] })   /* title/text verilmez: iOS bunları ayrı bir .txt dosyası olarak da kaydediyor */.then(done).catch(function (e) { if (!e || e.name !== 'AbortError') dl(); else if (cb) cb(false); });
     } else dl();
   }
   /* Tüm veriyi verilen veriyle değiştirir. Önce mevcut veri "safety" olarak saklanır; hata olursa eski veri geri yazılır. */
