@@ -739,13 +739,6 @@
   .frow.dng .fl { color: var(--danger); }
   .dsh-stack { flex-direction: column; gap: 10px; }
   .dsh-stack .dbtn { flex: none; width: 100%; height: 54px; font-size: 1rem; }
-  .bkn { flex: none; display: flex; align-items: center; gap: 10px; margin: 0 20px 10px; padding: 12px 10px 12px 16px; border-radius: 18px; background: var(--accent-soft); border: 1px solid rgba(var(--acc-rgb), .25); }
-  .bkn[hidden] { display: none; }
-  .bkn .bkt { flex: 1; min-width: 0; }
-  .bkn b { display: block; font-size: .95rem; font-weight: 700; letter-spacing: -.01em; }
-  .bkn small { display: block; color: var(--dim); font-size: .82rem; margin-top: 2px; }
-  .bkn .bkg { flex: none; height: 36px; padding: 0 16px; border-radius: 18px; background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: .88rem; }
-  .bkn .bkx { flex: none; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; color: var(--dim); }
   .m-sel .hb, .m-sort .hb { display: none; }
   .view.mode .lnew { visibility: hidden; }
   .view.mode .swt-scroll { padding-bottom: calc(var(--pb) + 120px); }
@@ -864,6 +857,12 @@
   #vSheet .opt .ot b { font-size: 1.08rem; font-weight: 600; }
   #vSheet .opt .ot small { font-size: .86rem; margin-top: 3px; }
   #vSheet .vhint { padding: 12px 0 6px; }
+  #nSheet .sht-list { margin: 0 -20px 4px; }
+  #nSheet .opt { position: relative; gap: 16px; padding: 16px 20px; border-radius: 0; }
+  #nSheet .opt + .opt::before { content: ""; position: absolute; left: 20px; right: 20px; top: 0; height: 1px; background: var(--line); }
+  #nSheet .opt:active { transform: none; background: var(--accent-soft); }
+  #nSheet .opt .ot b { font-size: 1.08rem; font-weight: 600; }
+  #nSheet .opt .ot small { font-size: .86rem; margin-top: 3px; }
   .optg { margin: 0 -20px 0; }
   .optg .opt { position: relative; width: 100%; gap: 16px; padding: 16px 20px; border-radius: 0; }
   .optg .opt + .opt::before { content: ""; position: absolute; left: 20px; right: 20px; top: 0; height: 1px; background: var(--line); }
@@ -1098,7 +1097,6 @@
           </div>
           <button class="icon-btn" id="openLib" aria-label="Hareketler"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg></button>
         </div>
-        <div class="bkn" id="bkBanner" hidden><div class="bkt"><b>Yedek almayı unutma</b><small id="bkBnT"></small></div><button type="button" class="bkg" id="bkBnGo">Yedekle</button><button type="button" class="bkx" id="bkBnX" aria-label="Kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" style="width:12px;height:12px"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
         <div class="scroll" id="homeList"></div>
         <div class="bar">
           <button class="primary" id="addGroup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Yeni grup</button>
@@ -1136,11 +1134,20 @@
         </div>
       </div>
       <div class="fsec stg" style="--k:2">
+        <div class="fcap">Bildirimler</div>
+        <div class="fcard">
+          <button type="button" class="frow lnk" id="nOpen"><span class="fl">Bildirim türü<small id="nName"></small></span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></span></button>
+          <button type="button" class="frow lnk bt" id="nSend"><span class="fl">Anlık bildirim gönder<small id="nSendS">Seçilen bildirim 1 saniye sonra gelir</small></span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l14 8-14 8z"/></svg></span></button>
+        </div>
+      </div>
+      <div class="fsec stg" style="--k:2">
         <div class="fcap">Yedekleme</div>
         <div class="fcard">
           <button type="button" class="frow lnk bt" id="bkOut"><span class="fl">Yedeği dışa aktar<small id="bkLast"></small></span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M9 5l7 7-7 7"/></svg></span></button>
           <button type="button" class="frow lnk bt" id="bkIn"><span class="fl">Yedekten geri yükle<small>Yedek dosyasından tüm veriyi geri al</small></span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M9 5l7 7-7 7"/></svg></span></button>
           <button type="button" class="frow lnk bt" id="bkUndo" style="display:none"><span class="fl">Önceki veriyi geri getir<small id="bkUndoS"></small></span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M9 5l7 7-7 7"/></svg></span></button>
+          <div class="frow bt"><span class="fl">Yedek hatırlatması<small>Yedek zamanı geldiğinde bildirim gösterir</small></span>
+            <button type="button" class="sw on" id="swBkRem" role="switch" aria-checked="true" aria-label="Yedek hatırlatması"></button></div>
         </div>
         <input type="file" id="bkFile" accept=".json,application/json" hidden>
       </div>
@@ -1165,6 +1172,15 @@
         <h2 id="rsT">Tüm veriler silinsin mi?</h2>
         <p class="sh-d" id="rsP"></p>
         <div class="dsh-act dsh-stack"><button class="dbtn ok" id="rsOk">Her şeyi sil ve sıfırla</button><button class="dbtn no" id="rsBk">Önce yedek al</button><button class="dbtn no" id="rsNo">Vazgeç</button></div>
+      </div>
+    </div>
+    <div class="sht" id="nSheet">
+      <div class="sht-card">
+        <p class="ssub eb">Bildirimler</p>
+        <h2>Bildirim türü</h2>
+        <p class="ssub">“Anlık bildirim gönder” seçtiğin türü gösterir.</p>
+        <div class="sht-list" id="nList"></div>
+        <button class="primary sec" id="nDone">Tamam</button>
       </div>
     </div>
     <div class="sht" id="vSheet">
@@ -2171,31 +2187,40 @@
     var d = Math.floor((Date.now() - ts) / 864e5);
     return d <= 0 ? 'bugün' : d === 1 ? 'dün' : d + ' gün önce';
   }
+  /* Yedek zamanı geldi mi? Veri var + (hiç yedek yok ya da 7 günden eski) + son hatırlatmadan 3 gün geçti. */
+  function bkDue() {
+    var lb = +lsGet('antrenman.lastBackup') || 0, sn = +lsGet('antrenman.bkSnooze') || 0;
+    var has = state.groups.length || state.library.some(function (e) { return !e.preset; });
+    return !!(has && (!lb || Date.now() - lb > 7 * 864e5) && Date.now() - sn > 3 * 864e5);
+  }
+  function bkRemOn() { return !(state.settings && state.settings.bkRemind === false); }
+  function bkSub() {
+    var lb = +lsGet('antrenman.lastBackup') || 0;
+    return lb ? 'Son yedek ' + bkAgo(lb) + '.' : 'Henüz hiç yedek almadın.';
+  }
   function bkPaint() {
     var lb = +lsGet('antrenman.lastBackup') || 0, sf = null;
     $('#bkLast').textContent = lb ? 'Son yedek: ' + bkAgo(lb) : 'Henüz yedek alınmadı';
     try { sf = JSON.parse(lsGet('antrenman.safety')); } catch (e) {}
     $('#bkUndo').style.display = sf && sf.data ? '' : 'none';
     if (sf && sf.ts) $('#bkUndoS').textContent = 'Son değişiklikten önceki veri · ' + bkAgo(sf.ts);
-    var has = state.groups.length || state.library.some(function (e) { return !e.preset; });
-    var sn = +lsGet('antrenman.bkSnooze') || 0;
-    var show = has && (!lb || Date.now() - lb > 7 * 864e5) && Date.now() - sn > 3 * 864e5;
-    $('#bkBanner').hidden = !show;
-    if (show) $('#bkBnT').textContent = lb ? 'Son yedek ' + bkAgo(lb) + '. Verilerini dosyaya kaydet.' : 'Henüz hiç yedek almadın. Verilerini dosyaya kaydet.';
+    var on = bkRemOn(), sw = $('#swBkRem');
+    sw.classList.toggle('on', on); sw.setAttribute('aria-checked', on ? 'true' : 'false');
   }
-  function bkExport() {
+  function bkExport(cb) {
+    cb = typeof cb === 'function' ? cb : null;   // onclick olay nesnesi gelirse yok say
     save();
     var o = { app: 'antrenman', format: 1, exportedAt: new Date().toISOString(), data: bkSnapshot() }, txt = JSON.stringify(o);
     var t = new Date(), pad = function (n) { return (n < 10 ? '0' : '') + n; };
     var name = 'antrenman-yedek-' + t.getFullYear() + '-' + pad(t.getMonth() + 1) + '-' + pad(t.getDate()) + '.json', file = null;
     try { file = new File([txt], name, { type: 'application/json' }); } catch (e) {}
-    function done() { lsSet('antrenman.lastBackup', String(Date.now())); bkPaint(); }
+    function done() { lsSet('antrenman.lastBackup', String(Date.now())); bkPaint(); if (cb) cb(true); }
     function dl() {
       var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([txt], { type: 'application/json' })); a.download = name;
       document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 2500); done();
     }
     if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
-      navigator.share({ files: [file], title: 'Antrenman yedeği' }).then(done).catch(function (e) { if (!e || e.name !== 'AbortError') dl(); });
+      navigator.share({ files: [file], title: 'Antrenman yedeği' }).then(done).catch(function (e) { if (!e || e.name !== 'AbortError') dl(); else if (cb) cb(false); });
     } else dl();
   }
   /* Tüm veriyi verilen veriyle değiştirir. Önce mevcut veri "safety" olarak saklanır; hata olursa eski veri geri yazılır. */
@@ -2250,10 +2275,20 @@
     if (!bkPend) return;
     if (!bkApply(bkPend.data, bkPend.ts)) { bkAsk('Yedekleme', 'Yapılamadı', 'Veri yazılamadı (yer yetersiz olabilir). Mevcut verin olduğu gibi duruyor.', false); }
   };
-  $('#bkBnGo').onclick = bkExport;
-  $('#bkBnX').onclick = function () { lsSet('antrenman.bkSnooze', String(Date.now())); bkPaint(); };
   try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}   // tarayıcı veriyi kendiliğinden silmesin
+  $('#swBkRem').onclick = function () {
+    state.settings = state.settings || {};
+    state.settings.bkRemind = !bkRemOn(); save(); bkPaint(); vib(6);
+  };
   bkPaint();
+  /* Yedek bildirimi (kapsül): bildirimden doğrudan yedeklenir. Açılışta zamanı geldiyse bir kez çıkar; hatırlatma 3 gün sonra tekrarlanır. */
+  window.bkNotify = { sub: bkSub, run: bkExport };
+  function bkRemind() {
+    if (!bkRemOn() || !bkDue() || navigator.onLine === false || wizOpen || !window.netBanner) return;
+    lsSet('antrenman.bkSnooze', String(Date.now()));
+    window.netBanner.show('bk');
+  }
+  window.addEventListener('load', function () { setTimeout(bkRemind, 1800); });
 
   $('#rsOk').onclick = function () { if (!bkApply({}, 0)) { $('#rsSheet').classList.remove('open'); bkAsk('Sıfırlama', 'Yapılamadı', 'Güvenlik kopyası alınamadığı için hiçbir şey silinmedi.', false); } };
   function closeSheet() { $('#dsh').classList.remove('open', 'go'); $('#xsh').classList.remove('open', 'go'); }
@@ -3413,7 +3448,7 @@
 
   /* ----- Panel tutamacı: aşağı sürükle ya da dokun, panel kapansın ----- */
   (function () {
-    var map = { ctx: 'cxCancel', addSheet: 'aCancel', vSheet: 'vDone', plMore: 'mKeep', plInfo: 'piOk', plQuit: 'qKeep', dsh: 'dshNo', cdsh: 'cdNo' };
+    var map = { ctx: 'cxCancel', addSheet: 'aCancel', vSheet: 'vDone', nSheet: 'nDone', plMore: 'mKeep', plInfo: 'piOk', plQuit: 'qKeep', dsh: 'dshNo', cdsh: 'cdNo' };
     Object.keys(map).forEach(function (id) {
       var ov = document.getElementById(id), card = ov && ov.querySelector('.sht-card, .dsh-card, .q-card'), btn = document.getElementById(map[id]);
       if (!card || !btn) return;
@@ -3564,6 +3599,43 @@
     say('Plank. 30 saniye.', 0, true);
   });
 
+  /* ----- Bildirimler: tür seçimi + anlık bildirim ----- */
+  var nBusy = false;
+  function nTypes() { return (window.netBanner && window.netBanner.types) || []; }
+  function nSel() {
+    var id = state.settings && state.settings.notifType, t = nTypes();
+    return t.filter(function (x) { return x.id === id; })[0] || t[0] || null;
+  }
+  function paintNotif() { var t = nSel(); $('#nName').textContent = t ? t.name : ''; }
+  function renderNotif() {
+    var cur = nSel(), h = '';
+    nTypes().forEach(function (t) {
+      h += '<button type="button" class="opt' + (cur && t.id === cur.id ? ' on' : '') + '" data-n="' + esc(t.id) + '"><span class="ot"><b>' + esc(t.name) + '</b><small>' + esc(t.desc) + '</small></span>' + CHECK + '</button>';
+    });
+    $('#nList').innerHTML = h;
+  }
+  $('#nOpen').onclick = function () { renderNotif(); $('#nSheet').classList.add('open'); };
+  $('#nDone').onclick = function () { $('#nSheet').classList.remove('open'); };
+  $('#nSheet').addEventListener('click', function (e) { if (e.target === this) $('#nDone').onclick(); });
+  $('#nList').addEventListener('click', function (e) {
+    var b = e.target.closest('.opt'); if (!b) return;
+    state.settings = state.settings || {}; state.settings.notifType = b.dataset.n; save();
+    Array.prototype.forEach.call($('#nList').children, function (x) { x.classList.toggle('on', x === b); });
+    paintNotif(); vib(6);
+  });
+  $('#nSend').onclick = function () {
+    if (nBusy || !window.netBanner) return;
+    var t = nSel(); if (!t) return;
+    nBusy = true; vib(8);
+    var sub = $('#nSendS'), old = sub.textContent;
+    sub.textContent = 'Bildirim geliyor…';
+    setTimeout(function () {
+      window.netBanner.show(t.id);
+      sub.textContent = old; nBusy = false;
+    }, 1000);
+  };
+  paintNotif(); window.addEventListener('load', paintNotif);
+
   function openSettings() {
     if (setOpen || formOpen || groupOpen || wizOpen || mm || WK) return;
     paintPrep(false); paintVoice();
@@ -3578,7 +3650,7 @@
   }
   function closeSettings(from, pf, dimFrom) {
     if (!setOpen) return;
-    setOpen = false; $('#vSheet').classList.remove('open'); cancelSpeech();
+    setOpen = false; $('#vSheet').classList.remove('open'); $('#nSheet').classList.remove('open'); cancelSpeech();
     var a = setView.animate([{ transform: from || 'none' }, { transform: 'translateX(100%)' }], { duration: 400, easing: EASE, fill: 'forwards' });
     homeView.animate([{ transform: pf || 'translateX(-22%)' }, { transform: 'none' }], { duration: 400, easing: EASE });
     if (setHomeAnim) { setHomeAnim.cancel(); setHomeAnim = null; }
@@ -3588,7 +3660,7 @@
     a.onfinish = function () { setView.style.display = 'none'; a.cancel(); };
   }
   $('#setBack').onclick = function () { closeSettings(); };
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && setOpen) { if ($('#vSheet').classList.contains('open')) $('#vDone').onclick(); else closeSettings(); } });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && setOpen) { if ($('#nSheet').classList.contains('open')) $('#nDone').onclick(); else if ($('#vSheet').classList.contains('open')) $('#vDone').onclick(); else closeSettings(); } });
 
 
   /* ================= Sekmeler: Ana · Gruplarım · Ayarlar ================= */
@@ -3641,7 +3713,7 @@
     var sx = null, dx = 0, t0 = 0, W = 1;
     function prevT(p) { return 'translate3d(' + (-0.22 * W * (1 - p)) + 'px,0,0)'; }
     strip.addEventListener('touchstart', function (e) {
-      if (!setOpen || sx != null || $('#vSheet').classList.contains('open')) return;
+      if (!setOpen || sx != null || $('#vSheet').classList.contains('open') || $('#nSheet').classList.contains('open')) return;
       sx = e.touches[0].clientX; dx = 0; t0 = Date.now(); W = setView.offsetWidth || innerWidth;
       if (setHomeAnim) { setHomeAnim.cancel(); setHomeAnim = null; }
       homeView.style.transform = prevT(0);
@@ -4688,7 +4760,7 @@
      • "offline" olayında kırmızı "İnternet bağlantısı kesildi" gösterilir.
      • "online" olayında yeşil "İnternete yeniden bağlandın" gösterilir (yalnızca kesinti sonrası).
      • Renkleri/yazıyı aktif temadan alır (--theme-bg, --theme-text); koyu temada videodaki görünümdür.
-     Test için konsoldan: netBanner.show('off') / netBanner.show('on') -->
+     Yedek bildirimi: netBanner.show('bk') (Yedekle düğmesi gerçek yedek alır). Test için konsoldan: netBanner.show('off') / netBanner.show('on'); sesi kapatmak: netBanner.sound(false) -->
 <style id="netBannerCss">
 .nb-wrap{
   position:fixed;left:0;right:0;
@@ -4710,6 +4782,7 @@
   cursor:pointer;-webkit-tap-highlight-color:transparent;
   -webkit-user-select:none;user-select:none;touch-action:pan-x;
   animation:nbIn 720ms cubic-bezier(.11,1.52,.44,.92) both,nbFade 140ms linear both;
+  transition:border-color .4s ease,box-shadow .4s ease;
   will-change:transform,opacity;
 }
 .nb.is-on{--c:52,165,112}
@@ -4719,10 +4792,10 @@
 .nb-ic{
   position:relative;flex:none;width:44px;height:44px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
-  background:rgba(var(--c),.14);
+  background:rgba(var(--c),.14);transition:background-color .4s ease;
 }
 .nb-ic svg{width:22px;height:22px;overflow:visible;fill:none;stroke:rgb(var(--c));
-  stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+  stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:stroke .4s ease}
 .nb-ic svg *{transform-box:view-box;transform-origin:12px 20px}
 
 .nb-t{display:flex;flex-direction:column;min-width:0}
@@ -4732,8 +4805,8 @@
   color:color-mix(in srgb,var(--theme-text,var(--ink,#f7f4f7)) 62%,transparent)}
 
 /* --- Kesildi: çizgi çekilir, sinyal yayları "arıyor" gibi nabız atar --- */
-.nb-slash{stroke-dasharray:1;stroke-dashoffset:1;animation:nbDraw 260ms 320ms cubic-bezier(.3,.7,.3,1) forwards}
-.nb-gap{stroke:#000;stroke-dasharray:1;stroke-dashoffset:1;animation:nbDraw 260ms 320ms cubic-bezier(.3,.7,.3,1) forwards}
+.nb-slash{stroke-dasharray:1 2;stroke-dashoffset:1;animation:nbDraw 260ms 320ms cubic-bezier(.3,.7,.3,1) forwards}
+.nb-gap{stroke:#000;stroke-dasharray:1 2;stroke-dashoffset:1;animation:nbDraw 260ms 320ms cubic-bezier(.3,.7,.3,1) forwards}
 .nb:not(.is-on) .nb-w{
   animation:nbDim 350ms 250ms ease forwards,
             nbSearch 1.6s calc(.65s + var(--i)*.14s) ease-in-out infinite;
@@ -4747,6 +4820,54 @@
   animation:nbRipple 800ms 120ms ease-out both;
 }
 .nb.is-on .nb-w{animation:nbPopA 380ms calc(.16s + var(--i)*.07s) cubic-bezier(.3,1.5,.5,1) both}
+
+/* --- Yedekleme: bulut + yukarı ok. Bekleme: ok hafifçe süzülür, halka nabız atar.
+       Yedekleniyor: ok sürekli yukarı yükselir. Bitti: yeşile döner, ok kaybolur, onay işareti çizilir. --- */
+.nb.is-bk{--c:64,132,246;max-width:calc(100% - 32px);padding-right:12px}
+.nb.is-bk.is-ok{--c:52,165,112}
+.nb-go{
+  flex:none;position:relative;display:grid;place-items:center;overflow:hidden;white-space:nowrap;
+  height:36px;max-width:140px;padding:0 16px;margin-left:2px;border:0;border-radius:18px;
+  background:rgb(var(--c));color:#fff;font:inherit;font-size:13.5px;font-weight:700;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;
+  transition:opacity .22s ease,max-width .42s cubic-bezier(.5,0,.2,1),padding .42s cubic-bezier(.5,0,.2,1),margin .42s cubic-bezier(.5,0,.2,1),transform .15s ease,background-color .4s ease;
+}
+.nb-go:active{transform:scale(.94)}
+.nb-gl,.nb-sp{grid-area:1/1;transition:opacity .2s ease}
+.nb-sp{opacity:0;width:16px;height:16px;justify-self:center;border-radius:50%;
+  border:2.4px solid rgba(255,255,255,.35);border-top-color:#fff;animation:nbSpin .7s linear infinite}
+.nb.is-busy .nb-gl{opacity:0}
+.nb.is-busy .nb-sp{opacity:1}
+.nb.is-busy .nb-go{pointer-events:none}
+.nb.is-ok .nb-go{opacity:0;max-width:0;padding:0;margin-left:-13px;pointer-events:none}
+
+.nb.is-bk .nb-ic{animation:nbPopC 520ms 100ms cubic-bezier(.3,1.6,.5,1) both}
+.nb.is-bk .nb-ic::after{
+  content:"";position:absolute;inset:0;border-radius:50%;
+  border:1.5px solid rgba(var(--c),.55);pointer-events:none;
+  animation:nbRipple 1.9s 800ms ease-out infinite;
+}
+.nb.is-bk.is-busy .nb-ic::after{animation-duration:1s}
+.nb.is-bk.is-ok .nb-ic{animation:nbPopD 520ms cubic-bezier(.3,1.6,.5,1) both}
+.nb.is-bk.is-ok .nb-ic::after{animation:nbRipple 800ms ease-out 1 both}
+.nb.is-bk .nb-cloud{animation:nbBreath 2.6s ease-in-out infinite}
+.nb.is-bk .nb-arrow{animation:nbBob 1.8s ease-in-out infinite}
+.nb.is-bk.is-busy .nb-arrow{animation:nbUp 1s cubic-bezier(.4,0,.6,1) infinite}
+.nb.is-bk.is-ok .nb-arrow{animation:nbArrowOut .3s ease forwards}
+.nb.is-bk.is-ok .nb-cloud{animation:none}
+/* dasharray'in boşluğu 1'den uzun olmalı: aksi halde yol sonunda sıfır uzunluklu çizgi kalır ve Safari yuvarlak ucu nokta olarak çizer */
+.nb-check{stroke-dasharray:1 2;stroke-dashoffset:1;opacity:0}
+.nb.is-ok .nb-check{opacity:1}
+.nb.is-ok .nb-check{animation:nbDraw 380ms 220ms cubic-bezier(.3,.7,.3,1) forwards}
+.nb.is-ok .nb-t{animation:nbTxt .38s ease both}
+
+@keyframes nbSpin{to{transform:rotate(360deg)}}
+@keyframes nbBob{0%,100%{transform:translateY(1.2px)}50%{transform:translateY(-1.6px)}}
+@keyframes nbUp{0%{transform:translateY(5px);opacity:0}30%,70%{opacity:1}100%{transform:translateY(-6px);opacity:0}}
+@keyframes nbArrowOut{to{opacity:0;transform:translateY(-6px)}}
+@keyframes nbBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+@keyframes nbPopD{from{transform:scale(.7)}to{transform:scale(1)}}
+@keyframes nbTxt{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 
 @keyframes nbIn{from{transform:translateY(-110px)}to{transform:none}}
 @keyframes nbFade{from{opacity:0}to{opacity:1}}
@@ -4765,6 +4886,8 @@
   .nb-slash,.nb-gap{animation:none;stroke-dashoffset:0}
   .nb *,.nb-ic,.nb-ic::after{animation:none!important}
   .nb:not(.is-on) .nb-w{opacity:.3}
+  .nb.is-ok .nb-check{stroke-dashoffset:0}
+  .nb-go{transition:none}
 }
 </style>
 
@@ -4774,7 +4897,7 @@
   if (window.__nbLoaded) return;
   window.__nbLoaded = true;
 
-  var HOLD = { off: 4500, on: 3800 };   // ekranda kalma süresi (ms) — videodaki zamanlama
+  var HOLD = { off: 4500, on: 3800, bk: 9000, ok: 3200 };   // ekranda kalma süresi (ms) — videodaki zamanlama
   var LEAVE = 240;                      // çıkış animasyonu (ms)
   var uid = 0, wrap = null, cur = null, timer = null;
   var last = navigator.onLine !== false;  // son bilinen durum
@@ -4782,13 +4905,22 @@
 
   var TEXT = {
     off: ['İnternet bağlantısı kesildi', 'Çevrimdışı da kullanmaya devam edebilirsin.'],
-    on:  ['İnternete yeniden bağlandın', 'Her şey yeniden çevrimiçi.']
+    on:  ['İnternete yeniden bağlandın', 'Her şey yeniden çevrimiçi.'],
+    bk:  ['Yedek almayı unutma', 'Verilerini dosyaya kaydet.'],
+    ok:  ['Yedek alındı', 'Verilerin dosyaya kaydedildi.']
   };
 
   function icon(kind) {
     var id = 'nbm' + (++uid);
     var slash = 'M4.5 4 L19.5 21';
     var isOff = kind === 'off';
+    if (kind === 'bk') {
+      return '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+        '<path class="nb-cloud" d="M4 14.9A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.24"/>' +
+        '<g class="nb-arrow"><path d="M12 13v8"/><path d="m8 17 4-4 4 4"/></g>' +
+        '<path class="nb-check" pathLength="1" d="m8.6 15.4 2.4 2.4 4.5-5"/>' +
+      '</svg>';
+    }
     return '<svg viewBox="0 0 24 24" aria-hidden="true">' +
       (isOff ? '<defs><mask id="' + id + '" maskUnits="userSpaceOnUse" x="-4" y="-4" width="32" height="32">' +
                '<rect x="-4" y="-4" width="32" height="32" fill="#fff"/>' +
@@ -4805,23 +4937,54 @@
 
   function build(kind) {
     var el = document.createElement('div');
-    el.className = 'nb' + (kind === 'on' ? ' is-on' : '');
+    var isBk = kind === 'bk';
+    el.className = 'nb' + (kind === 'on' ? ' is-on' : '') + (isBk ? ' is-bk' : '');
     el.setAttribute('role', 'status');
     el.setAttribute('aria-live', 'polite');
     el.innerHTML =
       '<div class="nb-ic">' + icon(kind) + '</div>' +
-      '<div class="nb-t"><div class="nb-h"></div><div class="nb-s"></div></div>';
+      '<div class="nb-t"><div class="nb-h"></div><div class="nb-s"></div></div>' +
+      (isBk ? '<button type="button" class="nb-go"><span class="nb-gl">Yedekle</span><span class="nb-sp"></span></button>' : '');
     el.querySelector('.nb-h').textContent = TEXT[kind][0];
-    el.querySelector('.nb-s').textContent = TEXT[kind][1];
+    el.querySelector('.nb-s').textContent = isBk && window.bkNotify ? window.bkNotify.sub() : TEXT[kind][1];
 
-    // Dokununca ya da yukarı kaydırınca erken kapanır.
+    // Dokununca ya da yukarı kaydırınca erken kapanır (yedekleme sürerken kapanmaz).
     var y0 = null;
-    el.addEventListener('click', function () { dismiss(el); });
+    el.addEventListener('click', function () { if (!el.__busy) dismiss(el); });
     el.addEventListener('touchstart', function (e) { y0 = e.touches[0].clientY; }, { passive: true });
     el.addEventListener('touchmove', function (e) {
-      if (y0 !== null && y0 - e.touches[0].clientY > 14) { y0 = null; dismiss(el); }
+      if (y0 !== null && !el.__busy && y0 - e.touches[0].clientY > 14) { y0 = null; dismiss(el); }
     }, { passive: true });
+    if (isBk) el.querySelector('.nb-go').addEventListener('click', function (e) { e.stopPropagation(); runBackup(el); });
     return el;
+  }
+
+  // Bildirimden yedekleme: düğme dönen halkaya geçer, ok yükselir; bitince yeşile döner ve onay çizilir.
+  function runBackup(el) {
+    if (el.__busy || el.__leaving) return;
+    var api = window.bkNotify, t0 = Date.now(), finished = false;
+    if (!api) return;
+    el.__busy = true; clearTimeout(timer);
+    el.classList.add('is-busy');
+    playSound('go');
+    function fin(ok) {
+      if (finished) return; finished = true;
+      el.__busy = false; el.classList.remove('is-busy');
+      if (ok) {
+        el.querySelector('.nb-h').textContent = TEXT.ok[0];
+        el.querySelector('.nb-s').textContent = TEXT.ok[1];
+        el.classList.add('is-ok');
+        playSound('ok');
+        try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {}
+      }
+      if (cur === el) timer = setTimeout(function () { dismiss(el); }, ok ? HOLD.ok : HOLD.bk);
+    }
+    try {
+      api.run(function (ok) {
+        // animasyon görünsün diye en az 1 sn "yedekleniyor" kalır
+        setTimeout(function () { fin(!!ok); }, ok ? Math.max(0, 1000 - (Date.now() - t0)) : 0);
+      });
+    } catch (e) { fin(false); }
   }
 
   function dismiss(el, fast) {
@@ -4831,6 +4994,93 @@
     el.classList.add('is-leaving');
     if (fast) el.classList.add('is-fast');
     setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, (fast ? 160 : LEAVE) + 30);
+  }
+
+
+  // ---------- Ses efektleri (dosya yok; Web Audio ile üretilir) ----------
+  var soundOn = true, ac = null;
+  function ctx() {
+    if (ac) return ac;
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    try { ac = new AC(); } catch (e) { ac = null; }
+    return ac;
+  }
+  // Tarayıcılar sesi ancak bir dokunuştan sonra açar; ilk etkileşimde hazırla.
+  function unlock() {
+    var a = ctx();
+    if (a && a.state === 'suspended') { try { a.resume(); } catch (e) {} }
+    if (a && a.state === 'running') {
+      ['pointerdown', 'touchstart', 'keydown'].forEach(function (t) { window.removeEventListener(t, unlock, true); });
+    }
+  }
+  ['pointerdown', 'touchstart', 'keydown'].forEach(function (t) { window.addEventListener(t, unlock, true); });
+
+  // Ortak ses hattı: yankısız, yumuşak. Alçak geçiren filtre tiz kenarları alır, hafif sıkıştırıcı ani tepeleri törpüler.
+  var bus = null;
+  function getBus(a) {
+    if (bus && bus.a === a) return bus;
+    var master = a.createGain(); master.gain.value = 0.55;
+    var lp = a.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1800; lp.Q.value = 0.3;
+    var comp = a.createDynamicsCompressor();
+    comp.threshold.value = -20; comp.knee.value = 24; comp.ratio.value = 3; comp.attack.value = 0.01; comp.release.value = 0.25;
+    master.connect(lp); lp.connect(comp); comp.connect(a.destination);
+    bus = { a: a, master: master };
+    return bus;
+  }
+  // Yumuşak, yuvarlak nota: saf sinüs + çok hafif bir oktav, yavaşça açılan atak (tık sesi yok), kısa ve temiz sönüm.
+  function note(a, freq, t0, dur, vol) {
+    var b = getBus(a);
+    [[1, 1, 1.0], [2, 0.45, 0.07]].forEach(function (l) {
+      var o = a.createOscillator(), g = a.createGain();
+      o.type = 'sine'; o.frequency.setValueAtTime(freq * l[0], t0);
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.linearRampToValueAtTime(vol * l[2], t0 + 0.03);                 // 30 ms yumuşak giriş
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur * l[1]);
+      o.connect(g); g.connect(b.master);
+      o.start(t0); o.stop(t0 + dur * l[1] + 0.05);
+    });
+  }
+  // Damla/baloncuk sesi: kısa, yumuşak, perdesi kayan sinüs. Yedek bildirimleri bunu kullanır (internet sesleri nota dizisi).
+  function blop(a, f0, f1, t0, dur, vol) {
+    var b = getBus(a), o = a.createOscillator(), g = a.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(f0, t0); o.frequency.exponentialRampToValueAtTime(f1, t0 + dur * 0.7);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.linearRampToValueAtTime(vol, t0 + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g); g.connect(b.master);
+    o.start(t0); o.stop(t0 + dur + 0.05);
+  }
+  // Pentatonik diziler, bir oktav aşağıda ve daha az nota: kulağı yormayan sıcak bir tını.
+  var PENTA_DOWN = [587.33, 440.00];            // Re5 → La4  (nazikçe iner)
+  var PENTA_UP   = [440.00, 587.33, 739.99];    // La4 → Re5 → Fa#5 (nazikçe yükselir)
+  function playSound(kind) {
+    if (!soundOn) return;
+    var a = ctx();
+    if (!a) return;
+    if (a.state === 'suspended') { try { a.resume(); } catch (e) {} }
+    var t = a.currentTime + 0.03;
+    try {
+      if (kind === 'bk') {            // gelen yedek bildirimi: iki yumuşak, yükselen damla
+        blop(a, 392, 523, t, 0.22, 0.16);
+        blop(a, 523, 698, t + 0.15, 0.26, 0.13);
+      } else if (kind === 'go') {     // dokunma: küçük, alçalan tık
+        blop(a, 330, 247, t, 0.12, 0.10);
+      } else if (kind === 'ok') {     // yedek alındı: alçak yumuşak "mühür" + Do-Sol çan sesi
+        blop(a, 196, 120, t, 0.28, 0.16);
+        note(a, 523.25, t + 0.06, 0.9, 0.12);
+        note(a, 783.99, t + 0.17, 1.1, 0.10);
+      } else if (kind === 'off') {
+        PENTA_DOWN.forEach(function (f, i) {
+          note(a, f, t + i * 0.16, i === 1 ? 0.7 : 0.5, 0.14 - i * 0.02);
+        });
+      } else {
+        PENTA_UP.forEach(function (f, i) {
+          note(a, f, t + i * 0.12, i === 2 ? 0.75 : 0.5, 0.12 + i * 0.01);
+        });
+      }
+    } catch (e) { /* ses çalınamasa da bildirim çalışsın */ }
   }
 
   function show(kind) {
@@ -4846,6 +5096,7 @@
     wrap.appendChild(el);
     cur = el;
     timer = setTimeout(function () { dismiss(el); }, HOLD[kind]);
+    playSound(kind);
   }
 
   function setState(online) {
@@ -4872,7 +5123,13 @@
   else window.addEventListener('load', initial);
 
   // Konsoldan deneme: netBanner.show('off') / netBanner.show('on')
-  window.netBanner = { show: show, hide: function () { dismiss(cur); } };
+  window.netBanner = {
+    types: [
+      { id: 'off', name: 'İnternet kesildi', desc: 'Bağlantı koptuğunda çıkar' },
+      { id: 'on',  name: 'İnternet geri geldi', desc: 'Bağlantı döndüğünde çıkar' },
+      { id: 'bk',  name: 'Yedek hatırlatması', desc: 'Yedek zamanı gelince çıkar' }
+    ],
+    show: show, hide: function () { dismiss(cur); }, sound: function (on) { soundOn = !!on; } };
 })();
 </script>
 
