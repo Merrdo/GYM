@@ -665,6 +665,76 @@
   .lemp { margin: 6px 0 4px; padding: 22px 20px; border-radius: 18px; border: 1.5px dashed var(--line2); text-align: center; color: var(--dim); font-size: .92rem; line-height: 1.5; }
   .lemp b { display: block; color: var(--ink); font-size: 1rem; font-weight: 650; margin-bottom: 3px; }
 
+
+/* swipe-tabs.css — üstte yazılı sayfa geçişi (bağımsız bileşen)
+ *
+ * Özelleştirme (CSS değişkenleri, kökte ya da .swt üzerinde tanımla):
+ *   --swt-ink      aktif yazı rengi            (varsayılan #f7f7f5)
+ *   --swt-accent   alt çizgi rengi             (varsayılan #ffb938)
+ *   --swt-bg       sayfa arka planı            (varsayılan #000)
+ *   --swt-top      yazı satırının üst boşluğu  (varsayılan 52px)
+ *   --swt-side     soldaki boşluk              (varsayılan 20px)
+ *   --swt-right    sağdaki boşluk; sağa ikon/buton koyacaksan arttır (varsayılan 20px)
+ *   --swt-gap      yazılar arası boşluk        (varsayılan 28px)
+ *   --swt-size     yazı boyutu                 (varsayılan 1.32rem)
+ *   --swt-h        yazı satırı yüksekliği      (varsayılan 42px)
+ */
+.swt {
+  --swt-ink: #f7f7f5; --swt-accent: #ffb938; --swt-bg: #000;
+  --swt-top: 52px; --swt-side: 20px; --swt-right: 20px; --swt-gap: 28px; --swt-size: 1.32rem; --swt-h: 42px;
+  position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--swt-bg);
+}
+.swt-track { position: absolute; inset: 0; display: flex; will-change: transform; touch-action: pan-y; }
+.swt-page {
+  position: relative; flex: 0 0 100%; min-width: 0; height: 100%;
+  display: flex; flex-direction: column; overflow: hidden;
+  padding-top: calc(var(--swt-top) + var(--swt-h) + 14px);          /* yazı satırının altından başlar */
+}
+.swt-nav {
+  position: absolute; left: var(--swt-side); right: var(--swt-right); top: var(--swt-top); height: var(--swt-h); z-index: 6;
+  display: flex; align-items: center; gap: var(--swt-gap); pointer-events: none;
+}
+.swt-nav button {
+  position: relative; height: 100%; padding: 0; border: 0; background: none; cursor: pointer; pointer-events: auto;
+  font: inherit; font-size: var(--swt-size); font-weight: 700; letter-spacing: -.03em; color: var(--swt-ink); opacity: .4;
+  -webkit-tap-highlight-color: transparent;
+}
+.swt-nav button:focus-visible { outline: 2px solid var(--swt-accent); outline-offset: 4px; border-radius: 6px; }
+.swt-nav button span { display: block; transform-origin: 0 70%; will-change: transform; }
+.swt-ul { position: absolute; left: 0; bottom: 0; width: 22px; height: 3px; border-radius: 2px; background: var(--swt-accent); will-change: transform; }
+/* Sayfa içinde kaydırılan alan: dikey kaydırma serbest, yatay hareket bileşene kalır */
+.swt-scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; padding: 4px var(--swt-side) 28px; }
+@media (prefers-reduced-motion: reduce) { .swt-track, .swt-nav * { transition: none !important; } }
+
+/* ---------- Hareketler sayfası (sekmeli, SwipeTabs) ---------- */
+#library .swt { --swt-ink: var(--ink); --swt-accent: var(--accent); --swt-bg: var(--bg); --swt-top: calc(var(--pt) - 6px); --swt-side: 78px; --swt-right: 20px; --swt-gap: 24px; --swt-size: 1.3rem;
+  position: absolute; inset: 0; height: auto; }
+#library .swt-page { padding-top: calc(var(--pt) - 6px + var(--swt-h) + 14px + 60px); }
+#library .swt-scroll { padding: 2px 20px calc(var(--pb) + 28px); }
+#libBack { position: absolute; left: 20px; top: calc(var(--pt) - 6px); z-index: 8; }
+#libQS { position: absolute; left: 0; right: 0; top: calc(var(--pt) - 6px + 42px + 14px); z-index: 7; margin: 0 20px; background: var(--surface); }
+.lh { display: flex; align-items: center; gap: 12px; min-height: 40px; padding: 4px 0 10px; }
+.lh p { flex: 1; min-width: 0; color: var(--dim); font-size: .9rem; line-height: 1.35; }
+.lh p b { color: var(--ink); font-weight: 650; }
+.lnew { flex: none; display: flex; align-items: center; gap: 6px; height: 38px; padding: 0 15px 0 12px; border-radius: 19px; background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: .9rem; transition: transform .15s var(--ease), filter .2s; }
+.lnew:active { transform: scale(.95); filter: brightness(.92); }
+.lnew svg { width: 16px; height: 16px; }
+.llist > .it:first-child::before { display: none; }
+.it.lb { cursor: pointer; gap: 15px; padding-top: 13px; padding-bottom: 13px; }
+.it.lb .nm { font-size: 1.14rem; font-weight: 600; letter-spacing: -.02em; }
+.it.lb .sb { font-size: .92rem; margin-top: 4px; }
+.gcv.pkv { width: 54px; height: 54px; border-radius: 16px; font-size: 1.5rem; }
+.hb { flex: none; display: grid; place-items: center; width: 44px; height: 44px; margin: -8px -10px -8px 0; border-radius: 50%; color: var(--faint); transition: transform .2s var(--ease), color .2s; }
+.hb svg { width: 23px; height: 23px; fill: none; transition: fill .2s; }
+.hb:active { transform: scale(.82); }
+.hb.on, .fbtn.fav.on { color: var(--accent); }
+.hb.on svg, .fbtn.fav.on svg { fill: currentColor; }
+.exmeta { margin-top: 10px; display: flex; gap: 8px; }
+.exmeta:empty { display: none; }
+.exmeta span { padding: 5px 12px; border-radius: 14px; background: var(--accent-soft); color: var(--accent); font-size: .82rem; font-weight: 650; }
+#exDesc.rich { font-size: 1.06rem; line-height: 1.62; }
+#exDesc .stp span { font-size: 1.05rem; opacity: .94; }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
   }
@@ -1088,17 +1158,21 @@
   </section>
 
 
-  <!-- Hareketler sayfası: uygulamadaki tüm hareketler -->
+  <!-- Hareketler sayfası: Hazır / Kendi / Favori sekmeleri (yatay kaydırma) -->
   <section class="view" id="library" aria-label="Hareketler">
-    <div class="top">
-      <button class="icon-btn" id="libBack" aria-label="Geri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
-      <div class="ttl"><h1>Hareketler</h1><div class="sub" id="libSub"></div></div>
+    <div class="swt" id="libSwt">
+      <section class="swt-page" data-title="Hazır">
+        <div class="swt-scroll"><div class="lh"><p id="lhPre"></p></div><div class="llist" id="libPre"></div></div>
+      </section>
+      <section class="swt-page" data-title="Kendi">
+        <div class="swt-scroll"><div class="lh"><p id="lhOwn"></p><button class="lnew" id="libAdd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Yeni</button></div><div class="llist" id="libList"></div></div>
+      </section>
+      <section class="swt-page" data-title="Favori">
+        <div class="swt-scroll"><div class="lh"><p id="lhFav"></p></div><div class="llist" id="libFav"></div></div>
+      </section>
     </div>
+    <button class="icon-btn" id="libBack" aria-label="Geri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
     <div class="srch" id="libQS"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg><input id="libQ" type="search" placeholder="Hareket ara" aria-label="Hareket ara" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="search"><button type="button" class="clr" id="libQX" aria-label="Temizle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-    <div class="scroll" id="libScroll"><div id="libList"></div></div>
-    <div class="bar">
-      <button class="primary" id="libAdd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Yeni hareket</button>
-    </div>
   </section>
 
   <!-- Hareket seçici: listeden seçilenler seçim sırasıyla gruba eklenir -->
@@ -1119,13 +1193,15 @@
       <div class="gw"><div class="cap"></div><div class="hero" id="exHero"></div></div>
       <div class="gbody">
         <h1 class="gt" id="exTitle"></h1>
+        <div class="exmeta" id="exMeta"></div>
         <div class="stats3" id="exStats"></div>
-        <div class="sech"><h2>Nasıl yapılır</h2></div>
+        <div class="sech"><h2>Anlatım</h2></div>
         <div class="exdesc" id="exDesc"></div>
       </div>
     </div>
     <div class="ghead" id="exHead"><span id="exHeadT"></span></div>
     <button class="icon-btn fbtn" id="exBack" style="left:20px" aria-label="Geri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button class="icon-btn fbtn fav" id="exFav" style="right:20px;display:none" aria-label="Favorilere ekle" aria-pressed="false"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.3s-7.6-4.6-7.6-10.3A4.4 4.4 0 0112 7.4 4.4 4.4 0 0119.6 10c0 5.7-7.6 10.3-7.6 10.3z"/></svg></button>
     <button class="icon-btn fbtn" id="exEdit" style="right:20px" aria-label="Hareketi düzenle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1-4L16.5 4.5a2.1 2.1 0 013 3L8 19z"/></svg></button>
   </section>
 
@@ -3589,7 +3665,7 @@
     $('#libList').addEventListener('pointerdown', down);
   })();
 
-  wireLP('home'); wireLP('group'); wireLP('lib');
+  wireLP('home'); wireLP('group');
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
     if ($('#cdsh').classList.contains('open')) closeCd();
@@ -3630,36 +3706,167 @@
   bindHead($('#exScroll'), $('#exHero'), $('#exHead'), $('#exview'));
 
   /* ----- Hareket sayfası ----- */
-  var exId = null, exView = $('#exview'), exAnim = null;
+  var exId = null, exLib = false, exView = $('#exview'), exAnim = null;
   function renderEx() {
-    var g = findGroup(curId), e = g && g.exercises.filter(function (x) { return x.id === exId; })[0];
+    var g = findGroup(curId), src = exLib ? state.library : (g ? g.exercises : []), e = src.filter(function (x) { return x.id === exId; })[0];
     if (!e) { closeEx(true); return; }
     $('#exTitle').textContent = e.name; $('#exHeadT').textContent = e.name;
     $('#exHero').innerHTML = '<div class="hl" aria-hidden="true">' + esc((e.name.trim().charAt(0) || '·').toLocaleUpperCase('tr')) + '</div>';
     $('#exStats').innerHTML = '<div class="st"><b>' + e.sets + '</b><span>Set</span></div><div class="st"><b>' + (e.type === 'time' ? fmtTime(e.value) : e.value) + '</b><span>' + (e.type === 'time' ? 'Süre' : 'Tekrar') + '</span></div><div class="st"><b>' + (e.rest ? fmtTime(e.rest) : 'Yok') + '</b><span>Dinlenme</span></div>';
     var d = $('#exDesc'); d.classList.toggle('none', !e.desc);
-    d.classList.toggle('rich', !!e.desc); if (e.desc) d.innerHTML = descHTML(e.desc); else d.textContent = 'Henüz tarif eklenmemiş. Sağ üstteki düğmeyle düzenleyip duruş, nefes ve dikkat noktalarını yazabilirsin.';
+    d.classList.toggle('rich', !!e.desc); if (e.desc) d.innerHTML = descHTML(e.desc); else d.textContent = exLib ? 'Bu hareket için henüz tarif eklenmemiş.' : 'Henüz tarif eklenmemiş. Sağ üstteki düğmeyle düzenleyip duruş, nefes ve dikkat noktalarını yazabilirsin.';
+    $('#exMeta').innerHTML = exLib ? '<span>' + (e.preset ? 'Hazır hareket' : 'Kendi hareketim') + '</span>' : '';
+    $('#exEdit').style.display = exLib ? 'none' : ''; $('#exFav').style.display = exLib ? '' : 'none';
+    $('#exFav').classList.toggle('on', !!e.fav); $('#exFav').setAttribute('aria-pressed', !!e.fav);
   }
-  function openEx(id) {
+  function openEx(id, lib) {
     if (exId) return;
-    exId = id; renderEx(); if (!exId) return;
+    exLib = !!lib; exId = id; renderEx(); if (!exId) return;
     $('#exScroll').scrollTop = 0; $('#exHead').style.setProperty('--p', 0); exView.style.setProperty('--hp', 0);
     if (exAnim) { exAnim.cancel(); exAnim = null; }   // yarım kalan kapanış animasyonu yeni açılışı gizlemesin
     exView.style.display = 'flex';
     exView.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 440, easing: EASE });
-    groupView.inert = true;
+    if (exLib) libView.inert = true; else groupView.inert = true;
   }
   function closeEx(instant) {
     if (!exId) return;
-    exId = null; groupView.inert = false;
+    exId = null; groupView.inert = false; libView.inert = false;
     if (exAnim) { exAnim.cancel(); exAnim = null; }
     if (instant) { exView.style.display = 'none'; return; }
     var a = exAnim = exView.animate([{ transform: 'none' }, { transform: 'translateX(100%)' }], { duration: 380, easing: EASE, fill: 'forwards' });
     a.onfinish = function () { if (exAnim !== a) return; exAnim = null; exView.style.display = 'none'; a.cancel(); };
   }
   $('#exBack').onclick = function () { closeEx(); };
-  $('#exEdit').onclick = function () { if (exId) exForm(exId); };
+  $('#exEdit').onclick = function () { if (exId && !exLib) exForm(exId); };
+  $('#exFav').onclick = function () { if (exId && exLib) toggleFav(exId); };
 
+
+
+/* swipe-tabs.js — üstte yazılı, parmağı izleyen sayfa geçişi. Bağımlılık yok.
+ *
+ * HTML:
+ *   <div class="swt" id="app">
+ *     <section class="swt-page" data-title="Ana">…</section>
+ *     <section class="swt-page" data-title="Gruplarım">…</section>
+ *     <section class="swt-page" data-title="Ayarlar">…</section>
+ *   </div>
+ *   (Yazı satırı ve kaydırma şeridi otomatik kurulur.)
+ *
+ * JS:
+ *   var tabs = new SwipeTabs(document.getElementById('app'), {
+ *     index: 0,                                   // açılış sayfası
+ *     onChange: function (i, from) {},            // sayfa yerine oturunca
+ *     onProgress: function (p) {},                // sürüklerken / animasyonda 0..N-1 arası sürekli konum
+ *     canSwipe: function (e) { return true; },    // false dönerse o dokunuşta kaydırma başlamaz
+ *     haptic: function () { navigator.vibrate && navigator.vibrate(4); },
+ *     edge: 24                                    // soldan bu kadar px içinde başlayan dokunuş yok sayılır (geri hareketi için)
+ *   });
+ *   tabs.go(2);  tabs.go(0, true);  // ikinci parametre true: animasyonsuz  tabs.index;  tabs.destroy();
+ *
+ * Kaydırmayı istemediğin yer (harita, yatay liste, giriş alanı vb.): öğeye data-swt-ignore ekle.
+ */
+(function (root) {
+  var EASE = function (u) { return 1 - Math.pow(1 - u, 4); };
+
+  function SwipeTabs(el, opt) {
+    opt = opt || {};
+    var self = this, pages = Array.prototype.slice.call(el.querySelectorAll(':scope > .swt-page')), n = pages.length;
+    var track = document.createElement('div'); track.className = 'swt-track';
+    pages.forEach(function (p) { track.appendChild(p); p.setAttribute('role', 'tabpanel'); });
+    el.insertBefore(track, el.firstChild);
+    var nav = document.createElement('nav'); nav.className = 'swt-nav'; nav.setAttribute('role', 'tablist');
+    pages.forEach(function (p, i) {
+      var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab');
+      b.innerHTML = '<span></span>'; b.firstChild.textContent = p.dataset.title || ('Sayfa ' + (i + 1));
+      b.onclick = function () { self.go(i); };
+      b.onkeydown = function (e) {
+        var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (!d) return;
+        e.preventDefault(); self.go(self.index + d); btns[self.index].focus();
+      };
+      nav.appendChild(b);
+    });
+    var ul = document.createElement('i'); ul.className = 'swt-ul'; nav.appendChild(ul); el.appendChild(nav);
+    var btns = Array.prototype.slice.call(nav.querySelectorAll('button'));
+    track.style.width = (n * 100) + '%';
+    pages.forEach(function (p) { p.style.flexBasis = (100 / n) + '%'; });
+
+    var xs = [], cur = 0, anim = 0, idx = Math.max(0, Math.min(n - 1, opt.index || 0));
+    function measure() { xs = btns.map(function (b) { return b.offsetLeft; }); }
+    function paint(p) {                               // p: sürekli konum
+      cur = p;
+      track.style.transform = 'translate3d(' + (-p * 100 / n) + '%,0,0)';
+      var i = Math.max(0, Math.min(n - 2, Math.floor(p))), f = Math.max(0, Math.min(1, p - i)), k, a;
+      if (!xs[1] && n > 1) measure();
+      for (k = 0; k < n; k++) {
+        a = Math.max(0, 1 - Math.abs(p - k));
+        btns[k].style.opacity = (.4 + .6 * a).toFixed(3);
+        btns[k].firstChild.style.transform = 'scale(' + (1 + .13 * a).toFixed(3) + ')';
+        pages[k].style.opacity = (.2 + .8 * a).toFixed(3);
+      }
+      ul.style.transform = 'translateX(' + (n > 1 ? xs[i] + (xs[i + 1] - xs[i]) * f : xs[0]).toFixed(1) + 'px)';
+      if (opt.onProgress) opt.onProgress(p);
+    }
+    function settle() {
+      pages.forEach(function (p, k) { p.inert = k !== idx; });
+      btns.forEach(function (b, k) { b.setAttribute('aria-selected', k === idx); b.tabIndex = k === idx ? 0 : -1; });
+    }
+    function reduced() { return root.matchMedia && root.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+
+    this.go = function (i, instant, fromP) {
+      i = Math.max(0, Math.min(n - 1, i));
+      var from = fromP == null ? idx : fromP, prev = idx, my = ++anim;
+      pages.forEach(function (p) { p.inert = false; });
+      idx = i;
+      if (instant || reduced() || from === i) { paint(i); settle(); if (prev !== i && opt.onChange) opt.onChange(i, prev); return; }
+      if (prev !== i && opt.haptic) opt.haptic();
+      var t0 = performance.now(), ms = 520;
+      (function step(t) {
+        if (my !== anim) return;
+        var u = Math.min(1, (t - t0) / ms);
+        paint(from + (i - from) * EASE(u));
+        if (u < 1) root.requestAnimationFrame(step); else { settle(); if (prev !== i && opt.onChange) opt.onChange(i, prev); }
+      })(t0);
+    };
+    Object.defineProperty(this, 'index', { get: function () { return idx; } });
+
+    // Parmağı izleyen yatay kaydırma
+    var sx, sy, p0, mode = -1, last, lt, v = 0, edge = opt.edge == null ? 24 : opt.edge;
+    function ts(e) {
+      var t = e.touches[0];
+      mode = (e.touches.length === 1 && t.clientX > edge && !e.target.closest('[data-swt-ignore], input, textarea, select') && (!opt.canSwipe || opt.canSwipe(e))) ? 0 : -1;
+      if (mode === 0) { sx = last = t.clientX; sy = t.clientY; lt = performance.now(); v = 0; }
+    }
+    function tm(e) {
+      if (mode < 0) return;
+      var t = e.touches[0], x = t.clientX, dx = x - sx, dy = t.clientY - sy, now = performance.now(), W = el.offsetWidth || root.innerWidth;
+      if (mode === 0) {
+        if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
+        if (Math.abs(dx) > Math.abs(dy) * 1.3) { mode = 1; anim++; p0 = idx; sx = x; dx = 0; pages.forEach(function (p) { p.inert = false; }); }
+        else { mode = -1; return; }
+      }
+      var raw = p0 - dx / W;
+      paint(raw < 0 ? raw * .3 : raw > n - 1 ? (n - 1) + (raw - (n - 1)) * .3 : raw);   // uçlarda lastik gibi direnir
+      if (now > lt) v = (last - x) / (now - lt) / W * 1000; last = x; lt = now;
+    }
+    function te() {
+      if (mode !== 1) { mode = -1; return; } mode = -1;
+      var to = Math.round(cur + v * .18), r = Math.round(cur);
+      to = Math.max(r - 1, Math.min(r + 1, to)); if (Math.abs(to - p0) > 1) to = p0 + (to > p0 ? 1 : -1);
+      self.go(to, false, cur);
+    }
+    track.addEventListener('touchstart', ts, { passive: true });
+    track.addEventListener('touchmove', tm, { passive: true });
+    track.addEventListener('touchend', te, { passive: true });
+    track.addEventListener('touchcancel', te, { passive: true });
+    function rs() { measure(); paint(cur); }
+    root.addEventListener('resize', rs);
+    if (root.document && document.fonts && document.fonts.ready) document.fonts.ready.then(rs);
+    this.destroy = function () { root.removeEventListener('resize', rs); anim++; nav.remove(); pages.forEach(function (p) { p.style.cssText = ''; p.inert = false; el.appendChild(p); }); track.remove(); };
+
+    measure(); paint(idx); settle();
+  }
+  root.SwipeTabs = SwipeTabs;
+})(window);
 
   /* ================= Hareketler sayfası ================= */
   var libView = $('#library'), libOpen = false, libDim = null, libHomeAnim = null, libAnim = null, libQ = '';
@@ -3672,40 +3879,42 @@
   function matchQ(e, q) { return !q || nkey(e.name).indexOf(nkey(q)) > -1; }
   var ICO_PRE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2 5.4L19.5 10 14 12l-2 5.5L10 12l-5.5-2L10 8.4z"/><path d="M18.5 16.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/></svg>';
   var ICO_OWN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.6 3.6-5.4 7-5.4s6.2 1.8 7 5.4"/></svg>';
-  // Hareketleri iki başlık altında listeler: Hazır hareketler / Kendi hareketlerim
-  function libSecs(rows, withEmpty, rowFn) {
-    var pre = rows.filter(function (e) { return e.preset; }), own = rows.filter(function (e) { return !e.preset; }), k = 0;
-    function sec(cls, ico, title, sub, list, emp) {
-      if (!list.length && !emp) return '';
-      return '<div class="lsec ' + cls + '"><div class="lsh"><span class="li" aria-hidden="true">' + ico + '</span><div class="lt"><b>' + title + '</b><small>' + sub + '</small></div><span class="lc">' + list.length + '</span></div>' +
-        (list.length ? '<div class="lbody">' + list.map(function (e) { return rowFn(e, k++); }).join('') + '</div>'
-                     : '<div class="lemp"><b>Henüz kendi hareketin yok</b>Yeni hareket oluşturunca burada görünür.</div>') + '</div>';
-    }
-    return sec('pre', ICO_PRE, 'Hazır hareketler', 'Anlatımlı, süresi ayarlı', pre, false) +
-           sec('own', ICO_OWN, 'Kendi hareketlerim', 'Senin eklediklerin', own, withEmpty);
+  var ICO_HEART = '<svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.3s-7.6-4.6-7.6-10.3A4.4 4.4 0 0112 7.4 4.4 4.4 0 0119.6 10c0 5.7-7.6 10.3-7.6 10.3z"/></svg>';
+  function favBtn(e) { return '<button class="hb' + (e.fav ? ' on' : '') + '" aria-label="' + (e.fav ? 'Favorilerden çıkar' : 'Favorilere ekle') + '" aria-pressed="' + (!!e.fav) + '">' + ICO_HEART + '</button>'; }
+  function libRow(e, i, animate, tag) {
+    var u = libUse(e);
+    return '<div class="it lb' + (animate ? ' in' : '') + '" role="button" tabindex="0" data-id="' + e.id + '" style="--i:' + Math.min(i, 12) + '"><div class="gcv pkv" aria-hidden="true">' + letterOf(e) + '</div><div class="bd"><div class="nm">' + esc(e.name) + (tag ? '<span class="tg">' + (e.preset ? 'Hazır' : 'Kendi') + '</span>' : '') + '</div><div class="sb">' + exMeasure(e) + (u ? ' · ' + u + ' grupta' : '') + '</div></div>' + favBtn(e) + '</div>';
+  }
+  function libFill(id, rows, animate, tag, emptyIco, emptyT, emptyP) {
+    var el = $('#' + id);
+    if (rows.length) { el.innerHTML = rows.map(function (e, i) { return libRow(e, i, animate, tag); }).join(''); return; }
+    el.innerHTML = libQ
+      ? '<div class="empty"><h2>Sonuç yok</h2>“' + esc(libQ) + '” ile eşleşen hareket bulunamadı.</div>'
+      : '<div class="empty"><span class="ico">' + emptyIco + '</span><h2>' + emptyT + '</h2>' + emptyP + '</div>';
   }
   function renderLib(animate) {
-    var el = $('#libList'), n = state.library.length;
-    var nPre = state.library.filter(function (e) { return e.preset; }).length;
-    $('#libSub').textContent = n ? (nPre ? nPre + ' hazır · ' : '') + (n - nPre) + ' kendi' : 'Henüz hareket yok';
-    $('#libQS').style.display = n ? '' : 'none';
-    if (!n) {
-      el.innerHTML = '<div class="empty"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg></span><h2>Hareket listesi boş</h2>Hareketlerini burada topla, sonra<br>istediğin gruba sırayla ekle.</div>';
-      return;
-    }
-    var rows = state.library.filter(function (e) { return matchQ(e, libQ); });
-    if (!rows.length) { el.innerHTML = '<div class="empty"><h2>Sonuç yok</h2>“' + esc(libQ) + '” ile eşleşen hareket bulunamadı.</div>'; return; }
-    el.innerHTML = libSecs(rows, !libQ, function (e, i) {
-      var u = libUse(e);
-      return '<button class="it lb' + (animate ? ' in' : '') + picked('lib', e.id) + '" data-id="' + e.id + '" style="--i:' + Math.min(i, 12) + '"><div class="gcv pkv" aria-hidden="true">' + letterOf(e) + '</div><div class="bd"><div class="nm">' + esc(e.name) + '</div><div class="sb">' + exMeasure(e) + (u ? ' · ' + u + ' grupta' : '') + '</div></div>' + CHEVC + MK + '</button>';
-    });
+    var all = state.library, pre = all.filter(function (e) { return e.preset; }), own = all.filter(function (e) { return !e.preset; }), fav = all.filter(function (e) { return e.fav; });
+    function q(a) { return a.filter(function (e) { return matchQ(e, libQ); }); }
+    $('#lhPre').innerHTML = '<b>' + pre.length + '</b> hazır hareket · anlatımlı, süresi ayarlı';
+    $('#lhOwn').innerHTML = own.length ? '<b>' + own.length + '</b> hareketin var' : 'Senin eklediğin hareketler';
+    $('#lhFav').innerHTML = fav.length ? '<b>' + fav.length + '</b> favori hareket' : 'Sık kullandıkların burada toplanır';
+    libFill('libPre', q(pre), animate, false, ICO_PRE, 'Hazır hareket yok', 'Hazır hareketler burada görünür.');
+    libFill('libList', q(own), animate, false, ICO_OWN, 'Henüz kendi hareketin yok', 'Sağ üstteki <b style="color:var(--ink)">Yeni</b> düğmesiyle oluştur.');
+    libFill('libFav', q(fav), animate, true, ICO_HEART, 'Henüz favorin yok', 'Bir hareketin kalbine dokun,<br>burada hızlıca ulaş.');
+  }
+  function toggleFav(id) {
+    var e = state.library.filter(function (x) { return x.id === id; })[0]; if (!e) return;
+    e.fav = !e.fav; save(); vib(8);
+    renderLib(false); if (exId && exLib) renderEx();
   }
   function openLib() {
     if (libOpen || formOpen || groupOpen || setOpen || wizOpen || mm || WK) return;
     if (libAnim) { libAnim.cancel(); libAnim = null; }
     libQ = ''; $('#libQ').value = ''; $('#libQS').classList.remove('has');
-    renderLib(true); $('#libScroll').scrollTop = 0;
+    renderLib(true);
     libView.style.display = 'flex';
+    Array.prototype.forEach.call(libView.querySelectorAll('.swt-scroll'), function (s) { s.scrollTop = 0; });
+    libTabs.go(0, true);
     libDim = document.createElement('div'); libDim.className = 'dim';
     stage.insertBefore(libDim, libView);
     libDim.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 480, easing: EASE });
@@ -3727,17 +3936,22 @@
   }
   $('#openLib').onclick = openLib;
   $('#libBack').onclick = function () { if (mm) { exitMode(); return; } closeLib(); };
-  $('#libAdd').onclick = function () { exForm(null, true); };
-  $('#libList').addEventListener('click', function (e) {
-    if (cardTap('lib', e)) return;
-    var c = e.target.closest('.it'); if (c) exForm(c.dataset.id, true);
+  libView.addEventListener('click', function (e) {
+    var c = e.target.closest('.it.lb'); if (!c) return;
+    if (e.target.closest('.hb')) toggleFav(c.dataset.id); else openEx(c.dataset.id, true);
   });
+  libView.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' || e.target.closest('.hb')) return;
+    var c = e.target.closest('.it.lb'); if (c) openEx(c.dataset.id, true);
+  });
+  var libTabs = new SwipeTabs($('#libSwt'), { index: 0, haptic: function () { vib(4); } });
   function wireSearch(id, get, set, render) {
     var inp = $('#' + id), box = $('#' + id + 'S');
     function sync() { set(inp.value); box.classList.toggle('has', !!inp.value); render(); }
     inp.addEventListener('input', sync);
     $('#' + id + 'X').addEventListener('click', function () { inp.value = ''; sync(); inp.focus(); });
   }
+  $('#libAdd').onclick = function () { exForm(null, true); };
   wireSearch('libQ', function () { return libQ; }, function (v) { libQ = v.trim(); }, function () { renderLib(false); });
 
   // Soldan çekerek geri
