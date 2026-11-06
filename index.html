@@ -647,6 +647,24 @@
   .tg { display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 6px; background: var(--surface2); color: var(--dim); font-size: .74rem; font-weight: 650; vertical-align: 1px; }
 
 
+
+  /* ---------- Hareketler: "Hazır" ve "Kendi hareketlerim" bölümleri ---------- */
+  .lsec { margin-top: 28px; }
+  .lsec:first-child { margin-top: 10px; }
+  .lsh { display: flex; align-items: center; gap: 12px; padding: 0 0 8px; }
+  .lsh .li { flex: none; width: 40px; height: 40px; border-radius: 13px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); }
+  .lsh .li svg { width: 21px; height: 21px; display: block; }
+  .lsh .lt { flex: 1; min-width: 0; }
+  .lsh .lt b { display: block; font-size: 1.22rem; font-weight: 720; letter-spacing: -.03em; line-height: 1.2; }
+  .lsh .lt small { display: block; color: var(--dim); font-size: .84rem; margin-top: 2px; }
+  .lsh .lc { flex: none; min-width: 28px; height: 28px; padding: 0 9px; border-radius: 14px; background: var(--surface2); color: var(--dim); font-size: .84rem; font-weight: 700; display: grid; place-items: center; font-variant-numeric: tabular-nums; }
+  .lsec.own .lsh .li { background: var(--surface2); color: var(--ink); }
+  .lsec.pre .gcv.pkv { box-shadow: inset 0 0 0 1px rgba(var(--acc-rgb), .3); }
+  .lbody { border-top: 1px solid var(--line); }
+  .lbody > .it:first-child::before { display: none; }
+  .lemp { margin: 6px 0 4px; padding: 22px 20px; border-radius: 18px; border: 1.5px dashed var(--line2); text-align: center; color: var(--dim); font-size: .92rem; line-height: 1.5; }
+  .lemp b { display: block; color: var(--ink); font-size: 1rem; font-weight: 650; margin-bottom: 3px; }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
   }
@@ -669,7 +687,7 @@
   /* KURAL: --ink/--bg gibi token'ları yeniden tanımlayan her kapsam (data-theme, #player...) yazı rengini de buradan alır; aksi halde kök temanın rengi miras kalır ve yazı kaybolur. */
   :where([data-theme]) { color: var(--ink); }
   /* Antrenman ekranı her temada koyu kalır; vurgu rengi temadan gelir */
-  #player { color: var(--ink); --faint: #7a7a80; --ph: #85858b; --danger-fill: #d4372b; --bg: #000000; --surface: #0f0f10; --surface2: #1b1b1d; --line: rgba(255,255,255,.09); --line2: rgba(255,255,255,.22); --ink: #f7f7f5; --dim: #8e8e93;
+  #player { color: var(--ink); --faint: #7a7a80; --danger-fill: #d4372b; --bg: #000000; --surface: #0f0f10; --surface2: #1b1b1d; --line: rgba(255,255,255,.09); --line2: rgba(255,255,255,.22); --ink: #f7f7f5; --dim: #8e8e93;
     --accent: var(--pl-acc); --accent-ink: #0a0a0a; --acc-rgb: var(--pl-rgb); --accent-soft: rgba(var(--pl-rgb), .16); --danger: #ff5a4d; --sheet: #101011; --card: #19191b; --press: rgba(255,255,255,.04); --glow: rgba(var(--pl-rgb), .5); }
 
   /* ---------- Temalar sayfası ---------- */
@@ -1008,6 +1026,8 @@
             <button type="button" class="sw" id="swVoice" role="switch" aria-checked="false" aria-label="Sesli yönlendirme"></button></div>
           <div class="col" id="vCol"><div>
             <button type="button" class="frow lnk bt" id="vOpen"><span class="fl">Ses<small id="vName"></small></span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></span></button>
+            <div class="frow bt"><span class="fl">Koç yardımı<small id="cSub">Hareket sırasında yapılış ve püf noktaları söyler</small></span>
+              <button type="button" class="sw" id="swCoach" role="switch" aria-checked="false" aria-label="Koç yardımı"></button></div>
           </div></div>
         </div>
       </div>
@@ -1363,29 +1383,62 @@
   }
   // Hazır hareketler: her biri bir kez listeye eklenir (silersen geri gelmez)
   var PRESETS = [
-    { key: 'kol-makas-2', name: 'Kol makas', type: 'time', value: 30, sets: 2, rest: 20,
-      old: function (d) { return d.indexOf('## Nerede ne hissetmelisin') > -1; },
+    { key: 'kol-makas-3', name: 'Kol makas', type: 'time', value: 30, sets: 2, rest: 20,
+      old: function (d) { return d.indexOf('## Nerede ne hissetmelisin') > -1 || d.indexOf('Kolları göğsünün önünde makas gibi kapat. Sağ kol üstte.') > -1; },
       desc: [
-      '## Yap',
-      '1. Ayaklar omuz genişliğinde, kollar yanlara açık.',
-      '2. Kolları göğsünün önünde makas gibi kapat. Sağ kol üstte.',
-      '3. Yanlara aç. Bir sonrakinde sol kol üstte.',
+      '## Süre ve tempo',
+      '- 30 sn · 2 set · setler arası 20 sn dinlenme',
+      '- Yaklaşık 2 sn’de bir makas (aç-kapa). 30 sn yaklaşık 12–15 tekrar eder.',
+      '- İlk 10 sn küçük hareketle başla, sonra açıyı yavaş yavaş büyüt. İlk tekrardan tam açıyla başlama.',
+      '## Nasıl yapılır',
+      '1. Ayaklar omuz genişliğinde, dizler hafif yumuşak, karın hafif sıkı, sırt dik.',
+      '2. Kollar yanlara omuz hizasında açık, dirsekler hafif yumuşak.',
+      '3. Kolları göğsünün önünde birbirine doğru getir ve çaprazla. İlk tekrarda sağ kol üstte.',
+      '4. Kolları yanlara tekrar aç. Bir sonrakinde sol kol üstte olsun. Üstteki kolu her seferinde değiştir.',
+      '5. Kollar tüm hareket boyunca omuz hizasında kalsın. Aşağı sarkmasın.',
       '## Dikkat',
-      '- Omuzlar aşağıda, kollar omuz hizasında.',
-      '- Açarken nefes al, kapatırken ver.',
-      '- Omuzda keskin ağrı olursa dur.'
+      '- Omuzlarını kulaklarına doğru kaldırma. Gövdeni geriye yatırıp beli kavislendirme.',
+      '- Dirsekleri kilitleme. Kolları fırlatma, çarptırma; akıcı ve kontrollü git.',
+      '- Kolları açarken geriye çok zorlama. Biraz arkaya geçmesi sorun değil ama göğüste hafif gerilme yeter.',
+      '- Normal hissin göğüs, omuz önü ve üst sırtta hafif ısınmak. Ağrı, boynun yorulması ya da omuz üstünde sıkışma hissi olmamalı.',
+      '- Omuz sıkışması ya da çıkığı geçmişin varsa açıyı küçük tut. Keskin ağrıda hemen bırak.'
+    ].join('\n') },
+    { key: 'boyun-mobilite-2', name: 'Boyun Mobilite Rutini', type: 'time', value: 90, sets: 1, rest: 20,
+      old: function (d) { return d.indexOf('00:00–00:30 · Baş döndürme (yarım daire)') > -1; },
+      desc: [
+      '## Sıra ve süre · toplam 90 sn',
+      '- 00:00–00:30 · Baş döndürme (ön tarafta yavaş yarım daireler çiz)',
+      '- 00:30–00:45 · Ön esnetme (çeneni göğsüne indir)',
+      '- 00:45–01:00 · Sağ yan esnetme (sağ kulağını sağ omzuna yaklaştır)',
+      '- 01:00–01:15 · Sol yan esnetme (sol kulağını sol omzuna yaklaştır)',
+      '- 01:15–01:30 · Arka esnetme (çeneni hafif içe çek, bakışını yukarı kaldır)',
+      '## Nasıl yapılır',
+      '1. Baş döndürme: Sırt dik, omuzlar gevşek. Çeneni göğsüne yaklaştırıp başını ön tarafta sağdan sola, sonra soldan sağa yarım daire çizerek yavaşça götür. Bir yarım daire yaklaşık 4 sn sürsün. Başı arkaya yuvarlama.',
+      '2. Ön esnetme: Çeneni göğsüne indir. Gerilim ensende ve boynun arkasında hissedilir. Çekme, zorlama.',
+      '3. Sağ yan esnetme: Sağ kulağını sağ omzuna yaklaştır. Sol omzun aşağıda kalsın. Gerilim boynun sol yanında olmalı.',
+      '4. Sol yan esnetme: Aynısını sol tarafa yap. Sağ omzun aşağıda kalsın.',
+      '5. Arka esnetme: Çeneni hafifçe içeri çek, bakışını yavaşça yukarı kaldır. Başı sonuna kadar geriye atma.',
+      '## Dikkat',
+      '- Gerilim hissetmelisin, ağrı değil. Keskin ağrı, uyuşma, karıncalanma ya da baş dönmesinde hemen bırak.',
+      '- Sallanma, ani hareket yok. Nefesini tutma; normal al, yavaş ver.',
+      '- Omuzlar kulaklarına doğru kalkmasın.',
+      '- Boyun fıtığı ya da yakın zamanda boyun yaralanman varsa önce doktora danış.',
+      '## Neden bu sıra',
+      '- Isınmada önce yavaş hareket, sonra tutuş gelir. Tutuşları 15 sn tuttuk; kaynaklar genelde 10–30 sn arası öneriyor.'
     ].join('\n') }
   ];
   (function () {
-    var done = state.presets = Array.isArray(state.presets) ? state.presets : [], ch = false;
+    var done = state.presets = Array.isArray(state.presets) ? state.presets : [], ch = false, fresh = [];
     PRESETS.forEach(function (x) {
       if (done.indexOf(x.key) > -1) return;
-      done.push(x.key); ch = true;
+      done.push(x.key); fresh.push(x.key); ch = true;
       function can(d) { return !d || (x.old && x.old(d)); }   // boşsa ya da eski uzun tarifse yenisiyle değiştir
-      var f = libFind(x.name); if (f && can(f.desc)) f.desc = x.desc;
+      var f = libFind(x.name); if (f && can(f.desc)) { f.desc = x.desc; f.preset = x.key; }
       state.groups.forEach(function (g) { (g.exercises || []).forEach(function (e) { if (nkey(e.name) === nkey(x.name) && can(e.desc)) e.desc = x.desc; }); });
-      if (!f) state.library.push({ id: uid(), name: x.name, desc: x.desc, type: x.type, value: x.value, sets: x.sets, rest: x.rest, metro: false, tempo: 2 });
+      if (!f) state.library.push({ id: uid(), name: x.name, desc: x.desc, type: x.type, value: x.value, sets: x.sets, rest: x.rest, metro: false, tempo: 2, preset: x.key });
     });
+    // Daha önce eklenmiş hazır hareketleri de işaretle (eski kayıtlarda bayrak yok)
+    PRESETS.forEach(function (x) { var f = libFind(x.name); if (f && !f.preset && fresh.indexOf(x.key) < 0 && done.indexOf(x.key) > -1) { f.preset = x.key; ch = true; } });
     if (ch) save();
   })();
   // Ayarlar: eski kayıtlarda yoksa varsayılanlar devreye girer
@@ -2168,6 +2221,7 @@
       var inp = $('#fTitle'), v = inp.value.trim();
       if (!v) return needName(inp);
       var o = { id: ex ? ex.id : uid(), name: v, desc: $('#fDesc').value.trim(), type: d.type, value: d.type === 'time' ? d.time : d.reps, sets: d.sets, rest: d.rest, metro: d.type === 'reps' && d.metro, tempo: d.tempo };
+      if (ex && ex.preset) o.preset = ex.preset;
       if (ex) arr[arr.indexOf(ex)] = o; else arr.push(o);
       if (!lib || W) libPush(o);
       save(); if (W) renderWizList(ex ? null : arr.length - 1); else if (lib) renderLib(false); else { renderGroup(false); renderHome(false); } closeForm();
@@ -2387,6 +2441,8 @@
     rest: function () { pluck(NOTE.B5, 0, .17, .6); pluck(NOTE.G5, .14, .17, .7); pluck(NOTE.E5, .29, .17, 1); },
     // set bitti (tekrarlı): Sol - Si - Re
     rep: function () { pluck(NOTE.G5, 0, .2, .55); pluck(NOTE.B5, .08, .18, .55); pluck(NOTE.D6, .16, .18, .9); },
+    // bölümlü harekette bir sonraki bölüme hızlı geçiş: kısa, hafif Sol - Re
+    next: function () { pluck(NOTE.G5, 0, .11, .4); pluck(NOTE.D6, .07, .12, .6); },
     pause: function () { pluck(NOTE.D5, 0, .13, .25); },
     resume: function () { pluck(NOTE.G5, 0, .13, .25); },
     // metronom: 0 normal, 1 ilk tekrar, 2 son tekrar
@@ -2431,46 +2487,70 @@
     if (!TTS.ok || voiceUnlocked) return; voiceUnlocked = true;
     try { var u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); } catch (e) {}
   }
-  var held = null;   // duraklatılmışken söylenmesi gereken cümle (devam edince okunur)
+  /* Konuşma kuyruğu: cümleler birbirini kesmez, sırayla söylenir.
+     Zamanı kritik olanlar (3-2-1) öncekini keser. Adım değişince eski, artık geçersiz cümleler atılır. */
+  var sayQ = [], sayBusy = false, sayCur = null, sayWd = 0;
+  function speechPaused() { return !!(WK && WK.run === false && !WK.done); }
+  function speakMs(t) { return 450 + String(t).length * 72; }   // tahmini konuşma süresi
   function cancelSpeech() {
-    sayTok++; held = null;
+    sayTok++; sayQ = []; sayBusy = false; sayCur = null; clearTimeout(sayWd);
     if (TTS.ok) { try { speechSynthesis.cancel(); if (speechSynthesis.paused) speechSynthesis.resume(); } catch (e) {} }
     duck(false);
+  }
+  function armWd() {   // onend gelmezse (iOS'ta olabiliyor) kuyruk takılı kalmasın
+    clearTimeout(sayWd); if (!sayCur) return;
+    var c = sayCur;
+    sayWd = setTimeout(function () {
+      if (sayCur !== c) return;
+      if (TTS.ok && speechSynthesis.paused) return armWd();
+      sayEnd(c.u);
+    }, c.ms);
+  }
+  function sayEnd(u) {
+    if (!sayCur || sayCur.u !== u) return;
+    clearTimeout(sayWd); sayCur = null; sayBusy = false; duck(false); sayNext();
+  }
+  function sayNext() {
+    if (sayBusy || !TTS.ok) return;
+    var it;
+    while ((it = sayQ.shift())) { if (it.tok === sayTok) break; it = null; }
+    if (!it) return;
+    if (speechPaused() && !it.force) { sayQ.unshift(it); return; }   // duraklatılmışken bekle, devam edince söyle
+    try {
+      var u = new SpeechSynthesisUtterance(it.text), v = pickVoice();
+      if (v) { u.voice = v; u.lang = v.lang; } else u.lang = 'tr-TR';
+      u.rate = .98; u.pitch = 1; u.volume = 1;
+      sayBusy = true; sayCur = { u: u, ms: speakMs(it.text) + 2500 };
+      u.onstart = function () { if (sayCur && sayCur.u === u) duck(true); };
+      u.onend = u.onerror = function () { sayEnd(u); };
+      speechSynthesis.speak(u); armWd();
+    } catch (e) { sayBusy = false; sayCur = null; }
   }
   // Duraklat: konuşma olduğu yerde durur, devam edince kaldığı yerden sürer
   function pauseSpeech() {
     if (!TTS.ok) return;
+    clearTimeout(sayWd);
     try { if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.pause(); } catch (e) {}
     duck(false);
   }
   function resumeSpeech() {
     if (!TTS.ok) return;
-    try {
-      if (speechSynthesis.paused) { speechSynthesis.resume(); if (speechSynthesis.speaking) duck(true); }
-      if (held && held.tok === sayTok) { var h = held; held = null; speakNow(h.text, h.tok); }
-    } catch (e) {}
-    held = null;
+    try { if (speechSynthesis.paused) { speechSynthesis.resume(); if (speechSynthesis.speaking) { duck(true); armWd(); } } } catch (e) {}
+    sayNext();
   }
-  function speakNow(text, tok) {
-    try {
-      if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
-      var u = new SpeechSynthesisUtterance(text), v = pickVoice();
-      if (v) { u.voice = v; u.lang = v.lang; } else u.lang = 'tr-TR';
-      u.rate = .98; u.pitch = 1; u.volume = 1;
-      u.onstart = function () { if (tok === sayTok) duck(true); };
-      u.onend = u.onerror = function () { if (tok === sayTok) duck(false); };
-      speechSynthesis.speak(u);
-    } catch (e) {}
-  }
-  function say(text, delay, force) {
+  // hi: geri sayım gibi zamanı kritik cümle; konuşmakta olanı ve bekleyenleri keser
+  function say(text, delay, force, hi) {
     if (!TTS.ok || !text || !(force || (soundOn && voiceOn()))) return;
-    var tok = ++sayTok;
-    if (WK && WK.run === false && !WK.done && TTS.ok) { try { speechSynthesis.cancel(); } catch (e) {} }   // duraklatılmışken eski cümle kalmasın
+    var tok = sayTok;
     setTimeout(function () {
       if (tok !== sayTok) return;
-      if (WK && WK.run === false && !WK.done && !force) { held = { text: text, tok: tok }; return; }   // duraklatılmış: devam edince söyle
-      speakNow(text, tok);
-    }, Math.max(40, delay || 0));
+      if (hi || force) {
+        sayQ = []; sayBusy = false; sayCur = null; clearTimeout(sayWd);
+        try { speechSynthesis.cancel(); if (speechSynthesis.paused) speechSynthesis.resume(); } catch (e) {}
+      } else if (sayQ.length > 3) sayQ.shift();
+      sayQ.push({ text: text, tok: tok, force: !!force });
+      sayNext();
+    }, Math.max(0, delay || 0));
   }
   function sayTime(sec) {
     var m = Math.floor(sec / 60), r = sec % 60, a = [];
@@ -2488,27 +2568,181 @@
   }
   function cap(x) { return x.charAt(0).toLocaleUpperCase('tr') + x.slice(1); }
   function sayMeasure(e) { return e.type === 'time' ? sayTime(e.value) : e.value + ' tekrar'; }
-  // Her adım başında kısa bir yönlendirme
+  function lc(t) { return t.charAt(0).toLocaleLowerCase('tr') + t.slice(1); }
+  // Set cümlesi: "İlk set", "İkinci set", ..., "Son set". Tek setlik harekette boş döner.
+  function setPhrase(e, n) { return e.sets > 1 ? (n === e.sets - 1 ? 'Son set' : n === 0 ? 'İlk set' : cap(sayOrd(n + 1)) + ' set') : ''; }
+  function nextLabel(idx) { return idx === WK.n - 1 && WK.n > 1 ? 'Son hareket' : 'Sıradaki hareket'; }
+  // Tarifteki zaman çizelgesi satırlarından bölüm uyarıları çıkarır:
+  // "- 00:30–00:45 · Ön esnetme (çeneni göğsüne indir)"  ->  { at: 30, say: 'Ön esnetme. Çeneni göğsüne indir.' }
+  function parseCues(desc) {
+    var out = [];
+    String(desc || '').split('\n').forEach(function (l) {
+      var m = /^[-•]\s*(\d{1,2}):(\d{2})\s*[–-]\s*\d{1,2}:\d{2}\s*[·:]?\s*(.+)$/.exec(l.trim());
+      if (!m) return;
+      var txt = m[3].trim(), pm = /^(.*?)\s*\((.+)\)\s*$/.exec(txt);
+      out.push({ at: (+m[1]) * 60 + (+m[2]), name: cap(pm ? pm[1] : txt), tip: pm ? cap(pm[2]) + '.' : '', say: pm ? pm[1] + '. ' + cap(pm[2]) + '.' : txt + '.' });
+    });
+    return out.length > 1 ? out : null;
+  }
+  // Süre dolarken tek uyarı: hareketin son 10 saniyesi (dinlenmede yok)
+  function buildMarks(s) {
+    var m = {}, D = Math.round(s.dur / 1000);
+    if (s.k === 'work' && s.dur && !s.m && D > 15) m[10] = 'Son on saniye.';
+    return m;
+  }
+  // Sade yönlendirme: hareket başlarken ad + (set) + süre/tekrar; dinlenmede sıradaki hareket. Geri sayım ayrıca (3-2-1).
   function cue(s) {
-    var e = s.e, t = '', prevK = WK.i ? WK.steps[WK.i - 1].k : '';
-    if (s.k === 'prep') {
-      if (s.ex === 0 && s.set === 0) {   // açılış: 3-2-1 sesli sayımla çakışmasın diye kısa tut
-        if (s.dur >= 4500) say('Hazırlan.' + (s.dur >= 8000 ? ' İlk hareket, ' + e.name + '.' : ''), 520);
-      } else {
-        t = s.set > 0 ? cap(sayOrd(s.set + 1)) + ' set.' : 'Sıradaki hareket, ' + e.name + '.';
-        say(t, 520);
+    var e = s.e;
+    if (s.k === 'work') {
+      var sp = setPhrase(e, s.set);
+      if (s.sec) {   // bölümlü hareket: ilk bölümde hareket adı (+set), her bölümde bölüm adı ve süresi; ipucu yalnızca koç açıkken
+        var st2 = (s.sec.idx === 0 ? e.name + '. ' + (sp ? sp + '. ' : '') : '') + s.sec.name + '. ' + sayTime(Math.round(s.dur / 1000)) + '.' + (coachOn() && s.sec.tip ? ' ' + s.sec.tip : '');
+        say(st2, s.sec.idx === 0 ? 480 : 150);
+        return;
       }
-    } else if (s.k === 'cd') {
-      return;   // sesli sayım (Üç, İki, Bir) kare döngüsünde ve setStep'te
-    } else if (s.k === 'work') {
-      if (!prevK) t = e.name + '. ' + sayMeasure(e) + '.';
-      else if (prevK === 'cd' && s.set > 0) t = cap(sayOrd(s.set + 1)) + ' set. ' + sayMeasure(e) + '.';
-      else t = 'Başla. ' + sayMeasure(e) + '.';
-      say(t, 480);
-    } else {
-      t = s.nx.ex !== s.ex ? 'Dinlen. Sıradaki hareket, ' + s.ne.name + '.' : 'Dinlen. Sırada ' + sayOrd(s.nx.set + 1) + ' set var.';
-      say(t, 560);
+      say(e.name + '. ' + (sp ? sp + '. ' : '') + sayMeasure(e) + '.', 480);
+    } else if (s.k === 'rest') {
+      var nxEx = s.nx.ex !== s.ex, sq = setPhrase(s.ne, s.nx.set);
+      say(nxEx ? nextLabel(s.nx.ex) + ', ' + s.ne.name + '.' : 'Sıradaki, ' + s.ne.name + (sq ? ', ' + lc(sq) : '') + '.', 560);
     }
+  }
+
+  /* ----- Koç yardımı: harekete özel yapılış ve püf noktaları -----
+     Hareket adına göre hazır bilgi kullanılır (nefes düzeni, duruş, sık hatalar). Bulunamazsa hareketin tarifindeki
+     "Nasıl yapılır" / "Dikkat" satırları, o da yoksa genel ipuçları söylenir. İlk ipucu her zaman "nefes / ana kural"dır. */
+  function coachOn() { return !!(state.settings && state.settings.coach === true) && voiceOn(); }
+  function coachKey(n) { return nkey(n).replace(/ç/g, 'c').replace(/ğ/g, 'g').replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ş/g, 's').replace(/ü/g, 'u'); }
+  var COACH = [
+    { re: /bisiklet|bicycle/,
+      setup: 'Sırtüstü uzan, eller başının yanında. Bacaklar havada, dirsekle karşı dizi buluştur.',
+      tips: ['Dirseği karşı dizine götürürken nefes ver.', 'Omzunla dön, boynunla çekme.', 'Belini yerden ayırma, yavaş ve kontrollü git.', 'Karşı bacağı tam uzat, çift taraf eşit çalışsın.'] },
+    { re: /yan plank|side plank/,
+      setup: 'Yan yat, dirsek omzunun tam altında. Kalçanı kaldır, vücut baştan ayağa düz çizgi olsun.',
+      tips: ['Nefesini tutma, düzenli nefes al.', 'Kalçan düşmesin, yukarı it.', 'Omzun dirseğin üstünde kalsın.', 'Karnını sık, vücudun öne ya da arkaya yatmasın.'] },
+    { re: /tirmanis|tirmanici|mountain|climber/,
+      setup: 'Şınav pozisyonuna geç. Omuzlar bileklerin üstünde, vücut düz çizgi.',
+      tips: ['Ritmik nefes al, tutma.', 'Kalçan ne düşsün ne de yukarı çıksın.', 'Dizini göğsüne doğru çek, karnını sık.', 'Hızlansan da formu bozma.'] },
+    { re: /plank/,
+      setup: 'Dirsekler omuzların tam altında. Vücut baştan topuğa düz bir çizgi olsun.',
+      tips: ['Nefesini tutma, yavaş ve düzenli nefes al.', 'Kalçan sarkmasın, yukarı da çıkmasın.', 'Kalçanı ve karnını sık, göbeğini içeri çek.', 'Bakışın yerde, boynun düz kalsın.', 'Omuzlarını kulaklarından uzak tut.'] },
+    { re: /sinav|push.?up/,
+      setup: 'Eller omuz genişliğinde, vücut baştan topuğa düz. Karın ve kalçan sıkı.',
+      tips: ['İnerken nefes al, kalkarken nefes ver.', 'Dirsekler vücuda yaklaşık kırk beş derece, yanlara açma.', 'Göğsün yere yaklaşsın, kalçan düşmesin.', 'Yavaş in, güçlü it.', 'Bakışın yerde, boynun düz.'] },
+    { re: /mekik|crunch|sit.?up/,
+      setup: 'Sırtüstü uzan, dizlerin bükülü, ayakların yerde. Ellerini göğsünde çapraz yap ya da başının yanında hafifçe tut.',
+      tips: ['Yukarı kalkarken nefes ver, inerken nefes al.', 'Boynunla değil, karın kaslarınla kalk. Başını çekme.', 'Sadece omuz bıçaklarını yerden kaldır.', 'Belini yere bastır, ivme kullanma.', 'Yukarıda bir an sık, sonra yavaşça in.', 'Nefesini tutma.'] },
+    { re: /squat|comelme|comel/,
+      setup: 'Ayaklar omuz genişliğinde, parmaklar hafif dışarı bakıyor. Göğsün dik, bakışın karşıda.',
+      tips: ['İnerken nefes al, kalkarken nefes ver.', 'Dizlerin ayak parmaklarınla aynı yöne baksın, içe kaçmasın.', 'Kalçanı geriye oturur gibi gönder.', 'Ağırlık topuklarında ve ayak ortasında olsun.', 'Sırtın dik, göğsün açık.', 'Yukarıda kalçanı sık.'] },
+    { re: /lunge|hamle|atak/,
+      setup: 'Bir adım ileri at. Gövden dik, iki diz de yaklaşık doksan derece bükülsün.',
+      tips: ['İnerken nefes al, kalkarken nefes ver.', 'Ön diz ayak bileğinin üstünde kalsın, içe kaçmasın.', 'Gövdeni dik tut, öne eğilme.', 'Arka diz yere yaklaşsın ama çarpmasın.', 'Ağırlığı ön topuğunda tut.'] },
+    { re: /kopru|bridge|hip thrust/,
+      setup: 'Sırtüstü uzan, dizlerin bükülü, ayakların kalça genişliğinde.',
+      tips: ['Kalçanı kaldırırken nefes ver.', 'Topuklarından it, üstte kalçanı sık.', 'Belini fazla kavislendirme, omuzdan dize düz çizgi kur.', 'Yukarıda bir an bekle, yavaşça in.'] },
+    { re: /superman|sirt kaldir|back extension/,
+      setup: 'Yüzüstü yat, kolların önde uzanıyor. Alnın yere yakın, boynun düz.',
+      tips: ['Kol ve bacaklarını kaldırırken nefes ver.', 'Bakışın yerde, boynunu geriye atma.', 'Üstte sırtını ve kalçanı sık, bir an bekle.', 'Çok yükselmen şart değil, belini zorlama.'] },
+    { re: /jumping|jack|acma kapa|acip kapa/,
+      setup: 'Ayaklar bitişik, kollar yanda. Zıplayıp bacakları aç, kolları başının üstünde birleştir.',
+      tips: ['Düzenli ritimle nefes al, tutma.', 'Yumuşak zıpla, dizlerin hafif bükülü kalsın.', 'Ayağının ucuna in, sonra topuğa yuvarla.', 'Omuzlarını kulaklarından uzak tut.'] },
+    { re: /ip atla|jump rope|atlama ipi/,
+      setup: 'Dirsekler gövdede, ipi bileklerinle çevir. Hafif zıpla.',
+      tips: ['Ayak ucunda, yumuşak zıpla.', 'Kollarını değil bileklerini çevir.', 'Düzenli nefes al.', 'Bakışın karşıda, gövdeni dik tut.'] },
+    { re: /burpee/,
+      setup: 'Çömel, elleri yere koy, ayakları geri at, göğsünü indir, geri gel ve zıpla.',
+      tips: ['Ritmini bozma, nefesini tutma.', 'Sırtını düz tut, kalçan sarkmasın.', 'Yukarı zıplarken kollarını kaldır, yumuşak in.', 'Yorulursan şınavı atlayıp temposunu koru.'] },
+    { re: /bacak kaldir|leg raise/,
+      setup: 'Sırtüstü uzan, bacakların düz. Elleri kalçanın altına ya da yanına koy.',
+      tips: ['Bacaklarını kaldırırken nefes ver, indirirken nefes al.', 'Belini yere bastır, kalkmasın.', 'Yavaş indir, ivme kullanma.', 'Bel kalkıyorsa dizlerini biraz bük.'] },
+    { re: /\brus\b|russian|twist/,
+      setup: 'Otur, dizlerin bükülü, gövdeni hafif geriye yatır. Sırtın düz kalsın.',
+      tips: ['Dönerken nefes ver.', 'Omuz ve gövdenle dön, sadece kollarınla değil.', 'Sırtını yuvarlama, göğsün açık.', 'Kontrollü git, savurma.'] },
+    { re: /duvar|wall sit/,
+      setup: 'Sırtını duvara yasla, dizlerin doksan derece olana kadar kay.',
+      tips: ['Nefesini tutma, düzenli nefes al.', 'Dizlerin topuklarının üstünde olsun.', 'Sırtın duvara tam yaslı, karnın hafif sıkı.', 'Ağırlığı topuklarına ver.'] },
+    { re: /baldir|calf|parmak ucu/,
+      setup: 'Ayaklar kalça genişliğinde. Parmak uçlarına yüksel.',
+      tips: ['Yükselirken nefes ver, inerken nefes al.', 'Yukarıda bir an bekle.', 'Yavaş in, topuğu yere çarpma.', 'Dizlerini kilitleme.'] },
+    { re: /triceps|dips|\bdip\b/,
+      setup: 'Ellerin bank ya da sandalyede, kalçan öne çıkmış. Dirsekleri geriye bük.',
+      tips: ['İnerken nefes al, kalkarken nefes ver.', 'Dirsekler geriye baksın, yanlara açılmasın.', 'Omuzlarını kulaklarına çıkarma.', 'Sırtını sandalyeye yakın tut.'] },
+    { re: /yuksek diz|high knee/,
+      setup: 'Yerinde koş, dizlerini kalça hizasına kadar çek.',
+      tips: ['Ayak ucunda, yumuşak in.', 'Kollarınla ritim tut, düzenli nefes al.', 'Gövden dik, dizlerini yükseğe çek.', 'Karnını hafif sık.'] },
+    { re: /dead bug|olu bocek/,
+      setup: 'Sırtüstü uzan, kollar tavana, dizler doksan derece havada.',
+      tips: ['Karşı kol ve bacağı uzatırken nefes ver.', 'Belini yere bastır, kalkmasın.', 'Yavaş git, kontrolü kaybetme.', 'Her seferinde tarafı değiştir.'] },
+    { re: /bird dog|kus kopek|kus-kopek/,
+      setup: 'Dört ayak üzerine gel. Eller omzun altında, dizler kalçanın altında.',
+      tips: ['Karşı kol ve bacağı uzatırken nefes ver.', 'Kalçan sabit kalsın, yana kaymasın.', 'Sırtın düz, boynun nötr.', 'Yavaş git, dengeni koru.'] },
+    { re: /kol makas/,
+      setup: 'Ayaklar omuz genişliğinde, kollar yanlarda omuz hizasında. Kolları göğsünün önünde çaprazla.',
+      tips: ['Kollar hep omuz hizasında kalsın.', 'Omuzlarını kulaklarına doğru kaldırma.', 'Dirseklerini kilitleme, akıcı git.', 'Üstteki kolu her seferinde değiştir.', 'Gövdeni geriye yatırma.'] },
+    { re: /kol cevir|arm circle|omuz cevir/,
+      setup: 'Kollar yanlara açık. Küçük dairelerle başla, yavaşça büyüt.',
+      tips: ['Düzenli nefes al.', 'Omuzlarını kulaklarına kaldırma.', 'Hareketi omuzdan yap, akıcı git.', 'Yönü ara ara değiştir.'] },
+    { re: /esnet|stretch|germe|mobilite/,
+      setup: '',
+      tips: ['Gerilim hissetmelisin, ağrı değil.', 'Yavaş ve derin nefes al, nefes verirken gevşe.', 'Sallanma, ani hareket yapma.', 'Omuzlarını gevşek bırak.'] }
+  ];
+  var COACH_GEN = ['Nefesini tutma, düzenli nefes al.', 'Hareketi ivmeyle değil, kontrolle yap.', 'Duruşunu koru, omuzlarını gevşek tut.', 'Çalışan kasına odaklan.', 'Form bozulursa hızını düşür.'];
+  // Tarifteki "Nasıl yapılır" adımlarından ve "Dikkat" maddelerinden kısa cümleler
+  function coachFromDesc(desc) {
+    var out = { setup: '', tips: [] }, sec = '';
+    String(desc || '').split('\n').forEach(function (l) {
+      l = l.trim(); var m;
+      if ((m = /^##\s*(.+)$/.exec(l))) { sec = coachKey(m[1]); return; }
+      var num = /^\d+[.)]\s/.test(l), bl = /^[-•]\s/.test(l), t = l.replace(/^(\d+[.)]|[-•])\s*/, '');
+      if (!t || t.length < 8 || t.length > 140 || /^\d{1,2}:\d{2}/.test(t)) return;
+      if (/nasil/.test(sec) && num) { if (!out.setup) out.setup = t; else out.tips.push(t); }
+      else if (/dikkat|ipucu|puf/.test(sec) && bl) out.tips.push(t);
+    });
+    out.tips = out.tips.slice(0, 8);
+    return out;
+  }
+  function coachData(e) {
+    var k = coachKey(e.name), i;
+    for (i = 0; i < COACH.length; i++) if (COACH[i].re.test(k)) return COACH[i];
+    var d = coachFromDesc(e.desc);
+    return { setup: d.setup, tips: d.tips.concat(COACH_GEN) };
+  }
+  // Adım için konuşma planı. Zamanlı harekette ipuçları süreye yayılır (en az 14 sn arayla, son 10 sn uyarısına çarpmadan).
+  // Süresiz (tekrarlı) harekette 7. sn'den sonra ~18 sn arayla devam eder. Dinlenmede yeni hareketin yapılışı anlatılır.
+  function coachPlan(s) {
+    if (!coachOn() || !WK) return null;
+    WK.setupSaid = WK.setupSaid || {};
+    var q = { list: [], i: 0, next: 7, k: 0, pool: [] }, cd, D, i;
+    if (s.k === 'rest') {
+      D = Math.round(s.dur / 1000);
+      if (s.nx.ex !== s.ex && D >= 14 && !WK.setupSaid[s.nx.ex]) {
+        cd = coachData(s.ne);
+        if (cd.setup) q.list.push({ at: 4, text: cd.setup, ex: s.nx.ex });
+      }
+      return q.list.length ? q : null;
+    }
+    if (s.k !== 'work' || s.sec) return null;   // bölümlü harekette ipucu, bölüm anonsuyla birlikte söylenir
+    cd = coachData(s.e);
+    var tips = cd.tips.slice(), L = tips.length, o;
+    if (s.set > 0 && L) { o = (s.set - 1) % L; tips = tips.slice(o).concat(tips.slice(0, o)); }   // her sette farklı ipucundan başla
+    tips.forEach(function (t) { q.pool.push({ text: t }); });
+    if (s.set === 0 && cd.setup && !WK.setupSaid[s.ex]) q.pool.unshift({ text: cd.setup, ex: s.ex });
+    if (!q.pool.length) return null;
+    if (!s.dur) return q;
+    D = s.dur / 1000;
+    var t0 = 7, tEnd = D - 17, n = tEnd >= t0 ? Math.min(6, Math.floor((tEnd - t0) / 14) + 1) : 0;
+    for (i = 0; i < n; i++) {
+      var it = q.pool[i % q.pool.length];
+      q.list.push({ at: n === 1 ? t0 : t0 + i * (tEnd - t0) / (n - 1), text: it.text, ex: it.ex });
+    }
+    return q.list.length ? q : null;
+  }
+  function coachSay(it) { if (it.ex != null) WK.setupSaid[it.ex] = 1; say(it.text, 0); }
+  function coachTick(s) {
+    var q = WK.coachQ; if (!q) return;
+    var et = WK.el / 1000;
+    if (s.dur || q.list.length) { while (q.i < q.list.length && q.list[q.i].at <= et) coachSay(q.list[q.i++]); }
+    else if (et >= q.next) { coachSay(q.pool[q.k++ % q.pool.length]); q.next = et + 18; }
   }
 
   /* ----- Ekranı açık tut ----- */
@@ -2544,6 +2778,18 @@
   var dg = new Digits($('#plVal'));
 
   /* ----- Adım listesi ----- */
+  // Zaman çizelgesi olan hareketi bölümlere ayırır: [{ at, dur, name, tip, idx, n }] ya da null
+  function secList(e) {
+    if (e.type !== 'time') return null;
+    var cq = parseCues(e.desc); if (!cq) return null;
+    cq = cq.filter(function (c) { return c.at < e.value; }).sort(function (a, b) { return a.at - b.at; })
+           .filter(function (c, i, a) { return !i || c.at > a[i - 1].at; });
+    if (cq.length < 2) return null;
+    if (cq[0].at > 0) cq.unshift({ at: 0, name: e.name, tip: '' });
+    return cq.map(function (c, i) { return { at: c.at, dur: (i < cq.length - 1 ? cq[i + 1].at : e.value) - c.at, name: c.name, tip: c.tip, idx: i, n: cq.length }; });
+  }
+  function setProg(s) { return s.sec ? (s.sec.at * 1000 + WK.el) / (s.e.value * 1000) : WK.el / s.dur; }
+  function markOk(s) { if (!s.sec || s.sec.idx === s.sec.n - 1) WK.ok[s.ex + ':' + s.set] = true; }
   function buildSteps(g) {
     var st = [], ex = g.exercises, n = ex.length;
     if (!n) return st;
@@ -2552,6 +2798,17 @@
     ex.forEach(function (e, i) {
       for (var s = 0; s < e.sets; s++) {
         if (st.length && st[st.length - 1].k === 'work') st.push({ k: 'prep', dur: 3000, ex: i, set: s, e: e });
+        var secs = secList(e);
+        if (secs) {   // bölümlü hareket: her bölüm kendi adı ve süresiyle ayrı adım; aralarında dinlenme/hazırlık yok
+          secs.forEach(function (sc) { st.push({ k: 'work', dur: sc.dur * 1000, ex: i, set: s, e: e, sec: sc }); });
+          var lastS = i === n - 1 && s === e.sets - 1;
+          if (!lastS && e.rest > 0) {
+            var nx2 = s < e.sets - 1 ? { ex: i, set: s + 1 } : { ex: i + 1, set: 0 };
+            st.push({ k: 'rest', dur: e.rest * 1000, ex: i, set: s, e: e, nx: nx2, ne: ex[nx2.ex] });
+            st.push({ k: 'cd', dur: 3000, ex: nx2.ex, set: nx2.set, e: ex[nx2.ex] });
+          }
+          continue;
+        }
         var w = { k: 'work', dur: e.type === 'time' ? e.value * 1000 : 0, ex: i, set: s, e: e };
         if (e.type === 'reps' && e.metro) {   // metronomlu tekrar: zamanlı adım gibi işler, sayaç vuruşla ilerler
           var bt = Math.round((e.tempo || 2) * 1000), ld = 2200;
@@ -2573,7 +2830,7 @@
   /* ----- Boyama ----- */
   function tagText(s) {
     if (WK.run === false && s.dur && !WK.quitOpen) return s.k === 'work' ? 'Duraklatıldı' : 'DURAKLATILDI';
-    if (s.k === 'work') return 'Hareket ' + (s.ex + 1) + ' / ' + WK.n;
+    if (s.k === 'work') return s.sec ? s.e.name + ' · ' + (s.sec.idx + 1) + ' / ' + s.sec.n : 'Hareket ' + (s.ex + 1) + ' / ' + WK.n;
     if (s.k === 'cd') return 'HAZIRLAN';
     if (s.k === 'prep') return s.set > 0 ? 'SIRADAKİ SET' : s.ex > 0 ? 'SIRADAKİ HAREKET' : 'BAŞLAMAYA HAZIR';
     return 'DİNLENME';
@@ -2611,7 +2868,7 @@
     var e = s.e, rem = s.dur ? Math.max(0, s.dur - WK.el) : 0;
     WK.secs = s.dur ? Math.ceil(rem / 1000) : -1;
     $('#plTag').textContent = tagText(s);
-    $('#plNameT').textContent = s.k === 'rest' ? 'Dinlenme' : e.name;
+    $('#plNameT').textContent = s.k === 'rest' ? 'Dinlenme' : s.sec ? s.sec.name : e.name;
     $('#plQ').style.display = s.k === 'rest' || s.k === 'cd' ? 'none' : '';
     if (s.m) {
       WK.cnt = metroCount(s);
@@ -2633,7 +2890,7 @@
   function paintSegs() {
     var s = cur(), e = s.e;
     var done = s.k === 'work' ? s.set : s.k === 'rest' ? s.set + 1 : s.k === 'cd' ? s.set : 0;
-    var part = (s.k === 'work' && s.dur) ? Math.min(1, WK.el / s.dur) : 0;
+    var part = (s.k === 'work' && s.dur) ? Math.min(1, setProg(s)) : 0;
     WK.sg.forEach(function (it, j) {
       var v = j < s.ex ? 1 : j > s.ex ? 0 : (done + part) / e.sets;
       if (Math.abs(v - it._v) > .002 || it._v == null) { it._v = v; it.style.transform = 'scaleX(' + v + ')'; }
@@ -2665,28 +2922,33 @@
   }
 
   /* ----- Akış ----- */
-  function setStep(i, instant) {
-    WK.i = i; WK.el = 0; WK.cnt = 0;
+  function setStep(i, instant, soft) {
+    WK.i = i; WK.el = 0; WK.cnt = 0; WK.fired = {};
     var s = cur();
+    // soft: süre doğal olarak bitti, söylenmekte olan cümle bitsin; eski bekleyenler atılsın. Aksi halde (atla/geri) hemen sustur.
+    if (soft) { sayTok++; sayQ = []; } else cancelSpeech();
+    WK.marks = buildMarks(s);
     swapContent(s, instant); paintMb(); paintSegs();
-    if (s.k === 'work') sfx('work'); else if (s.k === 'rest') sfx('rest');
-    else if (s.k === 'cd') { sfx('tick', 3); say('Üç.', 0); }
-    if (s.k !== 'prep' && s.k !== 'cd') vib(18);
+    if (s.k === 'work') sfx(s.sec && s.sec.idx > 0 ? 'next' : 'work'); else if (s.k === 'rest') sfx('rest');
+    else if (s.k === 'cd') { sfx('tick', 3); say('Üç.', 0, false, true); }
+    if (s.k !== 'prep' && s.k !== 'cd') vib(s.sec && s.sec.idx > 0 ? 10 : 18);
     cue(s);
+    WK.coachQ = coachPlan(s);
   }
   function setRun(b, quiet) {
     if (!WK || WK.done || WK.run === b) return;
+    WK.run = b;
     if (b) resumeSpeech(); else pauseSpeech();
-    WK.run = b; P.classList.toggle('paused', !b && !WK.quitOpen && !!cur().dur);
+    P.classList.toggle('paused', !b && !WK.quitOpen && !!cur().dur);
     $('#plTag').textContent = tagText(cur());
     paintMb();
     if (!quiet) sfx(b ? 'resume' : 'pause');
   }
-  function advance() {
-    if (WK.i + 1 >= WK.steps.length) finish(); else setStep(WK.i + 1, false);
+  function advance(soft) {
+    if (WK.i + 1 >= WK.steps.length) finish(); else setStep(WK.i + 1, false, soft);
   }
   function complete() {
-    var s = cur(); WK.ok[WK.i] = true;
+    var s = cur(); markOk(s);
     var nx = WK.steps[WK.i + 1];
     if (nx && nx.k === 'prep') sfx('rep');
     vib([30, 40, 30]);
@@ -2709,7 +2971,8 @@
     swapBusy = false;
     try { state.log.push({ d: skKey(new Date()), g: WK.g.id, t: Date.now() }); save(); skLabel(); } catch (e) {}
     sfx('done'); vib([60, 50, 60, 50, 120]); unlock();
-    say('Antrenman tamamlandı. Eline sağlık!', 1000);
+    cancelSpeech();
+    say('Antrenman tamamlandı. Toplam süre ' + sayTime(Math.round(WK.total / 1000)) + '. Eline sağlık!', 900);
     P.classList.remove('paused', 'is-rest', 'is-prep', 'is-cd'); P.classList.add('is-done');
     $('#dnGroup').textContent = WK.g.name;
     $('#dnTime').textContent = clock(Math.round(WK.total / 1000));
@@ -2730,10 +2993,11 @@
       if (s.dur) {
         var rem = s.dur - WK.el;
         if (rem <= 0) {
-          if (s.k === 'work') WK.ok[WK.i] = true;
-          advance(); return;
+          if (s.k === 'work') markOk(s);
+          advance(true); return;
         }
         if (swapBusy) return;   // geçiş sürerken ekrana ve sese dokunma (çift tık / çift rakam olmasın)
+        coachTick(s);
         if (s.m) {
           var c = metroCount(s);
           if (c !== WK.cnt) {
@@ -2743,7 +3007,7 @@
               if (!RM) $('#plVal').animate([{ transform: 'scale(1)' }, { transform: 'scale(1.06)' }, { transform: 'scale(1)' }], { duration: Math.min(260, s.m.beat * .6), easing: EASE });
             }
           }
-          setPill(WK.pp[s.set], Math.min(1, WK.el / s.dur));
+          setPill(WK.pp[s.set], Math.min(1, setProg(s)));
           if (!WK.done) paintSegs();
           return;
         }
@@ -2751,19 +3015,17 @@
         if (secs !== WK.secs) {
           WK.secs = secs; dg.set(s.k === 'prep' || s.k === 'cd' ? String(secs) : clock(secs), true);
           $('#plUnit').textContent = unitText(s, secs);
-          if (s.k === 'work') {
-            if (s.dur >= 40000 && secs === Math.round(s.dur / 2000)) say('Yarısı geçti.', 0);
-            else if (s.dur >= 20000 && secs === 10) say('Son on saniye.', 0);
-          }
-          if (secs <= 3) {
+          var mk = WK.marks && WK.marks[secs];
+          if (mk && !WK.fired['m' + secs]) { WK.fired['m' + secs] = 1; say(mk, 0); }
+          if (secs <= 3 && s.k !== 'rest') {
             sfx('tick', secs);
-            if ((s.k === 'prep' && s.ex === 0 && s.set === 0) || s.k === 'cd') say(secs === 3 ? 'Üç.' : secs === 2 ? 'İki.' : 'Bir.', 0);
+            if ((s.k === 'prep' && s.ex === 0 && s.set === 0) || s.k === 'cd') say(secs === 3 ? 'Üç.' : secs === 2 ? 'İki.' : 'Bir.', 0, false, true);
             if (!RM) $('#plVal').animate([{ transform: 'scale(1)' }, { transform: 'scale(1.07)' }, { transform: 'scale(1)' }], { duration: 380, easing: EASE });
           }
         }
-        if (s.k === 'work') setPill(WK.pp[s.set], Math.min(1, WK.el / s.dur));
+        if (s.k === 'work') setPill(WK.pp[s.set], Math.min(1, setProg(s)));
         else if (s.k === 'rest') paintRing(s);
-      }
+      } else if (s.k === 'work') coachTick(s);   // süresiz (tekrarlı) hareket
     }
     if (!WK.done) paintSegs();
   }
@@ -2822,6 +3084,7 @@
     for (j = i - 1; j >= 0 && WK.steps[j].k !== 'work'; j--);
     return j;
   }
+  function repeatStart() { var j = repeatTarget(), t = j >= 0 && WK.steps[j]; return t && t.sec ? j - t.sec.idx : j; }
   function skipExIdx() { var s = cur(); return s.k === 'rest' && s.nx.ex !== s.ex ? s.nx.ex : s.ex; }
   function askMore() {
     if (!WK || WK.done || WK.quitOpen) return;
@@ -2852,7 +3115,7 @@
   $('#mKeep').onclick = function () { leaveMore(); if (WK && WK.wasRun) setRun(true, true); };
   $('#plMore').addEventListener('click', function (e) { if (e.target === this) $('#mKeep').onclick(); });
   $('#mRepeat').onclick = function () {
-    if (!WK) return; var j = repeatTarget(); if (j < 0) return;
+    if (!WK) return; var j = repeatStart(); if (j < 0) return;
     leaveMore(); setRun(true, true); setStep(j, false);
   };
   $('#mSkip').onclick = function () {
@@ -2974,6 +3237,8 @@
     sw.classList.toggle('on', on); sw.setAttribute('aria-checked', on ? 'true' : 'false'); sw.disabled = !TTS.ok;
     $('#vSub').textContent = TTS.ok ? 'Hareketleri ve geçişleri söyler' : 'Bu cihaz desteklemiyor';
     $('#vCol').classList.toggle('off', !on); $('#vCol').inert = !on;
+    var co = !!(state.settings && state.settings.coach === true), cs = $('#swCoach');
+    cs.classList.toggle('on', co); cs.setAttribute('aria-checked', co ? 'true' : 'false');
     var v = pickVoice(), named = state.settings && state.settings.voiceName && TTS.voices.some(function (x) { return x.name === state.settings.voiceName; });
     $('#vName').textContent = named ? state.settings.voiceName : (v ? 'Otomatik · ' + v.name : 'Otomatik');
   }
@@ -2982,6 +3247,11 @@
     state.settings = state.settings || {};
     state.settings.voice = !voiceOn(); save(); paintVoice(); vib(6);
     if (voiceOn()) { unlockVoice(); say('Sesli yönlendirme açık.', 0, true); } else cancelSpeech();
+  };
+  $('#swCoach').onclick = function () {
+    state.settings = state.settings || {};
+    state.settings.coach = !(state.settings.coach === true); save(); paintVoice(); vib(6);
+    if (state.settings.coach) unlockVoice(); else cancelSpeech();
   };
   function renderVoices() {
     loadVoices();
@@ -3005,7 +3275,7 @@
     save();
     Array.prototype.forEach.call($('#vList').children, function (x) { x.classList.toggle('on', x === b); });
     paintVoice(); unlockVoice(); vib(6);
-    say('Hazırlan. İlk hareket, plank.', 0, true);
+    say('Plank. 30 saniye.', 0, true);
   });
 
   function openSettings() {
@@ -3294,7 +3564,7 @@
     }
     function commit() {
       var sc = mm ? mm.scope : null; if (!sc) return;
-      var ids = Array.prototype.map.call(list.querySelectorAll('.it'), function (c) { return c.dataset.id; });
+      var ids = Array.prototype.map.call(listEl(sc).querySelectorAll('.it'), function (c) { return c.dataset.id; });
       var arr = itemsOf(sc), by = {}; arr.forEach(function (x) { by[x.id] = x; });
       var out = ids.map(function (id) { return by[id]; }).filter(Boolean);
       if (out.length !== arr.length) return;
@@ -3400,9 +3670,24 @@
   }
   function letterOf(e) { return esc((e.name.trim().charAt(0) || '·').toLocaleUpperCase('tr')); }
   function matchQ(e, q) { return !q || nkey(e.name).indexOf(nkey(q)) > -1; }
+  var ICO_PRE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2 5.4L19.5 10 14 12l-2 5.5L10 12l-5.5-2L10 8.4z"/><path d="M18.5 16.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/></svg>';
+  var ICO_OWN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.6 3.6-5.4 7-5.4s6.2 1.8 7 5.4"/></svg>';
+  // Hareketleri iki başlık altında listeler: Hazır hareketler / Kendi hareketlerim
+  function libSecs(rows, withEmpty, rowFn) {
+    var pre = rows.filter(function (e) { return e.preset; }), own = rows.filter(function (e) { return !e.preset; }), k = 0;
+    function sec(cls, ico, title, sub, list, emp) {
+      if (!list.length && !emp) return '';
+      return '<div class="lsec ' + cls + '"><div class="lsh"><span class="li" aria-hidden="true">' + ico + '</span><div class="lt"><b>' + title + '</b><small>' + sub + '</small></div><span class="lc">' + list.length + '</span></div>' +
+        (list.length ? '<div class="lbody">' + list.map(function (e) { return rowFn(e, k++); }).join('') + '</div>'
+                     : '<div class="lemp"><b>Henüz kendi hareketin yok</b>Yeni hareket oluşturunca burada görünür.</div>') + '</div>';
+    }
+    return sec('pre', ICO_PRE, 'Hazır hareketler', 'Anlatımlı, süresi ayarlı', pre, false) +
+           sec('own', ICO_OWN, 'Kendi hareketlerim', 'Senin eklediklerin', own, withEmpty);
+  }
   function renderLib(animate) {
     var el = $('#libList'), n = state.library.length;
-    $('#libSub').textContent = n ? n + ' hareket' : 'Henüz hareket yok';
+    var nPre = state.library.filter(function (e) { return e.preset; }).length;
+    $('#libSub').textContent = n ? (nPre ? nPre + ' hazır · ' : '') + (n - nPre) + ' kendi' : 'Henüz hareket yok';
     $('#libQS').style.display = n ? '' : 'none';
     if (!n) {
       el.innerHTML = '<div class="empty"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg></span><h2>Hareket listesi boş</h2>Hareketlerini burada topla, sonra<br>istediğin gruba sırayla ekle.</div>';
@@ -3410,10 +3695,10 @@
     }
     var rows = state.library.filter(function (e) { return matchQ(e, libQ); });
     if (!rows.length) { el.innerHTML = '<div class="empty"><h2>Sonuç yok</h2>“' + esc(libQ) + '” ile eşleşen hareket bulunamadı.</div>'; return; }
-    el.innerHTML = rows.map(function (e, i) {
+    el.innerHTML = libSecs(rows, !libQ, function (e, i) {
       var u = libUse(e);
       return '<button class="it lb' + (animate ? ' in' : '') + picked('lib', e.id) + '" data-id="' + e.id + '" style="--i:' + Math.min(i, 12) + '"><div class="gcv pkv" aria-hidden="true">' + letterOf(e) + '</div><div class="bd"><div class="nm">' + esc(e.name) + '</div><div class="sb">' + exMeasure(e) + (u ? ' · ' + u + ' grupta' : '') + '</div></div>' + CHEVC + MK + '</button>';
-    }).join('');
+    });
   }
   function openLib() {
     if (libOpen || formOpen || groupOpen || setOpen || wizOpen || mm || WK) return;
@@ -3513,10 +3798,10 @@
     var has = {}; if (g) g.exercises.forEach(function (x) { has[nkey(x.name)] = 1; });
     var rows = state.library.filter(function (e) { return matchQ(e, pkQ); });
     if (!rows.length) { el.innerHTML = '<div class="empty"><h2>Sonuç yok</h2>“' + esc(pkQ) + '” ile eşleşen hareket bulunamadı.</div>'; }
-    else el.innerHTML = rows.map(function (e) {
+    else el.innerHTML = libSecs(rows, !pkQ, function (e) {
       var o = pkOrder.indexOf(e.id);
       return '<button class="it lb pk' + (o > -1 ? ' on' : '') + '" data-id="' + e.id + '" aria-pressed="' + (o > -1) + '"><div class="gcv pkv" aria-hidden="true">' + letterOf(e) + '</div><div class="bd"><div class="nm">' + esc(e.name) + '</div><div class="sb">' + exMeasure(e) + (has[nkey(e.name)] ? '<span class="tg">Grupta</span>' : '') + '</div></div><span class="pn">' + (o > -1 ? o + 1 : '') + '</span></button>';
-    }).join('');
+    });
     var n = pkOrder.length, b = $('#pkGo');
     b.disabled = !n; b.textContent = n ? 'Gruba ekle (' + n + ')' : 'Gruba ekle';
     $('#pkHint').textContent = n ? n + ' hareket seçildi. Gruba bu sırayla eklenecek.' : 'Dokunduğun sırayla gruba eklenir. Numaralar ekleme sırasını gösterir.';
