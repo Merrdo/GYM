@@ -4682,5 +4682,199 @@
   }
 })();
 </script>
+<!-- ================= İnternet Durumu Bildirimi (kesildi / geri geldi) =================
+     Ekran kaydındaki bildirimin birebir karşılığı: kapsül biçimli, renkli çerçeveli,
+     üstten yaylanarak giren, kendiliğinden kapanan bildirim.
+     • "offline" olayında kırmızı "İnternet bağlantısı kesildi" gösterilir.
+     • "online" olayında yeşil "İnternete yeniden bağlandın" gösterilir (yalnızca kesinti sonrası).
+     • Renkleri/yazıyı aktif temadan alır (--theme-bg, --theme-text); koyu temada videodaki görünümdür.
+     Test için konsoldan: netBanner.show('off') / netBanner.show('on') -->
+<style id="netBannerCss">
+.nb-wrap{
+  position:fixed;left:0;right:0;
+  top:calc(max(env(safe-area-inset-top,0px),10px) + 3px);
+  z-index:99999;display:grid;justify-items:center;
+  pointer-events:none;
+}
+.nb{
+  --c:230,69,77;
+  grid-area:1/1;
+  pointer-events:auto;box-sizing:border-box;
+  display:flex;align-items:center;gap:13px;
+  width:max-content;max-width:calc(100% - 56px);min-height:68px;
+  padding:0 17px 0 12px;
+  border:1.5px solid rgb(var(--c));border-radius:999px;
+  background:var(--theme-bg,var(--bg,#000));color:var(--theme-text,var(--ink,#f7f4f7));
+  box-shadow:0 0 0 3px rgba(var(--c),.11),0 12px 32px -8px rgba(var(--c),.30);
+  font-family:inherit;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;
+  -webkit-user-select:none;user-select:none;touch-action:pan-x;
+  animation:nbIn 720ms cubic-bezier(.11,1.52,.44,.92) both,nbFade 140ms linear both;
+  will-change:transform,opacity;
+}
+.nb.is-on{--c:52,165,112}
+.nb.is-leaving{animation:nbOut 240ms cubic-bezier(.55,0,.9,.5) forwards}
+.nb.is-leaving.is-fast{animation-duration:160ms}
+
+.nb-ic{
+  position:relative;flex:none;width:44px;height:44px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(var(--c),.14);
+}
+.nb-ic svg{width:22px;height:22px;overflow:visible;fill:none;stroke:rgb(var(--c));
+  stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.nb-ic svg *{transform-box:view-box;transform-origin:12px 20px}
+
+.nb-t{display:flex;flex-direction:column;min-width:0}
+.nb-h,.nb-s{overflow-wrap:anywhere}
+.nb-h{font-size:15px;font-weight:700;line-height:1.2;letter-spacing:.005em}
+.nb-s{margin-top:2px;font-size:13px;font-weight:500;line-height:1.25;
+  color:color-mix(in srgb,var(--theme-text,var(--ink,#f7f4f7)) 62%,transparent)}
+
+/* --- Kesildi: çizgi çekilir, sinyal yayları "arıyor" gibi nabız atar --- */
+.nb-slash{stroke-dasharray:1;stroke-dashoffset:1;animation:nbDraw 260ms 320ms cubic-bezier(.3,.7,.3,1) forwards}
+.nb-gap{stroke:#000;stroke-dasharray:1;stroke-dashoffset:1;animation:nbDraw 260ms 320ms cubic-bezier(.3,.7,.3,1) forwards}
+.nb:not(.is-on) .nb-w{
+  animation:nbDim 350ms 250ms ease forwards,
+            nbSearch 1.6s calc(.65s + var(--i)*.14s) ease-in-out infinite;
+}
+
+/* --- Geri geldi: daire yaylanarak belirir, halka yayılır, yaylar noktadan büyür --- */
+.nb.is-on .nb-ic{animation:nbPopC 520ms 100ms cubic-bezier(.3,1.6,.5,1) both}
+.nb.is-on .nb-ic::after{
+  content:"";position:absolute;inset:0;border-radius:50%;
+  border:1.5px solid rgba(var(--c),.6);pointer-events:none;
+  animation:nbRipple 800ms 120ms ease-out both;
+}
+.nb.is-on .nb-w{animation:nbPopA 380ms calc(.16s + var(--i)*.07s) cubic-bezier(.3,1.5,.5,1) both}
+
+@keyframes nbIn{from{transform:translateY(-110px)}to{transform:none}}
+@keyframes nbFade{from{opacity:0}to{opacity:1}}
+@keyframes nbOut{from{transform:none;opacity:1}to{transform:translateY(-110px);opacity:0}}
+@keyframes nbDraw{to{stroke-dashoffset:0}}
+@keyframes nbDim{from{opacity:1}to{opacity:.28}}
+@keyframes nbSearch{0%,100%{opacity:.28}45%{opacity:.95}}
+@keyframes nbPopC{from{transform:scale(.62)}to{transform:scale(1)}}
+@keyframes nbPopA{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+@keyframes nbRipple{from{transform:scale(1);opacity:.9}to{transform:scale(1.4);opacity:0}}
+
+@media (prefers-reduced-motion:reduce){
+  .nb{animation:nbFade 160ms linear both}
+  .nb.is-leaving{animation:nbOut 160ms linear forwards}
+  .nb.is-leaving{transform:none}
+  .nb-slash,.nb-gap{animation:none;stroke-dashoffset:0}
+  .nb *,.nb-ic,.nb-ic::after{animation:none!important}
+  .nb:not(.is-on) .nb-w{opacity:.3}
+}
+</style>
+
+<script id="netBannerJs">
+(function(){
+  'use strict';
+  if (window.__nbLoaded) return;
+  window.__nbLoaded = true;
+
+  var HOLD = { off: 4500, on: 3800 };   // ekranda kalma süresi (ms) — videodaki zamanlama
+  var LEAVE = 240;                      // çıkış animasyonu (ms)
+  var uid = 0, wrap = null, cur = null, timer = null;
+  var last = navigator.onLine !== false;  // son bilinen durum
+  var announcedOffline = false;           // "geri geldi" yalnızca kesinti bildirildiyse gösterilir
+
+  var TEXT = {
+    off: ['İnternet bağlantısı kesildi', 'Çevrimdışı da kullanmaya devam edebilirsin.'],
+    on:  ['İnternete yeniden bağlandın', 'Her şey yeniden çevrimiçi.']
+  };
+
+  function icon(kind) {
+    var id = 'nbm' + (++uid);
+    var slash = 'M4.5 4 L19.5 21';
+    var isOff = kind === 'off';
+    return '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+      (isOff ? '<defs><mask id="' + id + '" maskUnits="userSpaceOnUse" x="-4" y="-4" width="32" height="32">' +
+               '<rect x="-4" y="-4" width="32" height="32" fill="#fff"/>' +
+               '<path class="nb-gap" pathLength="1" d="' + slash + '" stroke-width="5.4"/></mask></defs>' : '') +
+      '<g' + (isOff ? ' mask="url(#' + id + ')"' : '') + '>' +
+        '<path class="nb-w" style="--i:3" d="M1.42 9a16 16 0 0 1 21.16 0"/>' +
+        '<path class="nb-w" style="--i:2" d="M5 12.55a11 11 0 0 1 14.08 0"/>' +
+        '<path class="nb-w" style="--i:1" d="M8.53 16.11a6 6 0 0 1 6.95 0"/>' +
+        '<path class="nb-w" style="--i:0" d="M12 20h.01"/>' +
+      '</g>' +
+      (isOff ? '<path class="nb-slash" pathLength="1" d="' + slash + '"/>' : '') +
+    '</svg>';
+  }
+
+  function build(kind) {
+    var el = document.createElement('div');
+    el.className = 'nb' + (kind === 'on' ? ' is-on' : '');
+    el.setAttribute('role', 'status');
+    el.setAttribute('aria-live', 'polite');
+    el.innerHTML =
+      '<div class="nb-ic">' + icon(kind) + '</div>' +
+      '<div class="nb-t"><div class="nb-h"></div><div class="nb-s"></div></div>';
+    el.querySelector('.nb-h').textContent = TEXT[kind][0];
+    el.querySelector('.nb-s').textContent = TEXT[kind][1];
+
+    // Dokununca ya da yukarı kaydırınca erken kapanır.
+    var y0 = null;
+    el.addEventListener('click', function () { dismiss(el); });
+    el.addEventListener('touchstart', function (e) { y0 = e.touches[0].clientY; }, { passive: true });
+    el.addEventListener('touchmove', function (e) {
+      if (y0 !== null && y0 - e.touches[0].clientY > 14) { y0 = null; dismiss(el); }
+    }, { passive: true });
+    return el;
+  }
+
+  function dismiss(el, fast) {
+    if (!el || el.__leaving) return;
+    el.__leaving = true;
+    if (cur === el) { cur = null; clearTimeout(timer); }
+    el.classList.add('is-leaving');
+    if (fast) el.classList.add('is-fast');
+    setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, (fast ? 160 : LEAVE) + 30);
+  }
+
+  function show(kind) {
+    if (!document.body) return;
+    if (!wrap) {
+      wrap = document.createElement('div');
+      wrap.className = 'nb-wrap';
+      document.body.appendChild(wrap);
+    }
+    clearTimeout(timer);
+    if (cur) dismiss(cur, true);          // önceki bildirim hızlıca çekilir
+    var el = build(kind);
+    wrap.appendChild(el);
+    cur = el;
+    timer = setTimeout(function () { dismiss(el); }, HOLD[kind]);
+  }
+
+  function setState(online) {
+    if (online === last) return;
+    last = online;
+    if (!online) { announcedOffline = true; show('off'); }
+    else if (announcedOffline) { announcedOffline = false; show('on'); }
+  }
+
+  window.addEventListener('offline', function () { setState(false); });
+  window.addEventListener('online',  function () { setState(true); });
+
+  // Arka plandan dönünce ya da sayfa geri yüklenince durumu yeniden eşitle.
+  function sync() { setState(navigator.onLine !== false); }
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) sync(); });
+  window.addEventListener('pageshow', sync);
+  window.addEventListener('focus', sync);
+
+  // Uygulama zaten çevrimdışı açıldıysa bildirimi göster.
+  function initial() {
+    if (navigator.onLine === false) { announcedOffline = true; setTimeout(function () { show('off'); }, 700); }
+  }
+  if (document.readyState === 'complete') initial();
+  else window.addEventListener('load', initial);
+
+  // Konsoldan deneme: netBanner.show('off') / netBanner.show('on')
+  window.netBanner = { show: show, hide: function () { dismiss(cur); } };
+})();
+</script>
+
 </body>
 </html>
