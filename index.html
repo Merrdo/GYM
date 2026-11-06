@@ -735,6 +735,39 @@
 #exDesc.rich { font-size: 1.06rem; line-height: 1.62; }
 #exDesc .stp span { font-size: 1.05rem; opacity: .94; }
 
+  /* ---------- Hareket formu: başlık ve açıklama (sade, kartsız) ---------- */
+  .frow.dng .fl { color: var(--danger); }
+  .dsh-stack { flex-direction: column; gap: 10px; }
+  .dsh-stack .dbtn { flex: none; width: 100%; height: 54px; font-size: 1rem; }
+  .bkn { flex: none; display: flex; align-items: center; gap: 10px; margin: 0 20px 10px; padding: 12px 10px 12px 16px; border-radius: 18px; background: var(--accent-soft); border: 1px solid rgba(var(--acc-rgb), .25); }
+  .bkn[hidden] { display: none; }
+  .bkn .bkt { flex: 1; min-width: 0; }
+  .bkn b { display: block; font-size: .95rem; font-weight: 700; letter-spacing: -.01em; }
+  .bkn small { display: block; color: var(--dim); font-size: .82rem; margin-top: 2px; }
+  .bkn .bkg { flex: none; height: 36px; padding: 0 16px; border-radius: 18px; background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: .88rem; }
+  .bkn .bkx { flex: none; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; color: var(--dim); }
+  .m-sel .hb, .m-sort .hb { display: none; }
+  .view.mode .lnew { visibility: hidden; }
+  .view.mode .swt-scroll { padding-bottom: calc(var(--pb) + 120px); }
+  #gform .fcap { text-transform: none; letter-spacing: -.01em; font-size: .92rem; font-weight: 650; color: var(--dim); padding: 0 2px 10px; }
+  #gform .fcard.xn { background: none; border: 0; box-shadow: none !important; border-radius: 0; overflow: visible; }
+  #gform .xn-field { padding: 4px 2px 22px; gap: 0; }
+  #gform .xn-ic { display: none; }
+  #gform .xn-in { font-size: 2rem; font-weight: 750; letter-spacing: -.04em; line-height: 1.15; padding: 4px 44px 4px 0; }
+  #gform .xn-in::placeholder { color: var(--ph); opacity: .55; font-weight: 700; }
+  #gform .xn-field .nm-bar { left: 2px; right: 2px; bottom: 6px; height: 2px; }
+  #gform .xn-field .nm-ct { right: 2px; margin-top: -22px; }
+  #gform .xn-sgl { display: none; }
+  #gform .xn .sg-row { padding: 4px 0 2px; }
+  #gform .xn .sgc { background: var(--surface); border: 1px solid var(--line); height: 36px; font-size: .88rem; }
+  #gform .fcard.xd { background: none; border: 0; box-shadow: none !important; overflow: visible; border-radius: 0; }
+  #gform .xd .dsbox { background: var(--surface); border: 1.5px solid var(--line); border-radius: 22px; overflow: hidden; transition: border-color .2s, box-shadow .3s; }
+  #gform .xd .dsbox:focus-within { border-color: rgba(var(--acc-rgb), .45); box-shadow: 0 0 0 4px rgba(var(--acc-rgb), .06); }
+  #gform .xd .dsbox:has(#dsAdd:not(.off)) { background: none; border-style: dashed; border-color: var(--line2); }
+  #gform .xd .ds-in { padding: 20px 20px 10px; font-size: 1.05rem; line-height: 1.6; min-height: 132px; }
+  #gform .xd .ds-foot { padding: 12px 16px 14px 16px; border-top: 1px solid var(--line); }
+  #gform .xd-cap em { color: var(--faint); }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
   }
@@ -1065,6 +1098,7 @@
           </div>
           <button class="icon-btn" id="openLib" aria-label="Hareketler"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg></button>
         </div>
+        <div class="bkn" id="bkBanner" hidden><div class="bkt"><b>Yedek almayı unutma</b><small id="bkBnT"></small></div><button type="button" class="bkg" id="bkBnGo">Yedekle</button><button type="button" class="bkx" id="bkBnX" aria-label="Kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" style="width:12px;height:12px"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
         <div class="scroll" id="homeList"></div>
         <div class="bar">
           <button class="primary" id="addGroup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Yeni grup</button>
@@ -1100,6 +1134,37 @@
               <button type="button" class="sw" id="swCoach" role="switch" aria-checked="false" aria-label="Koç yardımı"></button></div>
           </div></div>
         </div>
+      </div>
+      <div class="fsec stg" style="--k:2">
+        <div class="fcap">Yedekleme</div>
+        <div class="fcard">
+          <button type="button" class="frow lnk bt" id="bkOut"><span class="fl">Yedeği dışa aktar<small id="bkLast"></small></span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M9 5l7 7-7 7"/></svg></span></button>
+          <button type="button" class="frow lnk bt" id="bkIn"><span class="fl">Yedekten geri yükle<small>Yedek dosyasından tüm veriyi geri al</small></span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M9 5l7 7-7 7"/></svg></span></button>
+          <button type="button" class="frow lnk bt" id="bkUndo" style="display:none"><span class="fl">Önceki veriyi geri getir<small id="bkUndoS"></small></span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M9 5l7 7-7 7"/></svg></span></button>
+        </div>
+        <input type="file" id="bkFile" accept=".json,application/json" hidden>
+      </div>
+      <div class="fsec stg" style="--k:3">
+        <div class="fcap">Veriler</div>
+        <div class="fcard">
+          <button type="button" class="frow lnk bt dng" id="rsOpen"><span class="fl">Uygulama verilerini sıfırla<small>Uygulamayı ilk kurulum haline döndürür</small></span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M9 5l7 7-7 7"/></svg></span></button>
+        </div>
+      </div>
+    </div>
+    <div class="dsh" id="bkSheet" style="z-index:30">
+      <div class="dsh-card" role="alertdialog" aria-labelledby="bkT">
+        <div class="sh-eb" id="bkEb">Yedekleme</div>
+        <h2 id="bkT"></h2>
+        <p class="sh-d" id="bkP"></p>
+        <div class="dsh-act dsh-stack"><button class="dbtn ok" id="bkOk">Geri yükle</button><button class="dbtn no" id="bkNo">Vazgeç</button></div>
+      </div>
+    </div>
+    <div class="dsh" id="rsSheet" style="z-index:30">
+      <div class="dsh-card" role="alertdialog" aria-labelledby="rsT">
+        <div class="sh-eb">Uygulama verileri</div>
+        <h2 id="rsT">Tüm veriler silinsin mi?</h2>
+        <p class="sh-d" id="rsP"></p>
+        <div class="dsh-act dsh-stack"><button class="dbtn ok" id="rsOk">Her şeyi sil ve sıfırla</button><button class="dbtn no" id="rsBk">Önce yedek al</button><button class="dbtn no" id="rsNo">Vazgeç</button></div>
       </div>
     </div>
     <div class="sht" id="vSheet">
@@ -1375,6 +1440,14 @@
     </div>
     <div class="scroll" id="gfBody"></div>
     <div class="form-foot" id="gfFoot"></div>
+    <div class="dsh" id="xsh">
+      <div class="dsh-card" role="alertdialog" aria-labelledby="xshT">
+        <div class="sh-eb">Kaydedilmedi</div>
+        <h2 id="xshT">Değişiklikler silinsin mi?</h2>
+        <p class="sh-d">Yaptığın değişiklikler kaydedilmedi. Çıkarsan kaybolacak.</p>
+        <div class="dsh-act"><button class="dbtn no" id="xshNo">Düzenlemeye dön</button><button class="dbtn ok" id="xshOk">Çık</button></div>
+      </div>
+    </div>
     <div class="dsh" id="dsh">
       <div class="dsh-card" role="alertdialog" aria-labelledby="dshT">
         <div class="sh-eb">Silme onayı</div>
@@ -1405,6 +1478,7 @@
       <h2 id="ctxT"></h2>
       <p class="ssub eb" id="ctxS"></p>
       <div class="optg"><button class="opt" id="cxSort"><span class="oi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M7 4L3.5 7.5M7 4l3.5 3.5"/><path d="M17 20V4M17 20l-3.5-3.5M17 20l3.5-3.5"/></svg></span><span class="ot"><b>Sırala</b><small>Sürükleyerek yeniden düzenle</small></span></button>
+      <button class="opt" id="cxEdit"><span class="oi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1-4L16.5 4.5a2.1 2.1 0 013 3L8 19z"/></svg></span><span class="ot"><b>Düzenle</b><small>Ad, tarif ve ölçüleri değiştir</small></span></button>
       <button class="opt" id="cxSel"><span class="oi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.3l2.6 2.6 4.6-5.2"/></svg></span><span class="ot"><b>Seç</b><small>Birden fazla öğe seç</small></span></button>
       <button class="opt danger" id="cxDel"><span class="oi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.2h12l-.85 9.4a2 2 0 01-2 1.8H8.85a2 2 0 01-2-1.8L6 9.2z" fill="currentColor" fill-opacity=".18"/><path d="M10.2 12.6v4M13.8 12.6v4"/><g class="lid"><path d="M3.8 6.2h16.4"/><path d="M9.4 6.2V4.9a1.1 1.1 0 011.1-1.1h3a1.1 1.1 0 011.1 1.1v1.3"/></g></svg></span><span class="ot"><b>Sil</b><small id="cxDelS"></small></span></button>
       </div><button class="primary sec" id="cxCancel">Vazgeç</button>
@@ -1432,7 +1506,8 @@
     try { var d = JSON.parse(localStorage.getItem(KEY)); if (d && Array.isArray(d.groups)) return d; } catch (e) {}
     return { groups: [], settings: {} };
   }
-  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  var resetting = false;
+  function save() { if (resetting) return; try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
   // Hareket listesi: ilk açılışta gruplardaki mevcut hareketlerden (aynı ad tek kez) oluşturulur
   function nkey(s) { return String(s).trim().toLocaleLowerCase('tr'); }
   function libFind(name) { var k = nkey(name); return state.library.filter(function (x) { return nkey(x.name) === k; })[0]; }
@@ -2068,8 +2143,141 @@
     formView.style.display = 'flex';
     formView.animate([{ transform: 'translateY(100%)' }, { transform: 'none' }], { duration: 460, easing: EASE });
     homeView.inert = true; groupView.inert = true; libView.inert = true; wizView.inert = true; formOpen = true;
+    formSnap = null; setTimeout(function () { if (formOpen) formSnap = formState(); }, 120);   // form kurulduktan sonra başlangıç hali
   }
-  function closeSheet() { $('#dsh').classList.remove('open', 'go'); }
+  /* ----- Komple sıfırlama: tüm yerel veri silinir, sayfa yenilenir; hazır hareketler ilk açılıştaki gibi yeniden yüklenir ----- */
+  $('#rsOpen').onclick = function () {
+    var g = state.groups.length, o = state.library.filter(function (e) { return !e.preset; }).length, f = state.library.filter(function (e) { return e.fav; }).length, a = [];
+    if (g) a.push(g + ' grup'); if (o) a.push(o + ' kendi hareket'); if (f) a.push(f + ' favori');
+    a.push('tüm ayarların');
+    $('#rsP').textContent = (a.length > 1 ? a.slice(0, -1).join(', ') + ' ve ' + a[a.length - 1] : a[0]) + ' silinecek. Hazır hareketler yeniden yüklenir. İstersen sonradan Ayarlar’dan “Önceki veriyi geri getir” ile dönebilirsin.';
+    $('#rsSheet').classList.add('open');
+  };
+  $('#rsNo').onclick = function () { $('#rsSheet').classList.remove('open'); };
+  $('#rsSheet').addEventListener('click', function (e) { if (e.target === this) this.classList.remove('open'); });
+  /* ================= Yedekleme =================
+     KURAL: uygulamanın tüm verisi localStorage'da "antrenman" ile başlayan anahtarlarda durur; yedek bunların HEPSİNİ otomatik kapsar.
+     Yeni bir sistem eklenirse verisini yine "antrenman." önekiyle sakla (başka yere yazıyorsan buraya da ekle: bkKeys/bkBuild). */
+  var BK_SKIP = ['antrenman.safety', 'antrenman.lastBackup', 'antrenman.bkSnooze'];
+  function bkKeys() {
+    var ks = [], i, k;
+    try { for (i = 0; i < localStorage.length; i++) { k = localStorage.key(i); if (k && k.indexOf('antrenman') === 0 && BK_SKIP.indexOf(k) < 0) ks.push(k); } } catch (e) {}
+    return ks;
+  }
+  function bkSnapshot() { var d = {}; bkKeys().forEach(function (k) { d[k] = localStorage.getItem(k); }); return d; }
+  function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } }
+  function bkAgo(ts) {
+    var d = Math.floor((Date.now() - ts) / 864e5);
+    return d <= 0 ? 'bugün' : d === 1 ? 'dün' : d + ' gün önce';
+  }
+  function bkPaint() {
+    var lb = +lsGet('antrenman.lastBackup') || 0, sf = null;
+    $('#bkLast').textContent = lb ? 'Son yedek: ' + bkAgo(lb) : 'Henüz yedek alınmadı';
+    try { sf = JSON.parse(lsGet('antrenman.safety')); } catch (e) {}
+    $('#bkUndo').style.display = sf && sf.data ? '' : 'none';
+    if (sf && sf.ts) $('#bkUndoS').textContent = 'Son değişiklikten önceki veri · ' + bkAgo(sf.ts);
+    var has = state.groups.length || state.library.some(function (e) { return !e.preset; });
+    var sn = +lsGet('antrenman.bkSnooze') || 0;
+    var show = has && (!lb || Date.now() - lb > 7 * 864e5) && Date.now() - sn > 3 * 864e5;
+    $('#bkBanner').hidden = !show;
+    if (show) $('#bkBnT').textContent = lb ? 'Son yedek ' + bkAgo(lb) + '. Verilerini dosyaya kaydet.' : 'Henüz hiç yedek almadın. Verilerini dosyaya kaydet.';
+  }
+  function bkExport() {
+    save();
+    var o = { app: 'antrenman', format: 1, exportedAt: new Date().toISOString(), data: bkSnapshot() }, txt = JSON.stringify(o);
+    var t = new Date(), pad = function (n) { return (n < 10 ? '0' : '') + n; };
+    var name = 'antrenman-yedek-' + t.getFullYear() + '-' + pad(t.getMonth() + 1) + '-' + pad(t.getDate()) + '.json', file = null;
+    try { file = new File([txt], name, { type: 'application/json' }); } catch (e) {}
+    function done() { lsSet('antrenman.lastBackup', String(Date.now())); bkPaint(); }
+    function dl() {
+      var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([txt], { type: 'application/json' })); a.download = name;
+      document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 2500); done();
+    }
+    if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({ files: [file], title: 'Antrenman yedeği' }).then(done).catch(function (e) { if (!e || e.name !== 'AbortError') dl(); });
+    } else dl();
+  }
+  /* Tüm veriyi verilen veriyle değiştirir. Önce mevcut veri "safety" olarak saklanır; hata olursa eski veri geri yazılır. */
+  function bkApply(data, lastBackup) {
+    var cur = bkSnapshot();
+    if (!lsSet('antrenman.safety', JSON.stringify({ ts: Date.now(), data: cur }))) return false;
+    resetting = true;
+    function put(d) { Object.keys(d).forEach(function (k) { if (k.indexOf('antrenman') === 0 && BK_SKIP.indexOf(k) < 0) localStorage.setItem(k, d[k]); }); }
+    try {
+      bkKeys().forEach(function (k) { localStorage.removeItem(k); });
+      put(data);
+      if (lastBackup) localStorage.setItem('antrenman.lastBackup', String(lastBackup)); else localStorage.removeItem('antrenman.lastBackup');
+    } catch (e) {
+      try { bkKeys().forEach(function (k) { localStorage.removeItem(k); }); put(cur); } catch (e2) {}
+      resetting = false; return false;
+    }
+    try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {}
+    location.reload(); return true;
+  }
+  var bkPend = null;
+  function bkAsk(eb, t, p, ok) {
+    $('#bkEb').textContent = eb; $('#bkT').textContent = t; $('#bkP').textContent = p;
+    $('#bkOk').style.display = ok ? '' : 'none'; $('#bkNo').textContent = ok ? 'Vazgeç' : 'Tamam';
+    $('#bkSheet').classList.add('open');
+  }
+  function bkFromFile(f) {
+    var r = new FileReader();
+    r.onload = function () {
+      var o = null, st = null;
+      try { o = JSON.parse(r.result); st = JSON.parse(o.data['antrenman.v1']); } catch (e) {}
+      if (!o || o.app !== 'antrenman' || !st || !Array.isArray(st.groups)) { bkPend = null; bkAsk('Yedekleme', 'Dosya geçersiz', 'Bu dosya bir Antrenman yedeği gibi görünmüyor. Hiçbir şey değiştirilmedi.', false); return; }
+      bkPend = { data: o.data, ts: Date.parse(o.exportedAt) || 0 };
+      var n = st.groups.length + ' grup · ' + (st.library || []).length + ' hareket' + (o.exportedAt ? ' · ' + new Date(o.exportedAt).toLocaleDateString('tr') : '');
+      bkAsk('Yedekten geri yükle', 'Yedek geri yüklensin mi?', n + '. Şu an kayıtlı veri bu yedekle değiştirilir. Mevcut verin güvenlik için saklanır; Ayarlar’dan geri getirebilirsin.', true);
+    };
+    r.onerror = function () { bkAsk('Yedekleme', 'Dosya okunamadı', 'Dosya açılamadı. Hiçbir şey değiştirilmedi.', false); };
+    r.readAsText(f);
+  }
+  $('#bkOut').onclick = bkExport;
+  $('#rsBk').onclick = bkExport;
+  $('#bkIn').onclick = function () { $('#bkFile').value = ''; $('#bkFile').click(); };
+  $('#bkFile').onchange = function () { if (this.files && this.files[0]) bkFromFile(this.files[0]); };
+  $('#bkUndo').onclick = function () {
+    var sf = null; try { sf = JSON.parse(lsGet('antrenman.safety')); } catch (e) {}
+    if (!sf || !sf.data) return;
+    bkPend = { data: sf.data, ts: 0 };
+    bkAsk('Önceki veri', 'Önceki veri geri getirilsin mi?', 'Şu anki veri değiştirilir; yerine son sıfırlama ya da geri yüklemeden önceki veri gelir. Şu anki veri de güvenlik için saklanır.', true);
+  };
+  $('#bkNo').onclick = function () { $('#bkSheet').classList.remove('open'); bkPend = null; };
+  $('#bkSheet').addEventListener('click', function (e) { if (e.target === this) { this.classList.remove('open'); bkPend = null; } });
+  $('#bkOk').onclick = function () {
+    if (!bkPend) return;
+    if (!bkApply(bkPend.data, bkPend.ts)) { bkAsk('Yedekleme', 'Yapılamadı', 'Veri yazılamadı (yer yetersiz olabilir). Mevcut verin olduğu gibi duruyor.', false); }
+  };
+  $('#bkBnGo').onclick = bkExport;
+  $('#bkBnX').onclick = function () { lsSet('antrenman.bkSnooze', String(Date.now())); bkPaint(); };
+  try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}   // tarayıcı veriyi kendiliğinden silmesin
+  bkPaint();
+
+  $('#rsOk').onclick = function () { if (!bkApply({}, 0)) { $('#rsSheet').classList.remove('open'); bkAsk('Sıfırlama', 'Yapılamadı', 'Güvenlik kopyası alınamadığı için hiçbir şey silinmedi.', false); } };
+  function closeSheet() { $('#dsh').classList.remove('open', 'go'); $('#xsh').classList.remove('open', 'go'); }
+  /* Kaydedilmemiş değişiklik: kapatmadan önce sor */
+  var formSnap = null;
+  function formState() {
+    var b = $('#gfBody'), out = [];
+    Array.prototype.forEach.call(b.querySelectorAll('input, textarea'), function (i) { out.push(i.value); });
+    Array.prototype.forEach.call(b.querySelectorAll('.val'), function (v) { out.push(v.textContent); });
+    Array.prototype.forEach.call(b.querySelectorAll('*'), function (el, k) {
+      if (el.matches('.on, .sel, .active, [aria-pressed="true"], [aria-checked="true"]')) out.push(k);
+    });
+    return JSON.stringify(out);
+  }
+  function formDirty() { return formOpen && formSnap !== null && formState() !== formSnap; }
+  function tryCloseForm() {
+    if (!formOpen) return;
+    if (!formDirty()) { closeForm(); return; }
+    if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    $('#dsh').classList.remove('open', 'go'); $('#xsh').classList.add('open');
+  }
+  $('#xshNo').onclick = function () { $('#xsh').classList.remove('open'); };
+  $('#xshOk').onclick = function () { closeForm(); };
+  $('#xsh').onclick = function (e) { if (e.target === this) $('#xsh').classList.remove('open'); };
   function closeForm(cb, dur) {
     if (!formOpen) { if (cb) cb(); return; }
     formOpen = false; closeSheet();
@@ -2084,8 +2292,8 @@
       if (cb) cb();
     };
   }
-  $('#gfClose').onclick = function () { closeForm(); };
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && formOpen) { if ($('#dsh').classList.contains('open')) closeSheet(); else closeForm(); } });
+  $('#gfClose').onclick = tryCloseForm;
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && formOpen) { if ($('#dsh').classList.contains('open') || $('#xsh').classList.contains('open')) closeSheet(); else tryCloseForm(); } });
 
   /* ----- Ortak ad alanı: kayan etiket, ilerleme çizgisi, öneriler ----- */
   var GSUGG = ['Üst vücut', 'Alt vücut', 'Core', 'Kardiyo', 'Sabah esneme', 'Tüm vücut'];
@@ -2251,7 +2459,7 @@
       '</div></div>' +
       '<div class="fsec stg" style="--k:1"><div class="fcap xd-cap"><span>Nasıl yapılır</span><em>İsteğe bağlı</em></div><div class="fcard xd"><div class="dsbox">' +
         '<div class="col' + (d.desc ? ' off' : '') + '" id="dsAdd"><div>' +
-          '<button type="button" class="ds-add" id="dsAddBtn"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span><span><b>Tarif ekle</b><small>Duruş, nefes ve dikkat noktalarını yaz</small></span></button>' +
+          '<button type="button" class="ds-add" id="dsAddBtn"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span><span><b>Tarif ekle</b><small>Duruş, nefes ve dikkat noktaları</small></span></button>' +
         '</div></div>' +
         '<div class="col' + (d.desc ? '' : ' off') + '" id="dsOpen"><div>' +
           '<textarea class="ds-in" id="fDesc" aria-label="Nasıl yapılır" maxlength="2000" rows="3" placeholder="Örn. Ayaklar omuz genişliğinde, sırt dik. İnerken nefes al, kalkarken ver.">' + esc(d.desc) + '</textarea>' +
@@ -2303,7 +2511,7 @@
       save(); if (W) renderWizList(ex ? null : arr.length - 1); else if (lib) renderLib(false); else { renderGroup(false); renderHome(false); } closeForm();
     };
 
-    openForm('', ex ? 'Hareketi düzenle' : 'Yeni hareket', html, ex ? 'Kaydet' : (lib && !W ? 'Listeye ekle' : 'Ekle'), ex ? 'Hareketi sil' : null, function () {
+    openForm(W ? 'Yeni grup' : lib ? 'Hareketler' : g.name, ex ? 'Hareketi düzenle' : 'Yeni hareket', html, ex ? 'Kaydet' : (lib && !W ? 'Listeye ekle' : 'Ekle'), ex ? 'Hareketi sil' : null, function () {
       if (W) { wiz.exercises = wiz.exercises.filter(function (e) { return e.id !== ex.id; }); renderWizList(null); }
       else if (lib) { state.library = state.library.filter(function (e) { return e.id !== ex.id; }); save(); renderLib(false); }
       else { g.exercises = g.exercises.filter(function (e) { return e.id !== ex.id; }); save(); renderGroup(false); renderHome(false); }
@@ -2321,9 +2529,7 @@
       nmF.style.setProperty('--p', n / 50);
       nmF.classList.toggle('near', n >= 42);
       $('#nmCt').textContent = n + '/50';
-      sgW.classList.toggle('off', n > 0);
-      sgW.inert = n > 0;
-    }
+    }   // öneri çipleri yazarken açılıp kapanmaz: sayfa kaymasın
     nm.addEventListener('input', nmSync);
     nm.addEventListener('keydown', function (e) {
       if (e.key !== 'Enter') return;
@@ -2337,7 +2543,11 @@
     });
 
     /* ----- Tarif: açılan alan, otomatik büyüme, ipucu etiketleri ----- */
-    function grow() { ds.style.height = 'auto'; ds.style.height = Math.min(ds.scrollHeight, 320) + 'px'; }
+    function grow() {   // yüksekliği değiştirirken kaydırma konumu sıçramasın
+      var sc = $('#gfBody'), top = sc.scrollTop, h0 = ds.offsetHeight;
+      ds.style.height = 'auto'; var h = Math.min(Math.max(ds.scrollHeight, 132), 320);
+      ds.style.height = (h === h0 ? h0 : h) + 'px'; sc.scrollTop = top;
+    }
     function dsSync() {
       grow();
       var n = ds.value.length;
@@ -3464,7 +3674,7 @@
   var ctxScope = null, ctxId = null, lp = { t: 0, x: 0, y: 0, el: null, fired: false };
   var pendDel = null;
 
-  function listEl(scope) { return $(scope === 'home' ? '#homeList' : scope === 'lib' ? '#libList' : '#groupList'); }
+  function listEl(scope) { return $(scope === 'home' ? '#homeList' : scope === 'lib' ? '#libSwt' : '#groupList'); }
   function viewOf(scope) { return scope === 'home' ? homeView : scope === 'lib' ? libView : groupView; }
   function itemsOf(scope) { var g = scope === 'group' ? findGroup(curId) : null; return scope === 'home' ? state.groups : scope === 'lib' ? state.library : (g ? g.exercises : []); }
   function itemById(scope, id) { return itemsOf(scope).filter(function (x) { return x.id === id; })[0]; }
@@ -3500,11 +3710,13 @@
     $('#ctxS').textContent = scope === 'home' ? 'Grup' : 'Hareket';
     $('#cxDelS').textContent = scope === 'home' ? (it.exercises.length ? 'Grup ve ' + it.exercises.length + ' hareketi silinir' : 'Grubu sil') : scope === 'lib' ? 'Listeden sil · gruplardaki kopyalar kalır' : 'Hareketi bu gruptan sil';
     $('#cxSort').classList.toggle('dis', itemsOf(scope).length < 2);
+    $('#cxSort').style.display = scope === 'lib' ? 'none' : ''; $('#cxEdit').style.display = scope === 'lib' ? '' : 'none';
     $('#ctx').classList.add('open');
   }
   function closeCtx() { $('#ctx').classList.remove('open'); }
   $('#cxCancel').onclick = closeCtx;
   $('#ctx').addEventListener('click', function (e) { if (e.target === this) closeCtx(); });
+  $('#cxEdit').onclick = function () { var i = ctxId; closeCtx(); exForm(i, true); };
   $('#cxSort').onclick = function () { var s = ctxScope; closeCtx(); enterMode('sort', s); };
   $('#cxSel').onclick = function () { var s = ctxScope, i = ctxId; closeCtx(); enterMode('sel', s, i); };
   $('#cxDel').onclick = function () { var s = ctxScope, i = ctxId; closeCtx(); askDelete(s, [i]); };
@@ -3665,7 +3877,7 @@
     $('#libList').addEventListener('pointerdown', down);
   })();
 
-  wireLP('home'); wireLP('group');
+  wireLP('home'); wireLP('group'); wireLP('lib');
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
     if ($('#cdsh').classList.contains('open')) closeCd();
@@ -3883,7 +4095,7 @@
   function favBtn(e) { return '<button class="hb' + (e.fav ? ' on' : '') + '" aria-label="' + (e.fav ? 'Favorilerden çıkar' : 'Favorilere ekle') + '" aria-pressed="' + (!!e.fav) + '">' + ICO_HEART + '</button>'; }
   function libRow(e, i, animate, tag) {
     var u = libUse(e);
-    return '<div class="it lb' + (animate ? ' in' : '') + '" role="button" tabindex="0" data-id="' + e.id + '" style="--i:' + Math.min(i, 12) + '"><div class="gcv pkv" aria-hidden="true">' + letterOf(e) + '</div><div class="bd"><div class="nm">' + esc(e.name) + (tag ? '<span class="tg">' + (e.preset ? 'Hazır' : 'Kendi') + '</span>' : '') + '</div><div class="sb">' + exMeasure(e) + (u ? ' · ' + u + ' grupta' : '') + '</div></div>' + favBtn(e) + '</div>';
+    return '<div class="it lb' + (animate ? ' in' : '') + picked('lib', e.id) + '" role="button" tabindex="0" data-id="' + e.id + '" style="--i:' + Math.min(i, 12) + '"><div class="gcv pkv" aria-hidden="true">' + letterOf(e) + '</div><div class="bd"><div class="nm">' + esc(e.name) + (tag ? '<span class="tg">' + (e.preset ? 'Hazır' : 'Kendi') + '</span>' : '') + '</div><div class="sb">' + exMeasure(e) + (u ? ' · ' + u + ' grupta' : '') + '</div></div>' + favBtn(e) + MK + '</div>';
   }
   function libFill(id, rows, animate, tag, emptyIco, emptyT, emptyP) {
     var el = $('#' + id);
@@ -3937,11 +4149,12 @@
   $('#openLib').onclick = openLib;
   $('#libBack').onclick = function () { if (mm) { exitMode(); return; } closeLib(); };
   libView.addEventListener('click', function (e) {
+    if (cardTap('lib', e)) return;
     var c = e.target.closest('.it.lb'); if (!c) return;
     if (e.target.closest('.hb')) toggleFav(c.dataset.id); else openEx(c.dataset.id, true);
   });
   libView.addEventListener('keydown', function (e) {
-    if (e.key !== 'Enter' || e.target.closest('.hb')) return;
+    if (e.key !== 'Enter' || mm || e.target.closest('.hb')) return;
     var c = e.target.closest('.it.lb'); if (c) openEx(c.dataset.id, true);
   });
   var libTabs = new SwipeTabs($('#libSwt'), { index: 0, haptic: function () { vib(4); } });
