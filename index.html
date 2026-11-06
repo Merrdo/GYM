@@ -164,7 +164,7 @@
   .fcard > * + * { border-top: 1px solid var(--line); }
   .fcard, .nmbox, .nm-field, .nm-in, .finput, .ds-in { max-width: 100%; min-width: 0; }
   .finput { display: block; width: 100%; background: none; border: 0; outline: none; resize: none; padding: 16px 18px; font-size: 1.05rem; line-height: 1.45; }
-  .finput::placeholder { color: #55555a; }
+  .finput::placeholder { color: var(--ph); }
   textarea.finput { min-height: 104px; font-size: .96rem; }
   .frow { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 64px; padding: 10px 12px 10px 18px; }
   .frow.seg-row { min-height: 0; padding: 8px; }
@@ -202,7 +202,7 @@
   .xn-ic svg { width: 23px; height: 23px; }
   .xn-field:focus-within .xn-ic { transform: rotate(-8deg) scale(1.06); }
   .xn-in { flex: 1; min-width: 0; display: block; background: none; border: 0; outline: none; padding: 6px 48px 6px 0; font-size: 1.45rem; font-weight: 700; letter-spacing: -.03em; line-height: 1.25; caret-color: var(--accent); text-overflow: ellipsis; }
-  .xn-in::placeholder { color: #55555a; font-weight: 600; }
+  .xn-in::placeholder { color: var(--ph); font-weight: 600; }
   .xn-in.pop { animation: nmpop .45s var(--ease); }
   .xn-field .nm-ct { position: absolute; right: 18px; top: 50%; margin-top: -14px; font-size: .72rem; font-weight: 600; color: var(--dim); font-variant-numeric: tabular-nums; opacity: 0; transition: opacity .25s, color .25s; }
   .xn-field:focus-within .nm-ct { opacity: 1; }
@@ -239,7 +239,7 @@
   .ds-add small { display: block; color: var(--dim); font-size: .78rem; font-weight: 500; margin-top: 2px; }
 
   .ds-in { display: block; width: 100%; background: none; border: 0; outline: none; resize: none; padding: 18px 18px 8px; font-size: .98rem; line-height: 1.55; min-height: 88px; max-height: 320px; overflow-y: auto; caret-color: var(--accent); }
-  .ds-in::placeholder { color: #55555a; }
+  .ds-in::placeholder { color: var(--ph); }
   .ds-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 2px 16px 14px 14px; }
   .gcs { display: flex; flex-wrap: wrap; gap: 6px; }
   .gc { height: 30px; padding: 0 11px; border-radius: 10px; background: var(--surface2); color: var(--dim); font-size: .8rem; font-weight: 600; transition: transform .15s var(--ease), background .25s, color .25s; }
@@ -263,7 +263,7 @@
   .dbtn svg { width: 21px; height: 21px; overflow: visible; flex: none; }
   .dbtn.no { background: var(--surface2); color: var(--ink); }
   .dbtn.no:active { background: #26262a; }
-  .dbtn.ok { background: var(--danger); color: #fff; box-shadow: 0 12px 30px -12px rgba(255,90,77,.65); }
+  .dbtn.ok { background: var(--danger-fill); color: #fff; box-shadow: 0 12px 30px -12px rgba(255,90,77,.65); }
   .dbtn.ok:active { filter: brightness(.9); }
   .dsh .dbtn .lid { transform-box: fill-box; transform-origin: 15% 100%; transition: transform .45s var(--ease) .3s; }
   .dsh.open .dbtn .lid { transform: rotate(-16deg) translateY(-2px); }
@@ -514,7 +514,7 @@
   .it .bd { flex: 1; min-width: 0; }
   .it .nm { font-size: 1.14rem; font-weight: 560; letter-spacing: -.015em; line-height: 1.25; overflow-wrap: anywhere; }
   .it .sb { color: var(--dim); font-size: .96rem; margin-top: 3px; font-variant-numeric: tabular-nums; }
-  .it > svg.cv { width: 16px; height: 16px; color: #55555a; flex: none; }
+  .it > svg.cv { width: 16px; height: 16px; color: var(--faint); flex: none; }
   #homeList .it:first-child::before { display: none; }
   #homeList .it { padding-top: 19px; padding-bottom: 19px; }
   #homeList .it .nm { font-size: 1.22rem; }
@@ -555,6 +555,7 @@
   .gz { flex: none; width: 42px; height: 25px; overflow: visible; }
   .gz .tk { fill: none; stroke-width: 4; stroke-linecap: butt; opacity: .22; }
   .gz .pg { fill: none; stroke: var(--zc); stroke-width: 4; stroke-linecap: round; animation: gz .9s var(--ease) .12s both; }
+  .tk.t0 { stroke: var(--lv0); } .tk.t1 { stroke: var(--lv1); } .tk.t2 { stroke: var(--lv2); }
   @keyframes gz { from { stroke-dasharray: 0 100; } }
   @media (prefers-reduced-motion: reduce) { .gz .pg { animation: none; } }
   .sech { display: flex; align-items: baseline; gap: 8px; margin: 34px 0 4px; }
@@ -613,7 +614,7 @@
   .srch:focus-within { border-color: rgba(var(--acc-rgb),.45); }
   .srch > svg { width: 18px; height: 18px; color: var(--dim); flex: none; }
   .srch input { flex: 1; min-width: 0; height: 100%; background: none; border: 0; outline: 0; font-size: 1rem; }
-  .srch input::placeholder { color: var(--dim); }
+  .srch input::placeholder { color: var(--ph); }
   .srch .clr { flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--surface2); color: var(--dim); display: none; place-items: center; }
   .srch.has .clr { display: grid; }
   .srch .clr svg { width: 12px; height: 12px; }
@@ -642,16 +643,20 @@
     --bg: #000000; --surface: #0f0f10; --surface2: #1b1b1d; --line: rgba(255,255,255,.09); --line2: rgba(255,255,255,.22);
     --ink: #f7f7f5; --dim: #8e8e93; --accent: #ffb938; --accent-ink: #120a00; --acc-rgb: 255,185,56; --accent-soft: rgba(255,185,56,.16);
     --danger: #ff5a4d; --tile: #0b0a08; --press: rgba(255,255,255,.04); --hold: rgba(255,255,255,.07); --sheet: #101011; --card: #19191b;
+    --faint: #7a7a80; --ph: #85858b; --danger-fill: #d4372b; --lv0: #34d17a; --lv1: #ffc933; --lv2: #ff5a4d;
     --glow: rgba(255,185,56,.5); --fb: 18,18,20; --cov-a: #5e4016; --cov-b: #2b1d09; --pl-acc: #ffb938; --pl-rgb: 255,185,56;
   }
   [data-theme="mavi"] {
     --bg: #f5f2ec; --surface: #fcfbf8; --surface2: #e7e5de; --line: rgba(27,42,61,.1); --line2: rgba(27,42,61,.2);
-    --ink: #1b2a3d; --dim: #5f6c7d; --accent: #2a68ad; --accent-ink: #ffffff; --acc-rgb: 42,104,173; --accent-soft: rgba(42,104,173,.12);
-    --danger: #c4402f; --tile: #e4eef9; --press: rgba(27,42,61,.05); --hold: rgba(27,42,61,.08); --sheet: #f1eee7; --card: #fcfbf8;
-    --glow: rgba(42,104,173,.4); --fb: 252,251,248; --cov-a: #cfe0f3; --cov-b: #a9c6e6; --pl-acc: #5fa2e6; --pl-rgb: 95,162,230;
+    --ink: #1b2a3d; --dim: #4d5b6e; --accent: #245fa3; --accent-ink: #ffffff; --acc-rgb: 36,95,163; --accent-soft: rgba(36,95,163,.12);
+    --danger: #b5301f; --tile: #e4eef9; --press: rgba(27,42,61,.05); --hold: rgba(27,42,61,.08); --sheet: #f1eee7; --card: #fcfbf8;
+    --faint: #6f7b8b; --ph: #5f6c7d; --danger-fill: #b5301f; --lv0: #0a6f38; --lv1: #855900; --lv2: #b5301f;
+    --glow: rgba(36,95,163,.4); --fb: 252,251,248; --cov-a: #cfe0f3; --cov-b: #a9c6e6; --pl-acc: #5fa2e6; --pl-rgb: 95,162,230;
   }
+  /* KURAL: --ink/--bg gibi token'ları yeniden tanımlayan her kapsam (data-theme, #player...) yazı rengini de buradan alır; aksi halde kök temanın rengi miras kalır ve yazı kaybolur. */
+  :where([data-theme]) { color: var(--ink); }
   /* Antrenman ekranı her temada koyu kalır; vurgu rengi temadan gelir */
-  #player { --bg: #000000; --surface: #0f0f10; --surface2: #1b1b1d; --line: rgba(255,255,255,.09); --line2: rgba(255,255,255,.22); --ink: #f7f7f5; --dim: #8e8e93;
+  #player { color: var(--ink); --faint: #7a7a80; --ph: #85858b; --danger-fill: #d4372b; --bg: #000000; --surface: #0f0f10; --surface2: #1b1b1d; --line: rgba(255,255,255,.09); --line2: rgba(255,255,255,.22); --ink: #f7f7f5; --dim: #8e8e93;
     --accent: var(--pl-acc); --accent-ink: #0a0a0a; --acc-rgb: var(--pl-rgb); --accent-soft: rgba(var(--pl-rgb), .16); --danger: #ff5a4d; --sheet: #101011; --card: #19191b; --press: rgba(255,255,255,.04); --glow: rgba(var(--pl-rgb), .5); }
 
   /* ---------- Temalar sayfası ---------- */
@@ -685,7 +690,7 @@
   .gf-in:focus, .gf-ta:focus { border-bottom-color: var(--accent); }
   .gf-in { padding: 4px 0 14px; font-size: 2rem; font-weight: 700; letter-spacing: -.035em; line-height: 1.15; text-overflow: ellipsis; }
   .gf-ta { padding: 6px 0 14px; font-size: 1.08rem; line-height: 1.5; min-height: 72px; max-height: 220px; overflow-y: auto; }
-  .gf-in::placeholder, .gf-ta::placeholder { color: #4d4d52; font-weight: 400; }
+  .gf-in::placeholder, .gf-ta::placeholder { color: var(--ph); font-weight: 400; }
   .gf-in::placeholder { font-weight: 600; }
   .gf-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 16px -20px 2px; padding: 0 20px; touch-action: pan-x pan-y; overscroll-behavior-x: contain; }
   .gf-chips::-webkit-scrollbar { display: none; }
@@ -810,12 +815,12 @@
   /* 1 · yazdığın isim doğrudan başlık olur */
   .wz-title, .wz-sub { display: block; width: 100%; background: none; border: 0; outline: none; resize: none; overflow: hidden; border-radius: 0; padding: 0; caret-color: var(--accent); color: var(--ink); }
   .wz-title { margin-top: 5vh; font-size: 2.3rem; font-weight: 780; letter-spacing: -.04em; line-height: 1.12; overflow-wrap: anywhere; }
-  .wz-title::placeholder { color: var(--line2); transition: color .25s; }
+  .wz-title::placeholder { color: var(--ph); transition: color .25s; }
   .wz-title.err { caret-color: var(--danger); }
   .wz-title.err::placeholder { color: var(--danger); }
   .wz-sub { margin-top: 16px; font-size: 1.1rem; line-height: 1.5; color: var(--dim); transition: color .25s; }
   .wz-sub:focus { color: var(--ink); }
-  .wz-sub::placeholder { color: var(--dim); opacity: .55; }
+  .wz-sub::placeholder { color: var(--ph); opacity: 1; }
 
   /* 2 · hareketler */
   .wz-acts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 22px; }
@@ -923,7 +928,7 @@
   .sk-it { position: absolute; left: 0; right: 0; top: 50%; height: var(--ih); margin-top: calc(var(--ih) / -2); display: grid; place-items: center; font-size: calc(var(--ih) * .92); font-weight: 780; letter-spacing: -.05em; line-height: 1; font-variant-numeric: tabular-nums; color: var(--ink); opacity: 0; will-change: transform, opacity; pointer-events: none; transition: color .25s; }
   .sk-it.on { color: var(--accent); }
   /* Zorluk kadranı (büyük): yarım daire, üç dilim, seviye rengiyle dolan yay */
-  .sk-gauge { position: relative; width: min(100%, 250px); margin: 4px auto 0; --zc: #34d17a; }
+  .sk-gauge { position: relative; width: min(100%, 250px); margin: 4px auto 0; --zc: var(--lv0); }
   .sk-gauge svg { display: block; width: 100%; height: auto; overflow: visible; }
   .sk-gauge .tk { fill: none; stroke-width: 12; opacity: .22; }
   .sk-gauge .pg { fill: none; stroke: var(--zc); stroke-width: 12; stroke-linecap: round; }
@@ -1023,13 +1028,13 @@
       <p class="sk-sub stg" style="--k:2">Sana uygun bir tempo seç, istediğin zaman değiştirebilirsin.</p>
       <div class="sk-wheel stg" style="--k:3" id="skWheel" role="slider" tabindex="0" aria-label="Haftalık antrenman günü" aria-valuemin="1" aria-valuemax="7" aria-valuenow="3">
         <div class="sk-band" id="skBand"><i class="sk-ac t"></i><i class="sk-ac b"></i><span class="sk-bl">Haftada</span><span class="sk-br">gün</span></div>
-        <div class="sk-items" id="skItems"></div>
+        <div class="sk-items" id="skItems" aria-hidden="true"></div>
       </div>
       <div class="sk-gauge stg" style="--k:4" id="skGauge">
         <svg viewBox="0 0 240 132" aria-hidden="true">
-          <path class="tk" d="M24 118A96 96 0 0 1 216 118" pathLength="100" stroke="#34d17a" stroke-dasharray="31 100"/>
-          <path class="tk" d="M24 118A96 96 0 0 1 216 118" pathLength="100" stroke="#ffc933" stroke-dasharray="31 100" stroke-dashoffset="-34.5"/>
-          <path class="tk" d="M24 118A96 96 0 0 1 216 118" pathLength="100" stroke="#ff5a4d" stroke-dasharray="31 100" stroke-dashoffset="-69"/>
+          <path d="M24 118A96 96 0 0 1 216 118" pathLength="100" class="tk t0" stroke-dasharray="31 100"/>
+          <path d="M24 118A96 96 0 0 1 216 118" pathLength="100" class="tk t1" stroke-dasharray="31 100" stroke-dashoffset="-34.5"/>
+          <path d="M24 118A96 96 0 0 1 216 118" pathLength="100" class="tk t2" stroke-dasharray="31 100" stroke-dashoffset="-69"/>
           <path class="pg" id="skPg" d="M24 118A96 96 0 0 1 216 118" pathLength="100" stroke-dasharray="0 100"/>
           <circle class="kn" id="skKn" cx="24" cy="118" r="10"/>
         </svg>
@@ -1155,7 +1160,7 @@
       </div>
     </div>
     <div class="pl-done" id="plDone">
-      <div class="badge">
+      <div class="badge" aria-hidden="true">
         <span class="wave"></span><span class="wave"></span><span class="wave"></span>
         <svg viewBox="0 0 120 120"><circle class="d-trk" cx="60" cy="60" r="48"/><circle class="d-ring" cx="60" cy="60" r="48" transform="rotate(-90 60 60)"/><path class="d-chk" d="M38 62l16 16 28-34"/></svg>
       </div>
@@ -1419,15 +1424,15 @@
     var total = T.total, kcal = work * 0.095 + Math.max(0, total - work) * 0.03;
     function c(x) { return Math.max(0, Math.min(1, x)); }
     var score = .30 * c(n / 10) + .35 * c(total / 60 / 40) + .35 * c(kcal / 250);
-    return score < .35 ? { s: score, t: 'Kolay', c: '#34d17a' } : score < .65 ? { s: score, t: 'Orta', c: '#ffc933' } : { s: score, t: 'Zor', c: '#ff5a4d' };
+    return score < .35 ? { s: score, t: 'Kolay', c: 'var(--lv0)' } : score < .65 ? { s: score, t: 'Orta', c: 'var(--lv1)' } : { s: score, t: 'Zor', c: 'var(--lv2)' };
   }
   function gaugeHTML(d) {
     var pct = Math.round(Math.max(.07, Math.min(1, d.s)) * 100);
     var arc = 'd="M4 21A16 16 0 0 1 36 21" pathLength="100"';
     return '<b class="zr" style="--zc:' + d.c + '"><svg class="gz" viewBox="0 0 40 25" aria-hidden="true">' +
-      '<path class="tk" ' + arc + ' stroke="#34d17a" stroke-dasharray="31 100"/>' +
-      '<path class="tk" ' + arc + ' stroke="#ffc933" stroke-dasharray="31 100" stroke-dashoffset="-34.5"/>' +
-      '<path class="tk" ' + arc + ' stroke="#ff5a4d" stroke-dasharray="31 100" stroke-dashoffset="-69"/>' +
+      '<path ' + arc + ' class="tk t0" stroke-dasharray="31 100"/>' +
+      '<path ' + arc + ' class="tk t1" stroke-dasharray="31 100" stroke-dashoffset="-34.5"/>' +
+      '<path ' + arc + ' class="tk t2" stroke-dasharray="31 100" stroke-dashoffset="-69"/>' +
       '<path class="pg" ' + arc + ' stroke-dasharray="' + pct + ' 100"/></svg><em>' + d.t + '</em></b>';
   }
   function fmtEst(sec) { return sec < 60 ? Math.max(1, Math.round(sec)) + ' sn' : '~' + Math.round(sec / 60) + ' dk'; }
@@ -1447,7 +1452,7 @@
   // Canvas çizimlerinin renkleri (CSS değişkenleriyle aynı temaya bağlıdır)
   var THEMES = {
     altin: { name: 'Siyah Altın', desc: 'Saf siyah zemin, parlak altın detaylar ve net kontrast.', dark: 1, gold: '255,185,56', cov: ['#5e4016', '#2b1d09'], ring: '255,214,150', glow: '255,205,120', torso: '#ffcf70', head: '#ffe3a8', t0: '#15120d', t1: '#050505', bar: 'rgba(255,255,255,.6)', rope: 'rgba(255,255,255,.14)', meta: '#000000', fig: '255,196,82', figHi: '255,238,184', figLo: '168,110,26', bg0: '#2a1f0d', bg1: '#090705', spot: '255,196,90', spotA: .26, sh: '0,0,0', shA: .55 },
-    mavi:  { name: 'Mavi Sabah', desc: 'Ferah taş-fildişi zemin; butonlar ve detaylar mavi.', gold: '42,104,173', cov: ['#cfe0f3', '#a9c6e6'], ring: '27,74,128', glow: '255,255,255', torso: '#3a7bc8', head: '#1b3f6b', t0: '#eef4fb', t1: '#dce8f5', bar: 'rgba(27,42,61,.55)', rope: 'rgba(27,42,61,.16)', meta: '#f5f2ec', fig: '42,104,173', figHi: '150,196,240', figLo: '24,62,108', bg0: '#e8f1fa', bg1: '#b6cfeb', spot: '255,255,255', spotA: .8, sh: '27,42,61', shA: .3 }
+    mavi:  { name: 'Mavi Sabah', desc: 'Ferah taş-fildişi zemin; butonlar ve detaylar mavi.', gold: '36,95,163', cov: ['#cfe0f3', '#a9c6e6'], ring: '27,74,128', glow: '255,255,255', torso: '#3a7bc8', head: '#1b3f6b', t0: '#eef4fb', t1: '#dce8f5', bar: 'rgba(27,42,61,.55)', rope: 'rgba(27,42,61,.16)', meta: '#f5f2ec', fig: '42,104,173', figHi: '150,196,240', figLo: '24,62,108', bg0: '#e8f1fa', bg1: '#b6cfeb', spot: '255,255,255', spotA: .8, sh: '27,42,61', shA: .3 }
   }, TH = THEMES.altin, THEME_ORDER = ['altin', 'mavi'];
   $('#thList').innerHTML = THEME_ORDER.map(function (k) {
     var T = THEMES[k];
@@ -1499,7 +1504,7 @@
 
   var LV_N = ['Kolay', 'Orta', 'Zor'];
   // Gün sayısı → zorluk: 1–2 kolay, 3–4 orta, 5–7 zor. Yay konumu her sayı için kendi diliminde kalır
-  var GZ_S = [.09, .25, .42, .58, .74, .85, .95], GZ_C = [[52, 209, 122], [255, 201, 51], [255, 90, 77]], GZ_L = [0, 0, 1, 1, 2, 2, 2];
+  var GZ_S = [.09, .25, .42, .58, .74, .85, .95], GZ_L = [0, 0, 1, 1, 2, 2, 2];
   var GOAL_H = ['Alışkanlığı oturtmak için ideal.', 'Düzenli başlamak için harika.', 'Çoğu kişi için sürdürülebilir.', 'Gelişim için güçlü bir ritim.', 'Dinlenme günlerini önceden planla.', 'Tek dinlenme gününü akıllıca seç.', 'Dinlenme günü yok, vücudunu dinle.'];
   var CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
   var ARROW_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
@@ -1530,8 +1535,9 @@
   // Kadran çarkı canlı izler: yay uzunluğu, rengi ve seviye adı sürüklerken akar
   function skGz() {
     var p = Math.max(0, Math.min(6, skPos)), i = Math.min(5, Math.floor(p)), f = p - i;
-    var s = GZ_S[i] + (GZ_S[i + 1] - GZ_S[i]) * f, a = GZ_C[GZ_L[i]], b = GZ_C[GZ_L[i + 1]], th = Math.PI * (1 - s);
-    var col = 'rgb(' + [0, 1, 2].map(function (k) { return Math.round(a[k] + (b[k] - a[k]) * f); }).join(',') + ')';
+    var s = GZ_S[i] + (GZ_S[i + 1] - GZ_S[i]) * f, th = Math.PI * (1 - s);
+    // seviye renkleri temadan gelir (--lv0/1/2); iki seviye arası akış color-mix ile
+    var col = 'color-mix(in srgb, var(--lv' + GZ_L[i] + ') ' + ((1 - f) * 100).toFixed(1) + '%, var(--lv' + GZ_L[i + 1] + '))';
     $('#skPg').setAttribute('stroke-dasharray', (s * 100).toFixed(2) + ' 100');
     var kn = $('#skKn'); kn.setAttribute('cx', (120 + 96 * Math.cos(th)).toFixed(2)); kn.setAttribute('cy', (118 - 96 * Math.sin(th)).toFixed(2));
     skGauge.style.setProperty('--zc', col);
@@ -1605,12 +1611,17 @@
     if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); skGo(skIdx - 1); }
   });
 
+  // Önceki onaydan kalan 'fill: forwards' animasyonları (soluk kadran, görünmez çark) yeniden açılışta temizlenir
+  function skResetAnims() {
+    skView.getAnimations({ subtree: true }).forEach(function (an) { if (!(window.CSSAnimation && an instanceof CSSAnimation)) an.cancel(); });
+  }
   function openStreak() {
     if (skOpen) return; skOpen = true; skBusy = false; skClear();
     var n = skNow();
     skView.style.display = 'flex';
     skView.animate([{ opacity: 0, transform: 'scale(.97)' }, { opacity: 1, transform: 'none' }], { duration: 520, easing: EASE });
     $('#settings').inert = true;
+    skResetAnims();
     skMeasure();
     $('#skBand').classList.remove('fin');
     $('#skDone').classList.remove('ok'); $('#skDone').innerHTML = '<span>Hedefimi belirle</span>' + ARROW_SVG;
@@ -1624,7 +1635,7 @@
   function closeStreak() {
     if (!skOpen) return; skOpen = false; skTok++; skClear(); skIntro = false; $('#settings').inert = false; skLabel();
     var a = skView.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(1.03)' }], { duration: 480, easing: EASE, fill: 'forwards' });
-    a.onfinish = function () { skView.style.display = 'none'; a.cancel(); };
+    a.onfinish = function () { skView.style.display = 'none'; a.cancel(); skResetAnims(); };
   }
   $('#skOpen').onclick = openStreak;
 
