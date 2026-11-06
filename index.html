@@ -7,6 +7,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="theme-color" content="#000000">
 <meta name="color-scheme" content="dark">
+<script>
+/* İlk çizimden ÖNCE gerçek ekran yüksekliğini ve kurulu/tarayıcı modunu belirle.
+   (Aksi halde iOS ana ekran uygulamasında ilk karede alt şerit kısa kalır, sekme çubuğu yukarıda görünür, sonra aşağı kayar.) */
+(function () {
+  var d = document.documentElement, w = window, n = w.navigator;
+  var st = n.standalone === true || (w.matchMedia && (matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: fullscreen)').matches));
+  var h = w.innerHeight;
+  if (st) h = Math.max(h, w.innerHeight >= w.innerWidth ? Math.max(screen.height, screen.width) : Math.min(screen.height, screen.width));
+  d.style.setProperty('--full-h', h + 'px');
+  if (!st) d.classList.add('browser');
+})();
+</script>
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -490,7 +502,8 @@
   #tpSet #settings .top { min-height: calc(var(--pt) + 56px); }
   .tabbar { position: absolute; left: 0; right: 0; bottom: 0; height: var(--tbh); z-index: 6; display: grid; grid-template-columns: repeat(3, 1fr); padding: 5px 10px calc(var(--pb) - 12px); background: var(--bg); border-top: 1px solid var(--line); }
   html.kbd .tabbar { opacity: 0; pointer-events: none; transition: opacity .2s; }
-  .tb { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--dim); transition: color .35s var(--ease); -webkit-tap-highlight-color: transparent; }
+  .tb { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--dim); -webkit-tap-highlight-color: transparent; }
+  html.ready .tb { transition: color .35s var(--ease); }   /* açılışta renk geçişi yok: sekme baştan doğru renkte */
   .tb svg { width: 25px; height: 25px; transition: transform .45s var(--ease); }
   .tb span { font-size: .68rem; font-weight: 650; letter-spacing: .005em; }
   .tb:active svg { transform: scale(.88); }
@@ -1014,7 +1027,7 @@
     </div>
     <nav class="tabbar" id="tabbar" role="tablist" aria-label="Sayfalar">
       <i class="tb-ind" id="tbInd"></i>
-      <button type="button" class="tb" role="tab" data-t="0" aria-label="Ana"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.8L12 4l8 6.8V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z"/></svg><span>Ana</span></button>
+      <button type="button" class="tb on" role="tab" data-t="0" aria-label="Ana" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.8L12 4l8 6.8V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z"/></svg><span>Ana</span></button>
       <button type="button" class="tb" role="tab" data-t="1" aria-label="Gruplarım"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg><span>Gruplarım</span></button>
       <button type="button" class="tb" role="tab" data-t="2" aria-label="Ayarlar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h8M18 7h2M4 17h2M12 17h8"/><circle cx="15" cy="7" r="2.4"/><circle cx="9" cy="17" r="2.4"/></svg><span>Ayarlar</span></button>
     </nav>
