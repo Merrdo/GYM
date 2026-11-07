@@ -233,8 +233,13 @@
   .xd .ds-foot { margin-top: 6px; padding: 12px 16px 14px 14px; border-top: 1px solid var(--line); }
 
   /* Aç-kapa bölümleri: yükseklik yumuşakça değişir */
-  .col { display: grid; grid-template-rows: 1fr; transition: grid-template-rows .5s var(--ease), opacity .35s; }
-  .col > div { min-height: 0; overflow: hidden; }
+  .col { display: grid; grid-template-rows: 1fr; transition: grid-template-rows .36s var(--ease), opacity .26s; }
+  .col > div { min-height: 0; overflow: hidden; contain: paint; }
+  .col.off > div { visibility: hidden; transition: visibility 0s .36s; }
+  .ds-end { display: flex; align-items: center; gap: 10px; }
+  .ds-x { flex: none; width: 34px; height: 26px; border-radius: 13px; display: grid; place-items: center; background: var(--surface2); color: var(--dim); transition: background .2s, color .2s, transform .2s var(--ease); }
+  .ds-x:active { transform: scale(.9); color: var(--ink); }
+  .ds-x svg { width: 16px; height: 16px; display: block; }
   .col.off { grid-template-rows: 0fr; opacity: 0; }
 
   .sg-row { display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain; touch-action: pan-x pan-y; padding: 14px 18px 14px; margin: 0 -18px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
@@ -281,6 +286,8 @@
   .dsh.open .dbtn .lid { transform: rotate(-16deg) translateY(-2px); }
   .dsh.go .dbtn .lid { transform: none; transition-delay: 0s; transition-duration: .2s; }
   .shake { animation: shake .4s; }
+  .nm-warn { margin: 8px 2px 0; color: var(--danger); font-size: .86rem; font-weight: 600; line-height: 1.3; animation: rise .3s var(--ease) both; }
+  .gf-in.bad, .xn-in.bad { caret-color: var(--danger); border-bottom-color: var(--danger); }
   @keyframes shake { 20%,60% { transform: translateX(-6px); } 40%,80% { transform: translateX(6px); } }
 
   .seg { position: relative; width: 100%; display: grid; grid-template-columns: 1fr 1fr; background: var(--bg); border-radius: 13px; padding: 4px; }
@@ -450,6 +457,84 @@
     .pl-done .primary { height: 46px; }
   }
 
+  /* ---------- Metronom paneli ---------- */
+  .mp { --mp-tr: var(--surface2); padding: 16px 18px 12px; border-radius: 24px; background: var(--surface); border: 1px solid var(--line); }
+  .mp-head { display: flex; align-items: center; gap: 12px; }
+  .mp-ic { flex: none; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--surface2); color: var(--dim); transition: background .35s var(--ease), color .35s var(--ease); }
+  .mp-ic svg { width: 22px; height: 22px; }
+  .mt-arm { transform-box: view-box; transform-origin: 12px 17px; }
+  .mp.on .mt-arm, .mtp.on .mt-arm, .mtb.on .mt-arm { animation: mtSwing var(--sw, 3s) ease-in-out infinite; }
+  @keyframes mtSwing { 0%, 100% { transform: rotate(-19deg); } 50% { transform: rotate(19deg); } }
+  .mp.on .mp-ic { background: var(--accent-soft); color: var(--accent); }
+  .mp-t { flex: 1; min-width: 0; }
+  .mp-t b { display: block; font-size: 1.02rem; font-weight: 650; letter-spacing: -.01em; }
+  .mp-t small { display: block; color: var(--dim); font-size: .84rem; margin-top: 1px; }
+  .mp-bd { transition: opacity .4s var(--ease), filter .4s var(--ease); }
+  .mp:not(.on) .mp-bd { opacity: .3; filter: saturate(0); }
+  .mp-val { display: flex; align-items: baseline; justify-content: center; gap: 7px; margin: 14px 2px 0; }
+  .mp-num { color: var(--accent); font-size: 2.6rem; line-height: 1; font-weight: 700; letter-spacing: -.035em; font-variant-numeric: tabular-nums; display: inline-block; }
+  .mp-num.pop { animation: pop .18s var(--ease); }
+  .mp-u { color: var(--dim); font-size: .95rem; }
+  .mp-sl { position: relative; height: 66px; margin: 0 -6px; overflow: hidden; touch-action: none; cursor: grab; outline: none; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent); mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent); }
+  .mp-sl.drag { cursor: grabbing; }
+  .mp:not(.on) .mp-sl { pointer-events: none; }
+  .mp-rl { position: absolute; left: 50%; top: 0; width: 0; height: 100%; will-change: transform; }
+  .mp-rl.snap { transition: transform .5s cubic-bezier(.22,1,.36,1); }
+  .mp-rl i { position: absolute; top: 0; left: calc(var(--k) * 22px); width: 0; height: 100%; }
+  .mp-rl u { position: absolute; top: 6px; left: -1px; width: 2px; height: 12px; border-radius: 1px; background: var(--dim); opacity: .38; transform-origin: 50% 0; transition: background .2s, opacity .2s; }
+  .mp-rl i.w u { height: 20px; opacity: .6; }
+  .mp-rl i.x u { height: 8px; opacity: .18; }
+  .mp-rl i.cur u { background: var(--accent); opacity: 1; }
+  .mp-rl s { position: absolute; top: 34px; left: 0; transform: translateX(-50%); text-decoration: none; color: var(--dim); font-size: .72rem; font-weight: 550; font-variant-numeric: tabular-nums; transition: color .2s; }
+  .mp-rl i.cur s { color: var(--ink); }
+  .mp-pt { display: block; width: 0; height: 0; margin: 4px auto 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 6px solid var(--accent); border-radius: 1px; }
+  .mp-sl:focus-visible { box-shadow: 0 0 0 2px var(--accent); border-radius: 12px; }
+  .mp-chips { display: flex; justify-content: center; gap: 8px; margin-top: 2px; padding-bottom: 4px; }
+  .mp-chips button { flex: 1; max-width: 56px; height: 38px; border-radius: 19px; background: var(--surface2); color: var(--ink); font-size: .92rem; font-weight: 650; font-variant-numeric: tabular-nums; transition: background .25s var(--ease), color .25s var(--ease), transform .15s var(--ease); }
+  .mp-chips button:active { transform: scale(.93); }
+  .mp-chips button.on { background: var(--accent); color: var(--accent-ink); }
+  .mp:not(.on) .mp-bd { pointer-events: none; }
+  /* Alt panel olarak metronom */
+  .mts, .mts .sht-card { touch-action: none; overscroll-behavior: none; }
+  .mts .sht-card { padding-top: 12px; }
+  .mts .sht-card::before { content: ""; order: -2; display: block; flex: none; width: 40px; height: 5px; border-radius: 3px; background: var(--line2); margin: 0 auto 22px; }
+  .mts .mp { padding: 0; border: 0; border-radius: 0; background: none; }
+  .mts .mp-head { gap: 14px; }
+  .mts .mp-ic { width: 48px; height: 48px; }
+  .mts .mp-ic svg { width: 27px; height: 27px; }
+  .mts .mp-t b { font-size: 1.5rem; font-weight: 750; letter-spacing: -.03em; }
+  .mts .mp-t small { font-size: .9rem; margin-top: 2px; }
+  .mts .mp-val { margin: 30px 2px 0; gap: 9px; }
+  .mts .mp-num { font-size: 4.2rem; letter-spacing: -.05em; }
+  .mts .mp-u { font-size: 1.05rem; }
+  .mts .mp-pt { margin-top: 12px; }
+  .mts .mp-sl { height: 80px; margin: 2px -20px 0; }
+  .mts .mp-rl u { top: 8px; }
+  .mts .mp-rl s { top: 42px; font-size: .78rem; }
+  .mts .mp-chips { gap: 10px; margin-top: 8px; padding-bottom: 8px; }
+  .mts .mp-chips button { height: 48px; border-radius: 24px; max-width: 66px; font-size: 1rem; }
+  .mts .primary.sec { margin-top: 14px; }
+  /* Grup sayfası: ayrı satır olarak açılıp kapanır */
+  .mtp { margin-left: auto; align-self: center; flex: none; height: 34px; padding: 0 13px 0 11px; border-radius: 17px; display: flex; align-items: center; gap: 7px; background: var(--surface); color: var(--dim); font-size: .9rem; font-weight: 600; transition: background .3s var(--ease), color .3s var(--ease), transform .15s var(--ease); }
+  .mtp svg { width: 17px; height: 17px; flex: none; }
+  .sech .mtp span { color: inherit; font-size: inherit; }
+  .mtp:active { transform: scale(.94); }
+  .mtp em { font-style: normal; max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap; font-variant-numeric: tabular-nums; transition: max-width .4s var(--ease), opacity .3s, margin .4s var(--ease); margin-left: -7px; }
+  .mtp.on { background: var(--accent-soft); color: var(--accent); }
+  .mtp.on em { max-width: 90px; opacity: 1; margin-left: 0; }
+  .mtg { display: inline-flex; align-items: center; gap: 4px; margin-left: 9px; color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; vertical-align: middle; }
+  .mtg svg { width: 13px; height: 13px; }
+  /* Antrenman: üst çubuktaki düğme ve altında süzülen panel */
+  .pl-top .mtb { position: relative; overflow: visible; transition: width .45s var(--ease), margin .45s var(--ease), opacity .3s, transform .45s var(--ease), background .3s, color .3s; }
+  .pl-top .mtb svg { width: 21px; height: 21px; }
+  .pl-top .mtb b { position: absolute; right: -2px; bottom: -2px; min-width: 17px; height: 17px; padding: 0 4px; border-radius: 9px; display: grid; place-items: center; background: var(--accent); color: var(--accent-ink);
+    font-size: 9.5px; font-weight: 750; letter-spacing: -.01em; font-variant-numeric: tabular-nums; box-shadow: 0 0 0 2px #000; transform: scale(0); transition: transform .4s cubic-bezier(.34, 1.56, .5, 1); }
+  .pl-top .mtb.on { color: var(--accent); background: rgba(var(--acc-rgb), .14); }
+  .pl-top .mtb.on b { transform: scale(1); }
+  .pl-top .mtb.gone { width: 0; padding: 0; margin-left: -10px; opacity: 0; transform: scale(.5); pointer-events: none; }
+  @media (prefers-reduced-motion: reduce) { .mp.on .mt-arm, .mtp.on .mt-arm, .mtb.on .mt-arm { animation: none; } .mts .sht-card { transition: none; } }
+
   /* ---------- Anahtar (switch) ---------- */
   .sw { position: relative; flex: none; width: 52px; height: 32px; border-radius: 16px; background: var(--surface2); transition: background .3s var(--ease); }
   .sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 26px; height: 26px; border-radius: 16px; background: #b0b0b5;
@@ -517,13 +602,15 @@
   #setBody { padding-bottom: calc(var(--pb) + 24px); }
   .stepper .val.dimv { color: var(--dim); }
   .stepper button.lim { opacity: .3; }
+  .frow.tpr .stepper, .frow.tpr .fl small { transition: opacity .35s var(--ease), filter .35s var(--ease); }
+  .frow.tpr.off .stepper { opacity: .3; filter: saturate(0); pointer-events: none; }
 
 
   /* ---------- Liste satırları (sade) ---------- */
   .it { position: relative; display: flex; align-items: center; gap: 14px; width: calc(100% + 40px); margin: 0 -20px; padding: 17px 20px; text-align: left; transition: background .2s; }
   .it + .it::before { content: ""; position: absolute; left: 20px; right: 20px; top: 0; height: 1px; background: var(--line); }
   .it:active { background: var(--press); }
-  .it.in { animation: rise .5s var(--ease) both; animation-delay: calc(var(--i) * 40ms); }
+  .it.in { animation: rise .5s var(--ease) both; animation-delay: calc(var(--i) * 40ms + var(--d, 0ms)); }
   .it .bd { flex: 1; min-width: 0; }
   .it .nm { font-size: 1.14rem; font-weight: 560; letter-spacing: -.015em; line-height: 1.25; overflow-wrap: anywhere; }
   .it .sb { color: var(--dim); font-size: .96rem; margin-top: 3px; font-variant-numeric: tabular-nums; }
@@ -636,8 +723,7 @@
   .it.lb .nm { font-size: 1.15rem; font-weight: 600; }
   .it.lb .sb { font-size: .92rem; }
   .gcv.pkv { width: 58px; height: 58px; border-radius: 17px; font-size: 1.6rem; }
-  #libList .it:first-child::before, #pkList .it:first-child::before { display: none; }
-  #libList .empty, #pkList .empty { padding-top: 8vh; }
+  #libList .empty, #pkPre .empty, #pkOwn .empty, #pkFav .empty { padding-top: 8vh; }
   .pn { flex: none; width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--line2); display: grid; place-items: center; font-size: .88rem; font-weight: 800; color: transparent; font-variant-numeric: tabular-nums; transition: background .2s, border-color .2s, color .2s, transform .3s var(--ease); }
   .it.pk.on { background: var(--accent-soft); }
   .it.pk.on .pn { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); transform: scale(1.08); }
@@ -707,12 +793,14 @@
 @media (prefers-reduced-motion: reduce) { .swt-track, .swt-nav * { transition: none !important; } }
 
 /* ---------- Hareketler sayfası (sekmeli, SwipeTabs) ---------- */
-#library .swt { --swt-ink: var(--ink); --swt-accent: var(--accent); --swt-bg: var(--bg); --swt-top: calc(var(--pt) - 6px); --swt-side: 78px; --swt-right: 20px; --swt-gap: 24px; --swt-size: 1.3rem;
+#library .swt, #picker .swt { --swt-ink: var(--ink); --swt-accent: var(--accent); --swt-bg: var(--bg); --swt-top: calc(var(--pt) - 6px); --swt-side: 78px; --swt-right: 20px; --swt-gap: 24px; --swt-size: 1.3rem;
   position: absolute; inset: 0; height: auto; }
-#library .swt-page { padding-top: calc(var(--pt) - 6px + var(--swt-h) + 14px + 60px); }
+#library .swt-page, #picker .swt-page { padding-top: calc(var(--pt) - 6px + var(--swt-h) + 14px + 60px); }
 #library .swt-scroll { padding: 2px 20px calc(var(--pb) + 28px); }
-#libBack { position: absolute; left: 20px; top: calc(var(--pt) - 6px); z-index: 8; }
-#libQS { position: absolute; left: 0; right: 0; top: calc(var(--pt) - 6px + 42px + 14px); z-index: 7; margin: 0 20px; background: var(--surface); }
+#picker .swt-scroll { padding: 2px 20px calc(var(--pb) + 100px); }
+#picker .form-foot { position: absolute; left: 0; right: 0; bottom: 0; z-index: 9; }
+#libBack, #pkClose { position: absolute; left: 20px; top: calc(var(--pt) - 6px); z-index: 8; }
+#libQS, #pkQS { position: absolute; left: 0; right: 0; top: calc(var(--pt) - 6px + 42px + 14px); z-index: 7; margin: 0 20px; background: var(--surface); }
 .lh { display: flex; align-items: center; gap: 12px; min-height: 40px; padding: 4px 0 10px; }
 .lh p { flex: 1; min-width: 0; color: var(--dim); font-size: .9rem; line-height: 1.35; }
 .lh p b { color: var(--ink); font-weight: 650; }
@@ -1258,13 +1346,19 @@
 
   <!-- Hareket seçici: listeden seçilenler seçim sırasıyla gruba eklenir -->
   <section class="view" id="picker" role="dialog" aria-modal="true" aria-label="Hareket seç">
-    <div class="top">
-      <button class="icon-btn" id="pkClose" aria-label="Kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-      <div class="ttl"><div class="eyebrow" id="pkGrp"></div><h1>Hareket seç</h1></div>
+    <div class="swt" id="pkSwt">
+      <section class="swt-page" data-title="Hazır">
+        <div class="swt-scroll"><div class="lh"><p class="pkh"></p></div><div class="llist" id="pkPre"></div></div>
+      </section>
+      <section class="swt-page" data-title="Kendi">
+        <div class="swt-scroll"><div class="lh"><p class="pkh"></p></div><div class="llist" id="pkOwn"></div></div>
+      </section>
+      <section class="swt-page" data-title="Favori">
+        <div class="swt-scroll"><div class="lh"><p class="pkh"></p></div><div class="llist" id="pkFav"></div></div>
+      </section>
     </div>
+    <button class="icon-btn" id="pkClose" aria-label="Kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     <div class="srch" id="pkQS"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg><input id="pkQ" type="search" placeholder="Hareket ara" aria-label="Hareket ara" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="search"><button type="button" class="clr" id="pkQX" aria-label="Temizle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-    <p class="pkhint" id="pkHint">Dokunduğun sırayla gruba eklenir. Numaralar ekleme sırasını gösterir.</p>
-    <div class="scroll" id="pkScroll"><div id="pkList"></div></div>
     <div class="form-foot"><button class="primary" id="pkGo" disabled>Gruba ekle</button></div>
   </section>
 
@@ -1295,7 +1389,7 @@
         <p class="gdesc" id="gDesc"></p>
         <div class="gwk" id="gWk"></div>
         <div class="stats3" id="gStats"></div>
-        <div class="sech" id="gSech"><h2>Hareketler</h2><span id="gCount"></span></div>
+        <div class="sech" id="gSech"><h2>Hareketler</h2><span id="gCount"></span><button type="button" class="mtp" id="gMetro" aria-expanded="false" aria-controls="gMp" aria-label="Metronom ayarı"></button></div>
         <div id="groupList"></div>
       </div>
     </div>
@@ -1321,6 +1415,7 @@
         <div class="pl-bar">
           <button class="icon-btn" id="plClose" aria-label="Antrenmanı bitir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
           <div class="r">
+            <button class="icon-btn mtb gone" id="plMetro" aria-label="Metronom ayarı" aria-expanded="false" disabled></button>
             <button class="icon-btn" id="plMoreBtn" aria-label="Seçenekler"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5.5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="18.5" cy="12" r="1.9"/></svg></button>
             <button class="icon-btn" id="plSnd" aria-label="Sesi aç veya kapat"></button>
           </div>
@@ -1347,6 +1442,12 @@
           <button class="mb" id="plMb"></button>
           <button class="rb" id="plNext" aria-label="Atla"></button>
         </div>
+      </div>
+    </div>
+    <div class="sht mts" id="plMtSh">
+      <div class="sht-card" role="dialog" aria-label="Metronom">
+        <div class="mts-slot"></div>
+        <button class="primary sec mt-done" type="button">Tamam</button>
       </div>
     </div>
     <div class="pl-done" id="plDone">
@@ -1402,7 +1503,7 @@
 
       <!-- 1 · İsim: yazdığın başlık olur -->
       <div class="scroll wz-page" style="--pi:0">
-        <div class="stg" style="--k:0"><textarea class="wz-title" id="wzName" rows="1" maxlength="40" placeholder="Grup adı" aria-label="Grup adı" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="next"></textarea></div>
+        <div class="stg" style="--k:0"><textarea class="wz-title" id="wzName" rows="1" maxlength="40" placeholder="Grup adı" aria-label="Grup adı" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="next"></textarea><div class="nm-warn" id="wzNmWarn" role="alert" hidden></div></div>
         <textarea class="wz-sub stg" style="--k:1" id="wzDesc" rows="1" maxlength="160" placeholder="Açıklama ekle" aria-label="Açıklama" enterkeyhint="done"></textarea>
       </div>
 
@@ -1474,6 +1575,14 @@
     </div>
   </section>
 
+  <!-- Metronom ayarı: grup sayfası ve antrenman aynı alt paneli kullanır -->
+  <div class="sht mts" id="mtSh" style="z-index:50">
+      <div class="sht-card" role="dialog" aria-label="Metronom">
+        <div class="mts-slot"></div>
+        <button class="primary sec mt-done" type="button">Tamam</button>
+      </div>
+    </div>
+
   <!-- Gruba hareket ekleme seçenekleri -->
   <div class="sht" id="addSheet" style="z-index:50">
     <div class="sht-card">
@@ -1529,7 +1638,7 @@
   function libFind(name) { var k = nkey(name); return state.library.filter(function (x) { return nkey(x.name) === k; })[0]; }
   function libPush(e) {
     if (libFind(e.name)) return;
-    state.library.push({ id: uid(), name: e.name, desc: e.desc || '', type: e.type, value: e.value, sets: e.sets, rest: e.rest || 0, metro: !!e.metro, tempo: e.tempo || 2 });
+    state.library.push({ id: uid(), name: e.name, desc: e.desc || '', type: e.type, value: e.value, sets: e.sets, rest: e.rest || 0, metro: !!e.metro, tempo: e.tempo || 3 });
   }
   if (!Array.isArray(state.library)) {
     state.library = [];
@@ -1602,7 +1711,7 @@
       function can(d) { return !d || (x.old && x.old(d)); }   // boşsa ya da eski uzun tarifse yenisiyle değiştir
       var f = libFind(x.name); if (f && can(f.desc)) { f.desc = x.desc; f.preset = x.key; }
       state.groups.forEach(function (g) { (g.exercises || []).forEach(function (e) { if (nkey(e.name) === nkey(x.name) && can(e.desc)) e.desc = x.desc; }); });
-      if (!f) state.library.push({ id: uid(), name: x.name, desc: x.desc, type: x.type, value: x.value, sets: x.sets, rest: x.rest, metro: false, tempo: 2, preset: x.key });
+      if (!f) state.library.push({ id: uid(), name: x.name, desc: x.desc, type: x.type, value: x.value, sets: x.sets, rest: x.rest, metro: false, tempo: 3, preset: x.key });
     });
     // Daha önce eklenmiş hazır hareketleri de işaretle (eski kayıtlarda bayrak yok)
     PRESETS.forEach(function (x) { var f = libFind(x.name); if (f && !f.preset && fresh.indexOf(x.key) < 0 && done.indexOf(x.key) > -1) { f.preset = x.key; ch = true; } });
@@ -1633,8 +1742,14 @@
   function picked(scope, id) { return mm && mm.scope === scope && mm.sel[id] ? ' picked' : ''; }
 
   // Süre: oynatıcının gerçek adımlarından (hazırlık, set, dinlenme, 3-2-1) hesaplanır; böylece ekrandaki süre ile antrenman süresi aynı kalır.
-  // Metronomsuz tekrarlı hareket: tekrar sayısı × "Tekrar süresi" (ortalama; hareket formunda ayarlanır).
-  function repSec(e) { var t = +e.tempo; return t > 0 ? t : 2; }
+  // Metronomsuz tekrarlı hareket: tekrar sayısı × otomatik tekrar süresi (hareket adına göre tipik değer, yoksa 3 sn).
+  // Kayıtlı "tekrar süresi" yalnızca metronom açıkken geçerlidir; kapalıyken süre tahminine karışmaz.
+  var TEMPO_HINT = { 'şınav': 3, 'squat': 1.5, 'mekik': 2, 'barfiks': 3, 'lunge': 2.5, 'köprü': 3 };   // tipik tekrar süresi (öneri çipi + otomatik süre tahmini)
+  var TEMPO_DEF = 3;
+  function repSec(e) {
+    if (e.metro && e.type === 'reps') { var t = +e.tempo; if (t > 0) return t; }
+    return TEMPO_HINT[nkey(e.name)] || TEMPO_DEF;
+  }
   function groupTimes(g) {
     var per = g.exercises.map(function () { return { act: 0, rst: 0 }; }), act = 0, rst = 0;
     buildSteps(g).forEach(function (st) {
@@ -1670,6 +1785,8 @@
   }
   function fmtEst(sec) { return sec < 60 ? Math.max(1, Math.round(sec)) + ' sn' : '~' + Math.round(sec / 60) + ' dk'; }
   function fmtClock(sec) { sec = Math.round(sec); var m = Math.floor(sec / 60), r = sec % 60; return (m < 10 ? '0' : '') + m + ':' + (r < 10 ? '0' : '') + r; }
+  var SVG_MT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.8 3h6.4l3 16.4a1 1 0 0 1-.98 1.2H6.78a1 1 0 0 1-.98-1.2z"/><g class="mt-arm"><path d="M12 17V8.6"/></g></svg>';
+  function mtTag(e) { return e.type === 'reps' && e.metro ? '<span class="mtg">' + SVG_MT + fmtTempo(e.tempo) + '</span>' : ''; }
   function exMeasure(e) {
     var v = e.type === 'time' ? fmtClock(e.value) : '' + e.value;
     if (e.sets > 1) return e.sets + ' × ' + v;          // 3 × 00:30  /  3 × 20
@@ -2003,6 +2120,28 @@
   /* ================= Ekranlar ================= */
   var stage = $('#stage'), curId = null;
 
+  // Anahtarlı liste yaması: değişmeyen satırlara dokunulmaz (yeniden çizim/animasyon yok); yeni satırlar animasyonla belirir.
+  // all=true: tüm satırlar sırayla animasyonla girer (sayfa ilk açılırken)
+  function patchList(el, items, rowFn, all) {
+    var old = {}, i, nn = 0;
+    [].slice.call(el.children).forEach(function (c) { if (c.dataset && c.dataset.id && !all) old[c.dataset.id] = c; else c.remove(); });
+    var nodes = items.map(function (it, k) {
+      var h = rowFn(it, k), o = old[it.id];
+      if (o && o._h === h) { delete old[it.id]; return o; }
+      var t = document.createElement('div'); t.innerHTML = h; var n = t.firstElementChild; n._h = h;
+      if (all) { n.classList.add('in'); n.style.setProperty('--i', Math.min(k, 12)); }
+      else if (!o) { n.classList.add('in'); n.style.setProperty('--i', nn++); }
+      return n;
+    });
+    Object.keys(old).forEach(function (k) { old[k].remove(); });
+    nodes.forEach(function (n, k) {
+      var cur = el.children[k];
+      if (cur !== n) { if (n.parentNode === el) el.removeChild(n); el.insertBefore(n, el.children[k] || null); }
+    });
+  }
+  document.addEventListener('animationend', function (e) {
+    if (e.animationName === 'rise' && e.target.classList && e.target.classList.contains('in') && e.target.classList.contains('it')) e.target.classList.remove('in');
+  });
   function renderHome(animate) {
     var el = $('#homeList');
     var nEx = state.groups.reduce(function (a, g) { return a + g.exercises.length; }, 0);
@@ -2010,13 +2149,20 @@
       el.innerHTML = '<div class="empty"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg></span><h2>Henüz grup yok</h2>Antrenmanını gruplara ayır.<br>Örn. “Üst vücut” veya “Sabah esneme”.</div>';
       return;
     }
-    el.innerHTML = state.groups.map(function (g, i) {
+    patchList(el, state.groups, function (g, i) {
       var sub = g.exercises.length ? g.exercises.length + ' hareket · ' + fmtEst(estSec(g)) : 'Henüz hareket yok';
       var ch = (g.name.trim().charAt(0) || '·').toLocaleUpperCase('tr');
-      return '<button class="it g' + (animate ? ' in' : '') + picked('home', g.id) + '" data-id="' + g.id + '" style="--i:' + i + '"><div class="gcv" aria-hidden="true">' + esc(ch) + '</div><div class="bd"><div class="nm">' + esc(g.name) + '</div><div class="sb">' + sub + '</div></div>' + CHEVC + MK + '</button>';
-    }).join('');
+      return '<button class="it g' + picked('home', g.id) + '" data-id="' + g.id + '" style="--i:' + i + '"><div class="gcv" aria-hidden="true">' + esc(ch) + '</div><div class="bd"><div class="nm">' + esc(g.name) + '</div><div class="sb">' + sub + '</div></div>' + CHEVC + MK + '</button>';
+    }, animate);
   }
 
+  function gStatsHTML(g) {
+    var n = g.exercises.length;
+    return n ? '<div class="st"><b>' + n + '</b><span>Hareket</span></div><div class="st"><b>' + fmtEst(estSec(g)) + '</b><span>Süre</span></div><div class="st">' + gaugeHTML(groupDiff(g)) + '<span>Zorluk</span></div>' : '';
+  }
+  function exRowHTML(e, i) {
+      return '<button class="it x' + picked('group', e.id) + '" data-id="' + e.id + '" style="--i:' + i + '"><div class="gcv xcv" aria-hidden="true">' + esc((e.name.trim().charAt(0) || '·').toLocaleUpperCase('tr')) + '</div><div class="bd"><div class="nm">' + esc(e.name) + '</div><div class="sb">' + exMeasure(e) + mtTag(e) + '</div></div>' + MK + '</button>';
+  }
   function renderGroup(animate) {
     var g = findGroup(curId); if (!g) return;
     if (exId) renderEx();
@@ -2028,9 +2174,10 @@
     })();
     $('#gTitle').textContent = g.name; $('#gHeadT').textContent = g.name; $('#gHead').style.setProperty('--p', 0); $('#group').style.setProperty('--hp', 0);
     $('#hero').innerHTML = '<div class="hl" aria-hidden="true">' + esc((g.name.trim().charAt(0) || '·').toLocaleUpperCase('tr')) + '</div>';
-    $('#gStats').innerHTML = n ? '<div class="st"><b>' + n + '</b><span>Hareket</span></div><div class="st"><b>' + fmtEst(estSec(g)) + '</b><span>Süre</span></div><div class="st">' + gaugeHTML(groupDiff(g)) + '<span>Zorluk</span></div>' : '';
+    $('#gStats').innerHTML = gStatsHTML(g);
     $('#gSech').style.display = n ? '' : 'none';
     $('#gCount').textContent = n ? '(' + n + ')' : '';
+    mtGroupRefresh(false);
     $('#barRow').classList.toggle('no-ex', !n);
     $('#addEx span').textContent = n ? 'Ekle' : 'Hareket ekle';
     var el = $('#groupList');
@@ -2038,20 +2185,18 @@
       el.innerHTML = '<div class="empty"><h2>Bu grup boş</h2>İlk hareketini ekleyerek başla.</div>';
       return;
     }
-    el.innerHTML = g.exercises.map(function (e, i) {
-      return '<button class="it x' + (animate ? ' in' : '') + picked('group', e.id) + '" data-id="' + e.id + '" style="--i:' + i + '"><div class="gcv xcv" aria-hidden="true">' + esc((e.name.trim().charAt(0) || '·').toLocaleUpperCase('tr')) + '</div><div class="bd"><div class="nm">' + esc(e.name) + '</div><div class="sb">' + exMeasure(e) + '</div></div>' + MK + '</button>';
-    }).join('');
+    patchList(el, g.exercises, exRowHTML, animate);
     var gs = $('#groupScroll'); if (gs && gs._hdUpd) gs._hdUpd();
   }
 
   /* ================= Sayfa geçişleri (Web Animations) ================= */
   var EASE = 'cubic-bezier(.22,.9,.24,1)';
-  var homeView = $('#home'), groupView = $('#group'), groupOpen = false, dimEl = null, homeAnim = null, groupAnim = null;
+  var homePend = 0, homeView = $('#home'), groupView = $('#group'), groupOpen = false, dimEl = null, homeAnim = null, groupAnim = null;
 
   function openGroup(id, instant) {
     if (groupOpen) return;
     if (groupAnim) { groupAnim.cancel(); groupAnim = null; }   // kapanış bitmeden tekrar açılırsa sayfa gizlenmesin
-    curId = id; renderGroup(true);
+    curId = id; if (mtCtx === 'gr') mtClose(); groupView.style.setProperty('--d', instant ? '360ms' : '0ms'); renderGroup(true); setTimeout(function () { groupView.style.setProperty('--d', '0ms'); }, 1400);
     $('#groupScroll').scrollTop = 0;
     groupView.style.display = 'flex';
     dimEl = document.createElement('div'); dimEl.className = 'dim';
@@ -2070,6 +2215,7 @@
   function closeGroup(from, pf, dimFrom) {
     if (!groupOpen) return;
     groupOpen = false;
+    if (homePend) { homePend = 0; $('#homeList').style.setProperty('--d', '160ms'); renderHome(false); setTimeout(function () { $('#homeList').style.removeProperty('--d'); }, 1200); }
     var a = groupAnim = groupView.animate([{ transform: from || 'none' }, { transform: 'translateX(100%)' }], { duration: 400, easing: EASE, fill: 'forwards' });
     homeView.animate([{ transform: pf || 'translateX(-22%)' }, { transform: 'none' }], { duration: 400, easing: EASE });
     if (homeAnim) { homeAnim.cancel(); homeAnim = null; }
@@ -2122,6 +2268,12 @@
   function needName(inp) {
     var box = inp.closest('.fcard, .gf-sec') || inp;
     box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake'); inp.focus();
+    // Yazıyla da uyar (yalnız boşluk girildiyse placeholder görünmez, imleç tek başına yetmez)
+    var host = inp.closest('.gf-sec, .xn') || inp.parentNode, m = host.querySelector('.nm-warn');
+    if (!m) { m = document.createElement('div'); m.className = 'nm-warn'; m.setAttribute('role', 'alert'); (inp.closest('.xn-field') || inp).insertAdjacentElement('afterend', m); }
+    m.textContent = inp.value.length ? 'İsim yalnızca boşluktan oluşamaz' : 'Bir isim yazmalısın';
+    inp.classList.add('bad');
+    if (!inp._nmw) { inp._nmw = 1; inp.addEventListener('input', function () { if (inp.value.trim()) { inp.classList.remove('bad'); var w = host.querySelector('.nm-warn'); if (w) w.remove(); } }); }
   }
 
   /* ----- Tam ekran form sayfası ----- */
@@ -2284,7 +2436,7 @@
   /* Yedek bildirimi (kapsül): bildirimden doğrudan yedeklenir. Açılışta zamanı geldiyse bir kez çıkar; hatırlatma 3 gün sonra tekrarlanır. */
   window.bkNotify = { sub: bkSub, run: bkExport };
   function bkRemind() {
-    if (!bkRemOn() || !bkDue() || navigator.onLine === false || wizOpen || !window.netBanner) return;
+    if (!bkRemOn() || !bkDue() || navigator.onLine === false || wizOpen || window.__workoutOn || !window.netBanner) return;
     lsSet('antrenman.bkSnooze', String(Date.now()));
     window.netBanner.show('bk');
   }
@@ -2376,7 +2528,7 @@
       if (g) { g.name = v; g.desc = desc; g.days = dd; save(); renderHome(false); renderGroup(false); closeForm(); }
       else {
         var n = { id: uid(), name: v, desc: desc, days: dd, exercises: [] };
-        state.groups.push(n); save(); renderHome(false);
+        state.groups.push(n); save(); homePend = 1;
         openGroup(n.id, true);   // grup sayfası formun arkasında hazır; form kayıp gidince tam görünür
         vib(12);
         closeForm(null, 760);
@@ -2466,15 +2618,14 @@
     return '<div class="stepper" data-k="' + k + '"><button type="button" data-d="-1" aria-label="Azalt">−</button><div class="val"></div><button type="button" data-d="1" aria-label="Arttır">+</button></div>';
   }
 
-  var TEMPO_HINT = { 'şınav': 3, 'squat': 1.5, 'mekik': 2, 'barfiks': 3, 'lunge': 2.5, 'köprü': 3 };   // öneri çipine dokunulunca tipik tekrar süresi
   var SUGG = ['Şınav', 'Plank', 'Squat', 'Mekik', 'Barfiks', 'Lunge', 'Köprü', 'Atlama ipi', 'Esneme'];
 
   function exForm(exId, lib) {
     var W = lib === 'wiz', g = lib ? null : findGroup(curId); if (!lib && !g) return;
     var arr = W ? wiz.exercises : lib ? state.library : g.exercises;
     var ex = exId ? arr.filter(function (e) { return e.id === exId; })[0] : null;
-    var d = ex ? { name: ex.name, desc: ex.desc || '', type: ex.type, time: ex.type === 'time' ? ex.value : 30, reps: ex.type === 'reps' ? ex.value : 12, sets: ex.sets, rest: ex.rest || 0, metro: !!ex.metro, tempo: ex.tempo || 2 }
-               : { name: '', desc: '', type: 'time', time: 30, reps: 12, sets: 3, rest: 30, metro: false, tempo: 2 };
+    var d = ex ? { name: ex.name, desc: ex.desc || '', type: ex.type, time: ex.type === 'time' ? ex.value : 30, reps: ex.type === 'reps' ? ex.value : 12, sets: ex.sets, rest: ex.rest || 0, metro: !!ex.metro, tempo: ex.tempo || 3 }
+               : { name: '', desc: '', type: 'time', time: 30, reps: 12, sets: 3, rest: 30, metro: false, tempo: 3 };
 
     // Her .fsec bir bölüm; yeni özellik için yeni bölüm veya satır eklemek yeterli
     var html =
@@ -2494,11 +2645,11 @@
       '</div></div>' +
       '<div class="fsec stg" style="--k:1"><div class="fcap xd-cap"><span>Nasıl yapılır</span><em>İsteğe bağlı</em></div><div class="fcard xd"><div class="dsbox">' +
         '<div class="col' + (d.desc ? ' off' : '') + '" id="dsAdd"><div>' +
-          '<button type="button" class="ds-add" id="dsAddBtn"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span><span><b>Tarif ekle</b><small>Duruş, nefes ve dikkat noktaları</small></span></button>' +
+          '<button type="button" class="ds-add" id="dsAddBtn"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span><span><b id="dsAddT">Tarif ekle</b><small id="dsAddS">Duruş, nefes ve dikkat noktaları</small></span></button>' +
         '</div></div>' +
         '<div class="col' + (d.desc ? '' : ' off') + '" id="dsOpen"><div>' +
           '<textarea class="ds-in" id="fDesc" aria-label="Nasıl yapılır" maxlength="2000" rows="3" placeholder="Örn. Ayaklar omuz genişliğinde, sırt dik. İnerken nefes al, kalkarken ver.">' + esc(d.desc) + '</textarea>' +
-          '<div class="ds-foot"><div class="gcs" id="gcs"><button type="button" class="gc" tabindex="-1" data-t="Duruş">+ Duruş</button><button type="button" class="gc" tabindex="-1" data-t="Nefes">+ Nefes</button><button type="button" class="gc" tabindex="-1" data-t="Dikkat">+ Dikkat</button></div><span class="ds-ct" id="dsCt"></span></div>' +
+          '<div class="ds-foot"><div class="gcs" id="gcs"><button type="button" class="gc" tabindex="-1" data-t="Duruş">+ Duruş</button><button type="button" class="gc" tabindex="-1" data-t="Nefes">+ Nefes</button><button type="button" class="gc" tabindex="-1" data-t="Dikkat">+ Dikkat</button></div><span class="ds-end"><span class="ds-ct" id="dsCt"></span><button type="button" class="ds-x" id="dsClose" aria-label="Tarifi kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg></button></span></div>' +
         '</div></div>' +
       '</div></div></div>' +
       '<div class="fsec stg" style="--k:2"><div class="fcap">Ölçü</div><div class="fcard">' +
@@ -2511,7 +2662,7 @@
         '<div class="frow"><span class="fl">Dinlenme<small>Setler arası</small></span>' + stepperHTML('rest') + '</div>' +
       '</div></div>' +
       '<div class="fsec stg' + (d.type === 'reps' ? '' : ' hide') + '" id="fMetro" style="--k:4"><div class="fcap">Tempo</div><div class="fcard">' +
-        '<div class="frow"><span class="fl">Tekrar süresi<small>Ortalama, her tekrar için</small></span>' + stepperHTML('tempo') + '</div>' +
+        '<div class="frow tpr' + (d.metro ? '' : ' off') + '" id="tpRow"><span class="fl">Tekrar süresi<small id="tpSub">' + (d.metro ? 'Vuruş aralığı' : 'Metronom açıkken') + '</small></span>' + stepperHTML('tempo') + '</div>' +
         '<div class="frow bt"><span class="fl">Metronom<small>Tekrarları otomatik sayar</small></span><button type="button" class="sw' + (d.metro ? ' on' : '') + '" id="swMetro" role="switch" aria-checked="' + (d.metro ? 'true' : 'false') + '" aria-label="Metronom"></button></div>' +
       '</div></div>';
 
@@ -2526,6 +2677,11 @@
       var v = $('.stepper[data-k="' + k + '"] .val'); if (!v) return;
       v.innerHTML = fmtVal(k);
       if (animate) { v.classList.remove('pop'); void v.offsetWidth; v.classList.add('pop'); }
+    }
+    function paintMetro() {
+      var tr = $('#tpRow'); if (!tr) return;
+      tr.classList.toggle('off', !d.metro);
+      $('#tpSub').textContent = d.metro ? 'Vuruş aralığı' : 'Metronom açıkken';
     }
     function paintType() {
       var r = d.type === 'reps';
@@ -2589,17 +2745,36 @@
       dsCt.textContent = n + '/2000'; dsCt.classList.toggle('near', n >= 1800);
       Array.prototype.forEach.call(gcs.children, function (b) { b.classList.toggle('used', ds.value.indexOf(b.dataset.t + ':') > -1); });
     }
+    var dsT = 0;
     function showDesc(focus) {
+      clearTimeout(dsT);
       dsAdd.classList.add('off'); dsAdd.inert = true;
       dsOpen.classList.remove('off'); dsOpen.inert = false;
-      dsSync();
+      requestAnimationFrame(dsSync);
       if (focus) {
-        ds.focus({ preventScroll: true });
-        setTimeout(function () { ds.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }, 320);
+        // Klavye ve açılış animasyonu aynı anda başlamasın: alan açıldıktan sonra odaklan (kasma olmaz)
+        dsT = setTimeout(function () {
+          if (dsOpen.classList.contains('off')) return;
+          ds.focus({ preventScroll: true });
+          var sc = $('#gfBody'), r = ds.getBoundingClientRect(), b = sc.getBoundingClientRect();
+          if (r.bottom > b.bottom - 16) sc.scrollBy({ top: r.bottom - b.bottom + 24, behavior: 'smooth' });
+        }, 300);
       }
+    }
+    function hideDesc() {
+      clearTimeout(dsT);
+      if (document.activeElement === ds) ds.blur();
+      dsOpen.classList.add('off'); dsOpen.inert = true;
+      dsAdd.classList.remove('off'); dsAdd.inert = false;
+      var has = !!ds.value.trim();
+      $('#dsAddT').textContent = has ? 'Tarifi göster' : 'Tarif ekle';
+      $('#dsAddS').textContent = has ? 'Yazdığın tarif saklı, kaybolmaz' : 'Duruş, nefes ve dikkat noktaları';
+      vib(6);
     }
     dsAdd.inert = !!d.desc; dsOpen.inert = !d.desc;
     $('#dsAddBtn').addEventListener('click', function () { showDesc(true); });
+    $('#dsClose').addEventListener('click', hideDesc);
+    ['pointerdown', 'mousedown'].forEach(function (t) { $('#dsClose').addEventListener(t, function (e) { e.preventDefault(); }); });
     ds.addEventListener('input', dsSync);
     // etiketlere dokunmak klavyeyi kapatmasın
     ['pointerdown', 'mousedown'].forEach(function (t) { gcs.addEventListener(t, function (e) { if (e.target.closest('.gc')) e.preventDefault(); }); });
@@ -2622,7 +2797,7 @@
     fOn(body, 'click', function (e) {
       var b = e.target.closest('#swMetro'); if (!b) return;
       d.metro = !d.metro; b.classList.toggle('on', d.metro); b.setAttribute('aria-checked', d.metro ? 'true' : 'false');
-      vib(6);
+      paintMetro(); vib(6);
     });
     // Basılı tutunca hızlı değiştirme
     var tm, iv;
@@ -2634,6 +2809,7 @@
     fOn(body, 'pointerdown', function (e) {
       var b = e.target.closest('.stepper button'); if (!b) return;
       var k = b.parentNode.dataset.k, dir = +b.dataset.d;
+      if (k === 'tempo' && !d.metro) return;   // metronom kapalıyken tekrar süresi değişmez
       bump(k, dir); stop();
       tm = setTimeout(function () { iv = setInterval(function () { bump(k, dir); }, 80); }, 400);
     });
@@ -3132,7 +3308,7 @@
         }
         var w = { k: 'work', dur: e.type === 'time' ? e.value * 1000 : 0, ex: i, set: s, e: e };
         if (e.type === 'reps' && e.metro) {   // metronomlu tekrar: zamanlı adım gibi işler, sayaç vuruşla ilerler
-          var bt = Math.round((e.tempo || 2) * 1000), ld = 2200;
+          var bt = Math.round((e.tempo || 3) * 1000), ld = 2200;
           w.m = { beat: bt, lead: ld, n: e.value }; w.dur = ld + bt * e.value;
         }
         st.push(w);
@@ -3199,6 +3375,7 @@
       $('#plUnit').textContent = unitText(s, WK.secs);
     }
     paintPills(s); paintFoot(s); $('#plRing')._o = null; paintRing(s);
+    mtPlSync();
   }
   function paintMb() {
     var s = cur(), reps = s.k === 'work' && !s.dur, mb = $('#plMb');
@@ -3288,7 +3465,7 @@
     if (s.k === 'work' && !s.dur) complete(); else setRun(!WK.run);
   }
   function finish() {
-    WK.done = true; WK.run = false; WK.quitOpen = false;
+    plMpOpen(false); WK.done = true; WK.run = false; WK.quitOpen = false;
     swapBusy = false;
     try { state.log.push({ d: skKey(new Date()), g: WK.g.id, t: Date.now() }); save(); skLabel(); } catch (e) {}
     sfx('done'); vib([60, 50, 60, 50, 120]); unlock();
@@ -3363,6 +3540,7 @@
     var steps = buildSteps(g);
     WK = { g: g, steps: steps, n: g.exercises.length, i: 0, el: 0, run: true, total: 0, done: false, ok: {}, pp: [], secs: -1, quitOpen: false };
     swapBusy = false; swapTok++;
+    window.__workoutOn = true; try { window.netBanner && window.netBanner.hide(); } catch (e) {}   // antrenman sürerken bildirim çıkmaz
     P.style.display = 'flex';
     P.classList.remove('is-done', 'paused', 'is-rest', 'is-prep', 'is-cd');
     var d = $('#plDone'); d.style.display = 'none'; d.classList.remove('go');
@@ -3378,7 +3556,7 @@
   }
   function closePlayer() {
     if (!WK) return;
-    cancelAnimationFrame(raf); unlock(); WK = null; swapTok++; swapBusy = false; cancelSpeech(); fadeTo(0, .12);
+    plMpOpen(false); window.__workoutOn = false; cancelAnimationFrame(raf); unlock(); WK = null; swapTok++; swapBusy = false; cancelSpeech(); fadeTo(0, .12);
     $('#plMore').classList.remove('open'); $('#plInfo').classList.remove('open');
     groupView.inert = false;
     var a = reveal(false);
@@ -3396,6 +3574,218 @@
     if (WK.wasRun) setRun(true, true);
   }
 
+
+  /* ----- Metronom paneli: grup sayfasında ve antrenman sırasında aynı bileşen -----
+     api.targets(): etkilenen hareketler; api.mutate(fn, tür): değişikliği uygular ve kaydeder; api.settle(): sürükleme bitince */
+  var MT = { min: 1, max: 10, step: .5 }, MT_N = Math.round((MT.max - MT.min) / MT.step) + 1, MT_PAD = 14;
+  function swSec(v) { return Math.max(1.6, Math.min(5, v * 2)) + 's'; }   // ikondaki ağırlığın salınım hızı
+  function mtShort(v) { return String(+v).replace('.', ',') + 's'; }
+  var MT_CHIPS = [1.5, 2, 3, 5, 8], MT_S = 22, MT_PADT = 9;
+  function MetroPanel(root, api) {
+    var self = this, drag = false, glide = false, pos = 0, first = true, vel = 0, i;
+    var tk = '';
+    for (i = -MT_PADT; i < MT_N + MT_PADT; i++) {
+      var inr = i >= 0 && i < MT_N, whole = inr && i % 2 === 0;
+      tk += '<i data-k="' + i + '" class="' + (inr ? (whole ? 'w' : '') : 'x') + '" style="--k:' + i + '"><u></u>' + (whole ? '<s>' + (MT.min + i * MT.step) + '</s>' : '') + '</i>';
+    }
+    var ch = MT_CHIPS.map(function (v) { return '<button type="button" data-v="' + v + '">' + String(v).replace('.', ',') + '</button>'; }).join('');
+    root.classList.add('mp');
+    root.innerHTML =
+      '<div class="mp-head"><span class="mp-ic">' + SVG_MT + '</span><div class="mp-t"><b>Metronom</b><small>Tekrarları otomatik sayar</small></div><button type="button" class="sw" role="switch" aria-checked="false" aria-label="Metronom"></button></div>' +
+      '<div class="mp-bd"><div class="mp-val"><span class="mp-num"></span><span class="mp-u">sn / tekrar</span></div><i class="mp-pt"></i>' +
+      '<div class="mp-sl" role="slider" tabindex="0" aria-label="Tekrar süresi" aria-valuemin="' + MT.min + '" aria-valuemax="' + MT.max + '"><div class="mp-rl">' + tk + '</div></div>' +
+      '<div class="mp-chips">' + ch + '</div></div>';
+    var sw = root.querySelector('.sw'), sl = root.querySelector('.mp-sl'), rl = root.querySelector('.mp-rl'), num = root.querySelector('.mp-num');
+    var tks = [].slice.call(rl.querySelectorAll('i')).map(function (el) { return { el: el, k: +el.getAttribute('data-k'), u: el.firstChild }; });
+    var chips = [].slice.call(root.querySelectorAll('.mp-chips button'));
+    function clampI(x) { return Math.max(0, Math.min(MT_N - 1, x)); }
+    function read() {
+      var tg = api.targets(), on = tg.filter(function (e) { return e.metro; }), src = on[0] || tg[0];
+      var v = src && +src.tempo > 0 ? +src.tempo : TEMPO_DEF;
+      v = Math.max(MT.min, Math.min(MT.max, Math.round(v / MT.step) * MT.step));
+      return { tg: tg, on: on.length > 0, v: v };
+    }
+    /* sayı: hedefe yumuşakça akar */
+    var shown = null, tgt = 0, raf = 0;
+    function fmtN(v) { return String(Math.round(v * 10) / 10).replace('.', ','); }
+    function stepN() {
+      shown += (tgt - shown) * .3;
+      if (Math.abs(tgt - shown) < .03) { shown = tgt; raf = 0; } else raf = requestAnimationFrame(stepN);
+      num.textContent = fmtN(shown);
+    }
+    function setNum(v, instant) {
+      tgt = v;
+      if (shown === null || instant || RM) { shown = v; if (raf) { cancelAnimationFrame(raf); raf = 0; } num.textContent = fmtN(v); return; }
+      if (!raf) raf = requestAnimationFrame(stepN);
+    }
+    /* cetvel: sabit orta çizginin altından kayar */
+    function paint(p) {
+      rl.style.transform = 'translate3d(' + (-p * MT_S).toFixed(2) + 'px,0,0)';
+      var ci = Math.round(clampI(p));
+      for (var j = 0; j < tks.length; j++) {
+        var t = tks[j], d = Math.abs(t.k - p);
+        t.el.classList.toggle('cur', t.k === ci);
+        t.u.style.transform = d < 2.6 ? 'scaleY(' + (1 + Math.pow(1 - d / 2.6, 2) * .45).toFixed(3) + ')' : '';
+      }
+    }
+    this.sync = function (pop, instant) {
+      var r = read(), idx = Math.round((r.v - MT.min) / MT.step);
+      root.classList.toggle('on', r.on); sw.classList.toggle('on', r.on); sw.setAttribute('aria-checked', r.on ? 'true' : 'false');
+      root.style.setProperty('--bt', r.v + 's'); root.style.setProperty('--sw', swSec(r.v));
+      setNum(r.v, (!pop && !drag && !glide) || instant);
+      sl.setAttribute('aria-valuenow', r.v); sl.setAttribute('aria-valuetext', String(r.v).replace('.', ',') + ' saniye'); sl.setAttribute('aria-disabled', r.on ? 'false' : 'true');
+      chips.forEach(function (c) { c.classList.toggle('on', r.on && +c.getAttribute('data-v') === r.v); });
+      if (!drag && !glide) { pos = idx; rl.classList.toggle('snap', !first && !instant && !RM); }
+      paint(pos); first = false;
+    };
+    function setTempo(v) {
+      if (v === read().v) return;
+      api.mutate(function (tg) { tg.forEach(function (e) { e.tempo = v; }); }, 'tempo');
+      self.sync(true); vib(4);
+    }
+    function valAt(p) { return MT.min + Math.round(clampI(p)) * MT.step; }
+    function setOn(b) {
+      api.mutate(function (tg) { tg.forEach(function (e) { e.metro = b; if (b && !(+e.tempo > 0)) e.tempo = TEMPO_DEF; }); }, 'metro');
+      self.sync(); vib(8);
+    }
+    sw.addEventListener('click', function () { setOn(!read().on); });
+    chips.forEach(function (c) { c.addEventListener('click', function () { if (read().on) { setTempo(+c.getAttribute('data-v')); if (api.settle) api.settle(); } }); });
+
+    var sx = 0, sp = 0, moved = false, raf2 = 0, smp = [];
+    function stopGlide() { if (raf2) { cancelAnimationFrame(raf2); raf2 = 0; } glide = false; }
+    function rubber(p) { return p < 0 ? p * .35 : p > MT_N - 1 ? (MT_N - 1) + (p - (MT_N - 1)) * .35 : p; }
+    sl.addEventListener('pointerdown', function (e) {
+      if (!read().on) return;
+      stopGlide(); drag = true; moved = false; sx = e.clientX; sp = pos; smp = [{ t: performance.now(), p: pos }];
+      rl.classList.remove('snap'); sl.classList.add('drag'); try { sl.setPointerCapture(e.pointerId); } catch (x) {}
+      e.preventDefault();
+    });
+    sl.addEventListener('pointermove', function (e) {
+      if (!drag) return;
+      if (!moved && Math.abs(e.clientX - sx) < 3) return;
+      moved = true;
+      var now = performance.now();
+      pos = rubber(sp - (e.clientX - sx) / MT_S);
+      smp.push({ t: now, p: pos }); while (smp.length > 2 && now - smp[0].t > 100) smp.shift();
+      paint(pos); setTempo(valAt(pos));
+      e.preventDefault();
+    });
+    function settleTo(p) {
+      stopGlide(); drag = false; pos = clampI(Math.round(p)); sl.classList.remove('drag');
+      rl.classList.toggle('snap', !RM); setTempo(MT.min + pos * MT.step); self.sync(); if (api.settle) api.settle();
+    }
+    function release() {   // bırakış hızına göre doğal yavaşlayıp bir çentiğe tam oturur
+      var n = smp.length, now = performance.now(), v = 0;
+      if (n > 1 && now - smp[n - 1].t < 70) { var dt = smp[n - 1].t - smp[0].t; if (dt > 8) v = (smp[n - 1].p - smp[0].p) / dt; }
+      if (pos <= 0 || pos >= MT_N - 1 || RM || Math.abs(v) < .004) { settleTo(pos); return; }
+      var tgtI = clampI(Math.round(pos + v * 320)), dist = tgtI - pos;
+      if (Math.abs(dist) < .02) { settleTo(pos); return; }
+      var D = Math.max(300, Math.min(1100, 3 * Math.abs(dist) / Math.max(Math.abs(v), .002))), p0 = pos, t0 = performance.now();
+      glide = true; drag = false; sl.classList.remove('drag');
+      (function loop(t) {
+        var k = Math.min(1, (t - t0) / D), e = 1 - Math.pow(1 - k, 3);
+        pos = p0 + dist * e; paint(pos); setTempo(valAt(pos));
+        if (k < 1) raf2 = requestAnimationFrame(loop); else { raf2 = 0; settleTo(tgtI); }
+      })(t0);
+    }
+    function end(e) {
+      if (!drag) return;
+      if (!moved && e.type === 'pointercancel') { settleTo(pos); return; }
+      if (!moved) { var r = sl.getBoundingClientRect(); settleTo(pos + (e.clientX - (r.left + r.width / 2)) / MT_S); return; }   // dokunuş: o çentiğe süzül
+      release();
+    }
+    sl.addEventListener('pointerup', end); sl.addEventListener('pointercancel', end);
+    sl.addEventListener('keydown', function (e) {
+      var r = read(); if (!r.on) return;
+      var v = r.v, k = e.key;
+      if (k === 'ArrowLeft' || k === 'ArrowDown') v -= MT.step; else if (k === 'ArrowRight' || k === 'ArrowUp') v += MT.step;
+      else if (k === 'Home') v = MT.min; else if (k === 'End') v = MT.max; else return;
+      e.preventDefault(); setTempo(Math.max(MT.min, Math.min(MT.max, v))); if (api.settle) api.settle();
+    });
+    this.sync();
+  }
+
+  /* Grup sayfası: gruptaki tüm tekrarlı hareketler birlikte; ayar yalnızca bu gruba aittir (hareket kütüphanesine dokunmaz) */
+  function grTargets() { var g = findGroup(curId); return g ? g.exercises.filter(function (e) { return e.type === 'reps'; }) : []; }
+  function mtGroupRefresh(full) {
+    var g = findGroup(curId), b = $('#gMetro'); if (!g || !b) return;
+    var tg = grTargets(), on = tg.filter(function (e) { return e.metro; });
+    b.style.display = tg.length ? '' : 'none';
+    if (!tg.length && mtCtx === 'gr') mtClose();
+    b.classList.toggle('on', on.length > 0);
+    var same = on.every(function (e) { return e.tempo === on[0].tempo; });
+    b.style.setProperty('--sw', swSec(on.length ? on[0].tempo : 3));
+    b.innerHTML = SVG_MT + '<span>Metronom</span><em>' + (on.length ? (same ? fmtTempo(on[0].tempo) : 'Karışık') : '') + '</em>';
+    var t = $('#gStats .st:nth-child(2) b'); if (t) t.textContent = fmtEst(estSec(g));
+    if (full) { $('#gStats').innerHTML = gStatsHTML(g); patchList($('#groupList'), g.exercises, exRowHTML, false); }
+    if (mtCtx === 'gr' && mpSh) mpSh.sync();
+  }
+  $('#gMetro').onclick = function () { mtOpen('gr'); vib(6); };
+
+  /* Antrenman: yalnızca o anki (ya da molada sıradaki) tekrarlı hareket; adımlar canlı yeniden kurulur */
+  function plTargets() {
+    if (!WK || WK.done) return [];
+    var s = cur(), e = s.k === 'rest' ? s.ne : s.e;
+    return e && e.type === 'reps' ? [e] : [];
+  }
+  function plMetroApply(b) {
+    WK.steps = buildSteps(WK.g);   // adım sayısı değişmez, yalnızca çalışma adımlarının süresi/vuruşu
+    var s = cur();
+    if (s.k !== 'work' || s.e !== b.s.e) return;
+    if (b.m && s.m) {   // tempo değişti: sayaç kaldığı yerden, aynı tekrar oranıyla devam eder
+      var t = b.el - b.m.lead;
+      if (t > 0) WK.el = s.m.lead + t / b.m.beat * s.m.beat;
+      WK.cnt = metroCount(s); paintSegs();
+    } else if (!!b.m !== !!s.m) {   // metronom açıldı/kapandı: adım baştan, yeni düzenle
+      WK.el = 0; WK.cnt = 0; WK.marks = buildMarks(s); WK.coachQ = coachPlan(s);
+      swapContent(s); paintMb(); paintSegs();
+    }
+  }
+  function mtPlSync() {
+    var b = $('#plMetro'); if (!b) return;
+    var tg = plTargets(), on = tg.length && tg[0].metro;
+    b.classList.toggle('gone', !tg.length); b.disabled = !tg.length; b.classList.toggle('on', !!on);
+    if (tg.length) b.style.setProperty('--sw', swSec(tg[0].tempo));
+    b.innerHTML = SVG_MT + '<b>' + (on ? mtShort(tg[0].tempo) : '') + '</b>';
+    if (!tg.length) plMpOpen(false); else if (mtCtx === 'pl' && mpSh) mpSh.sync();
+  }
+  /* Metronom alt paneli: tek bileşen, iki bağlam (grup sayfası 'gr', antrenman 'pl') */
+  var mtCtx = null, mtBody = document.createElement('div');
+  mtBody.className = 'mts-body';
+  var mpSh = new MetroPanel(mtBody, {
+    targets: function () { return mtCtx === 'pl' ? plTargets() : mtCtx === 'gr' ? grTargets() : []; },
+    mutate: function (fn, kind) {
+      if (mtCtx === 'pl') {
+        if (!WK) return;
+        var s = cur(), b = { s: s, m: s.m ? { lead: s.m.lead, beat: s.m.beat } : null, el: WK.el };
+        fn(plTargets()); save(); homePend = 1; plMetroApply(b); mtPlSync();
+      } else if (mtCtx === 'gr') { fn(grTargets()); save(); homePend = 1; mtGroupRefresh(kind === 'metro'); }
+    },
+    settle: function () { if (groupOpen) mtGroupRefresh(true); }
+  });
+  function mtShEl(c) { return $(c === 'pl' ? '#plMtSh' : '#mtSh'); }
+  function mtBtn(c) { return $(c === 'pl' ? '#plMetro' : '#gMetro'); }
+  function mtIsOpen() { return !!mtCtx && mtShEl(mtCtx).classList.contains('open'); }
+  function mtClose() {
+    if (!mtIsOpen()) return;
+    mtShEl(mtCtx).classList.remove('open'); mtBtn(mtCtx).setAttribute('aria-expanded', 'false');
+  }
+  function mtOpen(c) {
+    if (!(c === 'pl' ? plTargets() : grTargets()).length) return;
+    if (mtIsOpen() && mtCtx !== c) mtClose();
+    mtCtx = c; var sh = mtShEl(c);
+    sh.querySelector('.mts-slot').appendChild(mtBody);
+    mpSh.sync(false, true);
+    sh.classList.add('open'); mtBtn(c).setAttribute('aria-expanded', 'true');
+  }
+  function plMpOpen(o) { if (o === false) { if (mtCtx === 'pl') mtClose(); } else mtOpen('pl'); }
+  ['#mtSh', '#plMtSh'].forEach(function (q) {
+    var sh = $(q);
+    sh.addEventListener('click', function (e) { if (e.target === sh) mtClose(); });
+    sh.querySelector('.mt-done').onclick = mtClose;
+    sh.addEventListener('touchmove', function (e) { e.preventDefault(); }, { passive: false });   // panel açıkken arkadaki ekran kaymaz
+  });
+  $('#plMetro').onclick = function () { mtOpen('pl'); vib(6); };
 
   /* ----- Seçenekler: seti tekrarla, hareketi atla ----- */
   function repeatTarget() {
@@ -4171,7 +4561,7 @@
   }
   function libFill(id, rows, animate, tag, emptyIco, emptyT, emptyP) {
     var el = $('#' + id);
-    if (rows.length) { el.innerHTML = rows.map(function (e, i) { return libRow(e, i, animate, tag); }).join(''); return; }
+    if (rows.length) { patchList(el, rows, function (e, i) { return libRow(e, i, false, tag); }, animate); return; }
     el.innerHTML = libQ
       ? '<div class="empty"><h2>Sonuç yok</h2>“' + esc(libQ) + '” ile eşleşen hareket bulunamadı.</div>'
       : '<div class="empty"><span class="ico">' + emptyIco + '</span><h2>' + emptyT + '</h2>' + emptyP + '</div>';
@@ -4292,18 +4682,30 @@
   $('#aPick').onclick = function () { closeAdd(); openPicker(); };
 
   function pkGrp() { return pkWiz ? wiz : findGroup(curId); }
-  function renderPicker() {
-    var g = pkGrp(), el = $('#pkList');
-    var has = {}; if (g) g.exercises.forEach(function (x) { has[nkey(x.name)] = 1; });
-    var rows = state.library.filter(function (e) { return matchQ(e, pkQ); });
-    if (!rows.length) { el.innerHTML = '<div class="empty"><h2>Sonuç yok</h2>“' + esc(pkQ) + '” ile eşleşen hareket bulunamadı.</div>'; }
-    else el.innerHTML = libSecs(rows, !pkQ, function (e) {
-      var o = pkOrder.indexOf(e.id);
-      return '<button class="it lb pk' + (o > -1 ? ' on' : '') + '" data-id="' + e.id + '" aria-pressed="' + (o > -1) + '"><div class="gcv pkv" aria-hidden="true">' + letterOf(e) + '</div><div class="bd"><div class="nm">' + esc(e.name) + '</div><div class="sb">' + exMeasure(e) + (has[nkey(e.name)] ? '<span class="tg">Grupta</span>' : '') + '</div></div><span class="pn">' + (o > -1 ? o + 1 : '') + '</span></button>';
-    });
-    var n = pkOrder.length, b = $('#pkGo');
-    b.disabled = !n; b.textContent = n ? 'Gruba ekle (' + n + ')' : 'Gruba ekle';
-    $('#pkHint').textContent = n ? n + ' hareket seçildi. Gruba bu sırayla eklenecek.' : 'Dokunduğun sırayla gruba eklenir. Numaralar ekleme sırasını gösterir.';
+  var pkTabs = new SwipeTabs($('#pkSwt'), { index: 0, haptic: function () { vib(4); } });
+  function pkHintSet() {
+    var n = pkOrder.length, g = pkGrp(), nm = g && g.name ? '<b>' + esc(g.name) + '</b>' : 'yeni gruba';
+    var t = n ? '<b>' + n + '</b> hareket seçildi · bu sırayla eklenecek' : 'Dokunduğun sırayla ' + (g && g.name ? nm + ' grubuna' : nm) + ' eklenir';
+    [].forEach.call(document.querySelectorAll('#picker .pkh'), function (p) { p.innerHTML = t; });
+    var b = $('#pkGo'); b.disabled = !n; b.textContent = n ? 'Gruba ekle (' + n + ')' : 'Gruba ekle';
+  }
+  function pkRow(e, i, has) {
+    var o = pkOrder.indexOf(e.id);
+    return '<div class="it lb pk' + (o > -1 ? ' on' : '') + '" role="button" tabindex="0" aria-pressed="' + (o > -1) + '" data-id="' + e.id + '" style="--i:' + Math.min(i, 12) + '"><div class="gcv pkv" aria-hidden="true">' + letterOf(e) + '</div><div class="bd"><div class="nm">' + esc(e.name) + (has[nkey(e.name)] ? '<span class="tg">Grupta</span>' : '') + '</div><div class="sb">' + exMeasure(e) + '</div></div><span class="pn">' + (o > -1 ? o + 1 : '') + '</span></div>';
+  }
+  function renderPicker(animate) {
+    var g = pkGrp(), has = {}; if (g) g.exercises.forEach(function (x) { has[nkey(x.name)] = 1; });
+    var all = state.library.filter(function (e) { return matchQ(e, pkQ); });
+    function fill(id, rows, ico, t, pp) {
+      var el = $('#' + id);
+      if (rows.length) { patchList(el, rows, function (e, i) { return pkRow(e, i, has); }, animate); return; }
+      el.innerHTML = pkQ ? '<div class="empty"><h2>Sonuç yok</h2>“' + esc(pkQ) + '” ile eşleşen hareket bulunamadı.</div>'
+        : '<div class="empty"><span class="ico">' + ico + '</span><h2>' + t + '</h2>' + pp + '</div>';
+    }
+    fill('pkPre', all.filter(function (e) { return e.preset; }), ICO_PRE, 'Hazır hareket yok', 'Hazır hareketler burada görünür.');
+    fill('pkOwn', all.filter(function (e) { return !e.preset; }), ICO_OWN, 'Henüz kendi hareketin yok', 'Hareketler sayfasından yeni hareket oluşturabilirsin.');
+    fill('pkFav', all.filter(function (e) { return e.fav; }), ICO_HEART, 'Henüz favorin yok', 'Hareketler sayfasında bir hareketin<br>kalbine dokunarak favori yapabilirsin.');
+    pkHintSet();
   }
   function openPicker(forWiz) {
     if (pickOpen || formOpen) return;
@@ -4311,9 +4713,10 @@
     var g = pkGrp(); if (!g) return;
     if (pickAnim) { pickAnim.cancel(); pickAnim = null; }
     pkOrder = []; pkQ = ''; $('#pkQ').value = ''; $('#pkQS').classList.remove('has');
-    $('#pkGrp').textContent = g.name || 'Yeni grup';
-    renderPicker(); $('#pkScroll').scrollTop = 0;
+    renderPicker(true);
     pickView.style.display = 'flex';
+    [].forEach.call(pickView.querySelectorAll('.swt-scroll'), function (sc) { sc.scrollTop = 0; });
+    pkTabs.go(0, true);
     pickView.animate([{ transform: 'translateY(100%)' }, { transform: 'none' }], { duration: 460, easing: EASE });
     (pkWiz ? wizView : groupView).inert = true; pickOpen = true;
   }
@@ -4326,30 +4729,32 @@
     a.onfinish = function () { if (pickAnim === a) { pickAnim = null; pickView.style.display = 'none'; a.cancel(); } if (cb) cb(); };
   }
   $('#pkClose').onclick = function () { closePicker(); };
-  wireSearch('pkQ', function () { return pkQ; }, function (v) { pkQ = v.trim(); }, renderPicker);
-  $('#pkList').addEventListener('click', function (e) {
+  wireSearch('pkQ', function () { return pkQ; }, function (v) { pkQ = v.trim(); }, function () { renderPicker(false); });
+  $('#pkSwt').addEventListener('click', function (e) {
     var c = e.target.closest('.it'); if (!c) return;
     var id = c.dataset.id, i = pkOrder.indexOf(id);
     if (i > -1) pkOrder.splice(i, 1); else pkOrder.push(id);
     vib(6);
-    // Yalnızca işaretleri güncelle (kaydırma konumu korunur)
-    Array.prototype.forEach.call($('#pkList').querySelectorAll('.it'), function (r) {
+    // Yalnızca işaretleri güncelle (kaydırma konumu korunur, liste yenilenmez)
+    [].forEach.call($('#pkSwt').querySelectorAll('.it'), function (r) {
       var o = pkOrder.indexOf(r.dataset.id);
       r.classList.toggle('on', o > -1); r.setAttribute('aria-pressed', o > -1); r.querySelector('.pn').textContent = o > -1 ? o + 1 : '';
+      r._h = null;
     });
-    var n = pkOrder.length, b = $('#pkGo');
-    b.disabled = !n; b.textContent = n ? 'Gruba ekle (' + n + ')' : 'Gruba ekle';
-    $('#pkHint').textContent = n ? n + ' hareket seçildi. Gruba bu sırayla eklenecek.' : 'Dokunduğun sırayla gruba eklenir. Numaralar ekleme sırasını gösterir.';
+    pkHintSet();
+  });
+  $('#pkSwt').addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter') return; var c = e.target.closest('.it.pk'); if (c) c.click();
   });
   $('#pkGo').onclick = function () {
     var g = pkGrp(); if (!g || !pkOrder.length) return;
     var wFrom = g.exercises.length;
     pkOrder.forEach(function (id) {
       var e = state.library.filter(function (x) { return x.id === id; })[0]; if (!e) return;
-      g.exercises.push({ id: uid(), name: e.name, desc: e.desc || '', type: e.type, value: e.value, sets: e.sets, rest: e.rest || 0, metro: !!e.metro, tempo: e.tempo || 2 });
+      g.exercises.push({ id: uid(), name: e.name, desc: e.desc || '', type: e.type, value: e.value, sets: e.sets, rest: e.rest || 0, metro: !!e.metro, tempo: e.tempo || 3 });
     });
     save(); vib(12);
-    closePicker(function () { if (pkWiz) renderWizList(wFrom); else { renderGroup(true); renderHome(false); } });
+    closePicker(function () { if (pkWiz) renderWizList(wFrom); else { renderGroup(false); renderHome(false); } });
   };
 
     /* ================= Grup oluşturma sihirbazı ================= */
@@ -4467,8 +4872,9 @@
 
   /* --- 1. adım: yazdığın isim başlık olur (yalnızca metin değişir, sayfa yenilenmez) --- */
   function wzGrow(el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; }
-  function wzNameOk() { wzNm.classList.remove('err'); wzNm.placeholder = 'Grup adı'; }
+  function wzNameOk() { wzNm.classList.remove('err'); wzNm.placeholder = 'Grup adı'; var w = $('#wzNmWarn'); if (w) w.hidden = true; }
   function wzNameErr() {
+    var w = $('#wzNmWarn'); w.textContent = wzNm.value.length ? 'İsim yalnızca boşluktan oluşamaz' : 'Bir isim yazmalısın'; w.hidden = false;
     wzNm.classList.add('err'); wzNm.placeholder = 'Bir isim yazmalısın';
     wzShake(wzNm); vib([25, 40, 25]);
     wzNm.focus({ preventScroll: true });
@@ -4635,9 +5041,9 @@
     wzBusy = true;
     var n = {
       id: uid(), name: wiz.name, desc: wiz.desc, days: wzSorted(),
-      exercises: wiz.exercises.map(function (e) { return { id: uid(), name: e.name, desc: e.desc || '', type: e.type, value: e.value, sets: e.sets, rest: e.rest || 0, metro: !!e.metro, tempo: e.tempo || 2 }; })
+      exercises: wiz.exercises.map(function (e) { return { id: uid(), name: e.name, desc: e.desc || '', type: e.type, value: e.value, sets: e.sets, rest: e.rest || 0, metro: !!e.metro, tempo: e.tempo || 3 }; })
     };
-    state.groups.push(n); save(); renderHome(false);
+    state.groups.push(n); save(); homePend = 1;
     var dots = '', i, on = {};
     n.days.forEach(function (d) { on[d] = 1; });
     // Seçili günler her zaman aynı tempoda (110 ms arayla) yanar; çok gün seçilince animasyon hızlanmaz, biraz uzar
@@ -5084,7 +5490,7 @@
   }
 
   function show(kind) {
-    if (!document.body) return;
+    if (!document.body || window.__workoutOn) return;   // antrenman sürerken hiçbir bildirim (internet, yedek) çıkmaz
     if (!wrap) {
       wrap = document.createElement('div');
       wrap.className = 'nb-wrap';
