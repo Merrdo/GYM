@@ -846,7 +846,9 @@
 
   /* ---------- Ayarlar ---------- */
   #settings { display: none; z-index: 10; }
-  #setBody { padding-bottom: calc(var(--pb) + 24px); }
+  #setBody, #devBody { padding-bottom: calc(var(--pb) + 24px); }
+  #devView { display: none; z-index: 12; }
+  .dev-note { margin: 2px 4px 18px; color: var(--dim); font-size: .84rem; line-height: 1.45; }
   .stepper .val.dimv { color: var(--dim); }
   .stepper button.lim { opacity: .3; }
   .frow.tpr .stepper, .frow.tpr .fl small { transition: opacity .35s var(--ease), filter .35s var(--ease); }
@@ -1537,6 +1539,7 @@
     <div class="top">
       <button class="icon-btn" id="setBack" aria-label="Geri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
       <div class="ttl"><h1>Ayarlar</h1></div>
+      <button class="icon-btn" id="setDev" aria-label="Geliştirici"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13.5 6l-3 12"/></svg></button>
     </div>
     <div class="scroll" id="setBody">
       <!-- Yeni ayar = .fcard içine yeni .frow; yeni grup = yeni .fsec -->
@@ -1562,13 +1565,6 @@
         </div>
       </div>
       <div class="fsec stg" style="--k:2">
-        <div class="fcap">Bildirimler</div>
-        <div class="fcard">
-          <button type="button" class="frow lnk" id="nOpen"><span class="fl">Bildirim türü<small id="nName"></small></span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></span></button>
-          <button type="button" class="frow lnk bt" id="nSend"><span class="fl">Anlık bildirim gönder<small id="nSendS">Seçilen bildirim 1 saniye sonra gelir</small></span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l14 8-14 8z"/></svg></span></button>
-        </div>
-      </div>
-      <div class="fsec stg" style="--k:2">
         <div class="fcap">Yedekleme</div>
         <div class="fcard">
           <button type="button" class="frow lnk bt" id="bkOut"><span class="fl">Yedeği dışa aktar<small id="bkLast"></small></span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M9 5l7 7-7 7"/></svg></span></button>
@@ -1578,12 +1574,6 @@
             <button type="button" class="sw on" id="swBkRem" role="switch" aria-checked="true" aria-label="Yedek hatırlatması"></button></div>
         </div>
         <input type="file" id="bkFile" accept=".json,application/json" hidden>
-      </div>
-      <div class="fsec stg" style="--k:3">
-        <div class="fcap">Başlangıç</div>
-        <div class="fcard">
-          <button type="button" class="frow lnk" id="pfOpenFirst"><span class="fl">Başlangıç animasyonunu oynat<small>Karşılama akışı baştan sona yeniden açılır</small></span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;color:var(--dim);display:block"><path d="M9 5l7 7-7 7"/></svg></span></button>
-        </div>
       </div>
       <div class="fsec stg" style="--k:4">
         <div class="fcap">Veriler</div>
@@ -1608,15 +1598,6 @@
         <div class="dsh-act dsh-stack"><button class="dbtn ok" id="rsOk">Her şeyi sil ve sıfırla</button><button class="dbtn no" id="rsBk">Önce yedek al</button><button class="dbtn no" id="rsNo">Vazgeç</button></div>
       </div>
     </div>
-    <div class="sht" id="nSheet">
-      <div class="sht-card">
-        <p class="ssub eb">Bildirimler</p>
-        <h2>Bildirim türü</h2>
-        <p class="ssub">“Anlık bildirim gönder” seçtiğin türü gösterir.</p>
-        <div class="sht-list" id="nList"></div>
-        <button class="primary sec" id="nDone">Tamam</button>
-      </div>
-    </div>
     <div class="sht" id="vSheet">
       <div class="sht-card">
         <p class="ssub eb">Sesli yönlendirme</p>
@@ -1627,6 +1608,42 @@
         <button class="primary sec" id="vDone">Tamam</button>
       </div>
     </div>
+  </section>
+
+  <!-- Geliştirici: GEÇİCİ sayfa. Ayarlar'ın sağ üstündeki </> simgesinden açılır. Yayından önce sayfa silinir; kalacak özellikler tek tek uygulamaya taşınır -->
+  <section class="view" id="devView" aria-label="Geliştirici">
+    <div class="top">
+      <button class="icon-btn" id="devBack" aria-label="Geri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="ttl"><h1>Geliştirici</h1></div>
+    </div>
+    <div class="scroll" id="devBody">
+      <p class="dev-note">Geçici sayfa. Yayından önce silinecek.</p>
+      <div class="fsec stg" style="--k:0">
+        <div class="fcap">Bildirimler</div>
+        <div class="fcard">
+          <button type="button" class="frow lnk" id="nOpen"><span class="fl">Bildirim türü<small id="nName"></small></span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></span></button>
+          <button type="button" class="frow lnk bt" id="nSend"><span class="fl">Anlık bildirim gönder<small id="nSendS">Seçilen bildirim 1 saniye sonra gelir</small></span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l14 8-14 8z"/></svg></span></button>
+        </div>
+      </div>
+
+      <div class="fsec stg" style="--k:1">
+        <div class="fcap">Başlangıç</div>
+        <div class="fcard">
+          <button type="button" class="frow lnk" id="pfOpenFirst"><span class="fl">Başlangıç animasyonunu oynat<small>Karşılama akışı baştan sona yeniden açılır</small></span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;color:var(--dim);display:block"><path d="M9 5l7 7-7 7"/></svg></span></button>
+        </div>
+      </div>
+
+    </div>
+    <div class="sht" id="nSheet">
+      <div class="sht-card">
+        <p class="ssub eb">Bildirimler</p>
+        <h2>Bildirim türü</h2>
+        <p class="ssub">“Anlık bildirim gönder” seçtiğin türü gösterir.</p>
+        <div class="sht-list" id="nList"></div>
+        <button class="primary sec" id="nDone">Tamam</button>
+      </div>
+    </div>
+
   </section>
 
   <!-- Haftalık hedef: ilk kurulum adımı gibi tam ekran, Ayarlar'dan açılır -->
@@ -2724,7 +2741,7 @@
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && pfOpenF && pfSheetMode) $('#pfsNo').click(); });
   // Test: ilk kurulum akışı (Boy → Kilo) Ayarlar'dan, hedef sayfası gibi tam ekran animasyonla başlatılır
   $('#pfOpenFirst').onclick = function () { openProfile('first'); };
-  setTimeout(function () { if (pfNeedsFirst() && !WK && !pfOpenF && !lgIsOpen) openProfile('first'); }, 700);
+  // Açılışta boy/kilo sayfası kendiliğinden açılmaz; Profil > Bilgilerim'den ya da VKİ kartındaki düğmeden girilir
 
   /* ================= Profil sekmesi: ad · fotoğraf · karakter · boy/kilo/VKİ ================= */
   // Fotoğraf yokken görünen sade varsayılan profil: kafa + omuz silüeti, rengi temanın vurgu renginden gelir
@@ -2880,7 +2897,6 @@
     if (!lgIsOpen) return; lgIsOpen = false; homeView.inert = false; if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
     var a = lgEl.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(28px)' }], { duration: 260, easing: EASE, fill: 'forwards' });
     a.onfinish = function () { lgEl.style.display = 'none'; a.cancel(); };
-    setTimeout(function () { if (pfNeedsFirst() && !WK && !pfOpenF) openProfile('first'); }, 420);
   }
   $('#psIn').onclick = function () { psClose(); setTimeout(openLg, 220); };
   $('#psOut').onclick = function () { psClose(); setTimeout(function () { $('#lgSheet').classList.add('open'); vib(6); }, 220); };
@@ -2906,11 +2922,7 @@
   $('#lgSheet').addEventListener('click', function (e) { if (e.target === this) this.classList.remove('open'); });
   $('#lgOk').onclick = function () { $('#lgSheet').classList.remove('open'); acLogout(); delete state.guest; save(); vib([8, 22, 12]); setTimeout(openLg, 320); };   // çıkış: giriş sayfası yeniden gelir
   acPaint();
-  // Açılış: giriş yapılmamış ve misafir seçilmemişse giriş sayfası her şeyden önce gelir
-  if (!(state.account && state.account.email) && !state.guest) {
-    lgIsOpen = true; lgSetMode('in'); lgEl.style.display = 'flex';
-    setTimeout(function () { homeView.inert = true; }, 0);   // homeView bu noktada henüz tanımlı değil
-  }
+  // Açılışta giriş sayfası kendiliğinden gelmez; giriş Profil > Giriş yap ile yapılır (çıkış yapınca giriş sayfası açılır)
 
   /* ================= Avatar sayfası: kategoriler ve renkler ================= */
   // Yeni kategori eklemek için AV_CATS'a bir { id, name, items } daha eklemek yeterli. Özel öğe: { id: 'ozel', name: 'Özel', custom: true }
@@ -5148,7 +5160,21 @@
   }
   $('#setBack').onclick = function () { closeSettings(); };
   $('#prSet').onclick = function () { vib(4); openSettings(); };
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && setOpen) { if ($('#nSheet').classList.contains('open')) $('#nDone').onclick(); else if ($('#vSheet').classList.contains('open')) $('#vDone').onclick(); else closeSettings(); } });
+  // Geliştirici sayfası (geçici): Ayarlar'ın üstüne sağdan kayarak açılır
+  var devView = $('#devView'), devOpen = false;
+  function openDev() {
+    if (devOpen || !setOpen) return; devOpen = true; $('#devBody').scrollTop = 0;
+    devView.style.display = 'flex'; setView.inert = true; vib(4);
+    devView.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 420, easing: EASE });
+  }
+  function closeDev() {
+    if (!devOpen) return; devOpen = false; $('#nSheet').classList.remove('open'); setView.inert = false;
+    var a = devView.animate([{ transform: 'none' }, { transform: 'translateX(100%)' }], { duration: 360, easing: EASE, fill: 'forwards' });
+    a.onfinish = function () { devView.style.display = 'none'; a.cancel(); };
+  }
+  $('#setDev').onclick = openDev;
+  $('#devBack').onclick = closeDev;
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && setOpen) { if ($('#nSheet').classList.contains('open')) $('#nDone').onclick(); else if (devOpen) closeDev(); else if ($('#vSheet').classList.contains('open')) $('#vDone').onclick(); else closeSettings(); } });
 
 
   /* ================= Sekmeler: Ana · Gruplarım · Profil ================= */
@@ -6337,7 +6363,11 @@
       hh = Math.max(hh, portrait ? Math.max(screen.height, screen.width) : Math.min(screen.height, screen.width));
     } else { hh = innerHeight; }
     var ae = document.activeElement, vv = window.visualViewport, typing = false;
-    if (vv && ae && ae.matches && ae.matches('input,textarea') && vv.height < hh - 80) { hh = Math.round(vv.height + vv.offsetTop); typing = true; }
+    if (vv && ae && ae.matches && ae.matches('input,textarea') && vv.height < hh - 80) {
+      typing = true;
+      // Profil adı sayfanın en üstünde: sayfayı küçültme (klavyenin üstünde siyah boşluk kalıyordu); alt kısım klavyenin arkasında kalsın
+      if (ae.id !== 'prName') hh = Math.round(vv.height + vv.offsetTop);
+    }
     root.style.setProperty('--full-h', hh + 'px');
     root.classList.toggle('kbd', typing);
   }
