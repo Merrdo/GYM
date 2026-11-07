@@ -279,6 +279,8 @@
   .dbtn:active { transform: scale(.97); }
   .dbtn svg { width: 21px; height: 21px; overflow: visible; flex: none; }
   .dbtn.no { background: var(--surface2); color: var(--ink); }
+  .dbtn.go { background: var(--accent); color: var(--accent-ink); box-shadow: 0 12px 30px -12px rgba(var(--acc-rgb), .6); }
+  .dbtn.go:active { filter: brightness(.92); }
   .dbtn.no:active { background: #26262a; }
   .dbtn.ok { background: var(--danger-fill); color: #fff; box-shadow: 0 12px 30px -12px rgba(255,90,77,.65); }
   .dbtn.ok:active { filter: brightness(.9); }
@@ -616,6 +618,8 @@
   .sht-card { width: 100%; max-height: 82%; display: flex; flex-direction: column; background: var(--sheet); border-radius: 28px 28px 0 0; padding: 22px 20px var(--pb);
     transform: translateY(100%); transition: transform .45s var(--ease); }
   .sht.open .sht-card { transform: none; }
+  .sht.quick { transition-duration: .16s; }
+  .sht.quick .sht-card { transition-duration: .2s; }   /* rumuz düzenlerken panel hızlı iner: klavye animasyonuyla yarışmaz */
   .sht h2 { font-size: 1.3rem; letter-spacing: -.02em; }
   .sht .ssub { color: var(--dim); font-size: .88rem; line-height: 1.4; margin: 4px 0 14px; }
   .sht-list { overflow-y: auto; margin: 0 -8px 8px; -webkit-overflow-scrolling: touch; }
@@ -1287,11 +1291,11 @@
      Eskiden tüm katman (kart dahil) soluyordu, kart yok oluyor gibi görünüyordu.
      Şimdi sadece arka karartma solar; kart opak kalıp ekranın altına kayar. */
   .sht, .dsh, .pl-quit { opacity: 1; background: rgba(0,0,0,0); visibility: hidden; pointer-events: none;
-    transition: background-color .36s ease, visibility 0s linear .36s; }
+    transition: background-color .24s ease, visibility 0s linear .24s; }
   .sht.open, .dsh.open, .pl-quit.open { opacity: 1; background: rgba(0,0,0,.66); visibility: visible; pointer-events: auto;
-    transition: background-color .4s ease, visibility 0s; }
-  .sht-card, .dsh-card, .q-card { transform: translateY(100%); transition: transform .36s cubic-bezier(.4,0,.2,1); will-change: transform; }
-  .sht.open .sht-card, .dsh.open .dsh-card, .pl-quit.open .q-card { transform: none; transition: transform .5s var(--ease); }
+    transition: background-color .24s ease, visibility 0s; }
+  .sht-card, .dsh-card, .q-card { transform: translateY(100%); transition: transform .24s cubic-bezier(.4,0,.2,1); will-change: transform; }
+  .sht.open .sht-card, .dsh.open .dsh-card, .pl-quit.open .q-card { transform: none; transition: transform .34s cubic-bezier(.27,.1,.2,1); }
 
   /* Hareket adı + soru işareti: aynı satırda, yan yana */
   .pl-name { display: flex; align-items: center; justify-content: center; gap: 2px; }
@@ -1511,7 +1515,7 @@
         <div class="scroll" id="prBody">
           <div class="pr-hero">
             <button type="button" class="pr-av" id="prAv" aria-label="Profil fotoğrafı seç"><span class="pr-img" id="prImg"></span><span class="pr-cam"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7H8l1.4-2h5.2L16 7h2.5A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="13" r="3.4"/></svg></span></button>
-            <div class="pr-name"><input class="pr-in" id="prName" type="text" maxlength="24" placeholder="Adını yaz" autocomplete="off" autocapitalize="words" enterkeyhint="done" aria-label="Adın"><i class="pr-ul"></i></div>
+            <div class="pr-name"><input class="pr-in" id="prName" type="text" maxlength="24" placeholder="Rumuzunu yaz" autocomplete="off" autocapitalize="words" enterkeyhint="done" aria-label="Rumuzun"><i class="pr-ul"></i></div>
           </div>
           <div class="pr-stat3" aria-label="Özet">
             <div><b id="prSn">0</b><span>Antrenman</span></div>
@@ -1728,6 +1732,16 @@
   </section>
 
 
+  <!-- Geçmiş antrenmanı tekrarlama onayı -->
+  <div class="dsh" id="rpSheet" style="z-index:30">
+    <div class="dsh-card" role="alertdialog" aria-labelledby="rpT">
+      <div class="sh-eb">Geçmiş antrenman</div>
+      <h2 id="rpT">Tekrar başlatılsın mı?</h2>
+      <p class="sh-d" id="rpP"></p>
+      <div class="dsh-act dsh-stack"><button class="dbtn go" id="rpOk"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.6v12.8a1 1 0 001.5.86l10.4-6.4a1 1 0 000-1.72L9.5 4.74A1 1 0 008 5.6z"/></svg>Başlat</button><button class="dbtn no" id="rpNo">Vazgeç</button></div>
+    </div>
+  </div>
+
   <!-- Çıkış onayı: Profil sayfasından açıldığı için sekmelerin dışında durur -->
   <div class="dsh" id="lgSheet" style="z-index:30">
     <div class="dsh-card" role="alertdialog" aria-labelledby="lgT">
@@ -1746,7 +1760,7 @@
       <div class="ps-nm" id="psNm"></div>
       <div class="ps-sub" id="psSub"></div>
       <div class="ps-acts">
-        <button type="button" class="ps-btn" id="psEditName">Takma adı düzenle</button>
+        <button type="button" class="ps-btn" id="psEditName">Rumuzu düzenle</button>
         <button type="button" class="ps-btn" id="psAvatar">Avatar</button>
       </div>
       <div class="ps-acts ps-acc">
@@ -2345,12 +2359,12 @@
   var thView = $('#themesView'), thIsOpen = false;
   $('#thOpen').onclick = function () {
     if (thIsOpen) return; thIsOpen = true; thView.style.display = 'flex'; $('#thBody').scrollTop = 0;
-    thView.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 440, easing: EASE });
+    thView.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 360, easing: EASE });
     $('#settings').inert = true;
   };
   $('#thBack').onclick = function () {
     if (!thIsOpen) return; thIsOpen = false; $('#settings').inert = false;
-    var a = thView.animate([{ transform: 'none' }, { transform: 'translateX(100%)' }], { duration: 380, easing: EASE, fill: 'forwards' });
+    var a = thView.animate([{ transform: 'none' }, { transform: 'translateX(100%)' }], { duration: 310, easing: EASE, fill: 'forwards' });
     a.onfinish = function () { thView.style.display = 'none'; a.cancel(); };
   };
   /* ================= Haftalık hedef (kurulum adımı gibi tam ekran) ================= */
@@ -2489,7 +2503,7 @@
     if (skOpen) return; skOpen = true; skBusy = false; skClear();
     var n = skNow();
     skView.style.display = 'flex';
-    skView.animate([{ opacity: 0, transform: 'scale(.97)' }, { opacity: 1, transform: 'none' }], { duration: 520, easing: EASE });
+    skView.animate([{ opacity: 0, transform: 'scale(.97)' }, { opacity: 1, transform: 'none' }], { duration: 430, easing: EASE });
     $('#settings').inert = true;
     skResetAnims();
     skMeasure();
@@ -2504,7 +2518,7 @@
   }
   function closeStreak() {
     if (!skOpen) return; skOpen = false; skTok++; skClear(); skIntro = false; $('#settings').inert = false; skLabel();
-    var a = skView.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(1.03)' }], { duration: 480, easing: EASE, fill: 'forwards' });
+    var a = skView.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(1.03)' }], { duration: 390, easing: EASE, fill: 'forwards' });
     a.onfinish = function () { skView.style.display = 'none'; a.cancel(); skResetAnims(); };
   }
   if ($('#skOpen')) $('#skOpen').onclick = openStreak;   // haftalık hedef artık Bilgilerim'den panelle ayarlanıyor
@@ -2669,13 +2683,13 @@
     if (mode !== 'first') { pfSheetMode = true; pfMount(true); pfSheetEl.classList.add('open'); pfSetup(0); return; }   // tek değer: alttan panel
     pfSheetMode = false; pfMount(false);
     pfView.style.display = 'flex';
-    pfView.animate([{ opacity: 0, transform: 'scale(.97)' }, { opacity: 1, transform: 'none' }], { duration: 520, easing: EASE });
+    pfView.animate([{ opacity: 0, transform: 'scale(.97)' }, { opacity: 1, transform: 'none' }], { duration: 430, easing: EASE });
     pfHomeInert = homeView.inert; homeView.inert = true; if (inOpen) inView.inert = true;
     pfSetup(0);
   }
   function closeProfile() {
     if (!pfOpenF) return; pfOpenF = false; pfTok++; pfClear(); pfIntro = false; homeView.inert = pfHomeInert; if (inOpen) inView.inert = false; pfLabel();
-    var a = pfView.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(1.03)' }], { duration: 340, easing: EASE, fill: 'forwards' });
+    var a = pfView.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(1.03)' }], { duration: 280, easing: EASE, fill: 'forwards' });
     a.onfinish = function () { pfView.style.display = 'none'; a.cancel(); pfResetAnims(); };
   }
   pfDoneB.onclick = function () {
@@ -2693,7 +2707,7 @@
     pfBand.classList.add('fin'); vib([10, 30, 16]);
     var o = { duration: 150, easing: EASE, fill: 'forwards' };
     pfPool.forEach(function (el) {
-      if (el.classList.contains('on')) el.animate([{ transform: 'translateY(0) scale(1)' }, { transform: 'translateY(0) scale(1.07)', offset: .5 }, { transform: 'translateY(0) scale(1.03)' }], { duration: 260, easing: EASE, fill: 'forwards' });
+      if (el.classList.contains('on')) el.animate([{ transform: 'translateY(0) scale(1)' }, { transform: 'translateY(0) scale(1.07)', offset: .5 }, { transform: 'translateY(0) scale(1.03)' }], { duration: 210, easing: EASE, fill: 'forwards' });
       else el.animate([{ opacity: el.style.opacity || 0 }, { opacity: 0 }], o);
     });
     [$('#pfHt'), $('#pfDots')].forEach(function (e) { e.animate([{ opacity: 1 }, { opacity: .18 }], o); });
@@ -2728,7 +2742,7 @@
     // Kısa ve sakin: komşu sayılar hızla çekilir, seçili sayı tek bir yumuşak vurgu yapar, düğme etiketi tike döner ve düğmeden ince bir ışık halkası yayılır
     var fade = { duration: 140, easing: 'ease-out', fill: 'forwards' };
     pfPool.forEach(function (el) {
-      if (el.classList.contains('on')) el.animate([{ transform: 'translateY(0) scale(1)' }, { transform: 'translateY(0) scale(1.07)', offset: .5 }, { transform: 'translateY(0) scale(1.03)' }], { duration: 260, easing: EASE, fill: 'forwards' });
+      if (el.classList.contains('on')) el.animate([{ transform: 'translateY(0) scale(1)' }, { transform: 'translateY(0) scale(1.07)', offset: .5 }, { transform: 'translateY(0) scale(1.03)' }], { duration: 210, easing: EASE, fill: 'forwards' });
       else el.animate([{ opacity: el.style.opacity || 0 }, { opacity: 0 }], fade);
     });
     $('#pfsHt').animate([{ opacity: 1 }, { opacity: 0 }], fade);
@@ -2805,7 +2819,7 @@
       e.style.setProperty('--ring', rc); e.style.setProperty('--ring-ink', ink); e.classList.toggle('ph', !!p.img);   // fotoğraf varken dış halka çizilmez
     });
     $('#psAv').classList.toggle('has', !!p.img);
-    $('#psNm').textContent = p.name || 'Takma ad yok'; $('#psNm').classList.toggle('empty', !p.name);
+    $('#psNm').textContent = p.name || 'Rumuz yok'; $('#psNm').classList.toggle('empty', !p.name);
     var ni = $('#prName'); if (document.activeElement !== ni && ni.value !== (p.name || '')) ni.value = p.name || '';
     inPaint(); if (typeof acPaint === 'function') acPaint();
     var H = state.hist || [], hk = 0, hs = 0; H.forEach(function (x) { hk += x.kcal || 0; hs += x.sec || 0; });
@@ -2856,7 +2870,15 @@
   psEl.addEventListener('touchmove', function (e) { e.preventDefault(); }, { passive: false });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && psEl.classList.contains('open')) psClose(); });
   // dokunuşun içinde odaklanır / dosya seçici açılır; böylece klavye ve galeri sorunsuz gelir
-  $('#psEditName').onclick = function () { var n = $('#prName'); psClose(); n.focus(); try { n.setSelectionRange(n.value.length, n.value.length); } catch (x) {} };
+  $('#psEditName').onclick = function () {
+    var n = $('#prName');
+    psEl.classList.add('quick');
+    setTimeout(function () { psEl.classList.remove('quick'); }, 500);
+    // odak dokunuşun içinde verilir (klavye açılsın), ama sayfa kaydırması istenmez: klavye tek seferde, takılmadan açılır
+    try { n.focus({ preventScroll: true }); } catch (x) { n.focus(); }
+    try { n.setSelectionRange(n.value.length, n.value.length); } catch (x) {}
+    requestAnimationFrame(psClose);   // panel kapanışı bir sonraki karede başlar; klavye çizimiyle aynı ana denk gelmez
+  };
   /* ===== SARSILMA EFEKTİ (işlevsiz / "Yakında" düğmeleri için hazır) =====
      Kullanım 1: HTML'de düğmeye data-soon ekle  ->  <button data-soon>Avatar</button>
      Kullanım 2: koddan shakeNo(element) çağır.
@@ -2887,16 +2909,29 @@
     lgErr('');
   }
   function lgErr(t, info) { var e = $('#lgErr'); e.textContent = t; e.classList.toggle('info', !!info); }
+  var LG_EASE = 'cubic-bezier(.25,.8,.25,1)', lgAnims = [];
+  function lgStopAnims() { lgAnims.forEach(function (x) { try { x.cancel(); } catch (e) {} }); lgAnims = []; }
   function openLg() {
     if (lgIsOpen) return; lgIsOpen = true;
     lgSetMode('in'); $('#lgMail').value = $('#lgPass').value = ''; lgShow = false; $('#lgPass').type = 'password'; $('#lgEye').classList.remove('on');
+    lgStopAnims();
     lgEl.style.display = 'flex'; homeView.inert = true;
-    lgEl.animate([{ opacity: 0, transform: 'translateY(28px)' }, { opacity: 1, transform: 'none' }], { duration: 360, easing: EASE });
+    // Perde yavaşça yükselir; içerik arkasından sırayla süzülür (GPU: opaklık + dönüşüm)
+    lgAnims.push(lgEl.animate([{ opacity: 0, transform: 'translateY(36px) scale(.985)' }, { opacity: 1, transform: 'none' }], { duration: 560, easing: LG_EASE }));
+    if (!RM) [].slice.call(lgEl.querySelector('.lg-pg').children).forEach(function (el, i) {
+      lgAnims.push(el.animate([{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'none' }], { duration: 620, delay: 120 + i * 55, easing: LG_EASE, fill: 'backwards' }));
+    });
   }
   function closeLg() {
     if (!lgIsOpen) return; lgIsOpen = false; homeView.inert = false; if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
-    var a = lgEl.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(28px)' }], { duration: 260, easing: EASE, fill: 'forwards' });
-    a.onfinish = function () { lgEl.style.display = 'none'; a.cancel(); };
+    lgStopAnims();
+    // İçerik önce solar, sonra perde hafifçe aşağı süzülüp kaybolur
+    if (!RM) [].slice.call(lgEl.querySelector('.lg-pg').children).forEach(function (el, i) {
+      lgAnims.push(el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 260, delay: i * 18, easing: 'ease-in-out', fill: 'forwards' }));
+    });
+    var a = lgEl.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(20px) scale(.99)' }], { duration: 480, delay: 90, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' });
+    lgAnims.push(a);
+    a.onfinish = function () { if (lgIsOpen) return; lgEl.style.display = 'none'; lgStopAnims(); };
   }
   $('#psIn').onclick = function () { psClose(); setTimeout(openLg, 220); };
   $('#psOut').onclick = function () { psClose(); setTimeout(function () { $('#lgSheet').classList.add('open'); vib(6); }, 220); };
@@ -2920,7 +2955,11 @@
   [$('#lgMail'), $('#lgPass')].forEach(function (i) { i.addEventListener('input', function () { lgErr(''); }); i.addEventListener('keydown', function (e) { if (e.key === 'Enter') $('#lgGo').click(); }); });
   $('#lgNo').onclick = function () { $('#lgSheet').classList.remove('open'); };
   $('#lgSheet').addEventListener('click', function (e) { if (e.target === this) this.classList.remove('open'); });
-  $('#lgOk').onclick = function () { $('#lgSheet').classList.remove('open'); acLogout(); delete state.guest; save(); vib([8, 22, 12]); setTimeout(openLg, 320); };   // çıkış: giriş sayfası yeniden gelir
+  $('#lgOk').onclick = function () {
+    $('#lgSheet').classList.remove('open'); delete state.account; delete state.guest; save(); vib([8, 22, 12]);
+    // panel inerken giriş sayfası yükselir; profil ekranı ancak perde onu örtünce güncellenir (ani değişim görünmez)
+    setTimeout(openLg, 260); setTimeout(function () { acPaint(); prPaint(); }, 260 + 420);
+  };   // çıkış: giriş sayfası yeniden gelir
   acPaint();
   // Açılışta giriş sayfası kendiliğinden gelmez; giriş Profil > Giriş yap ile yapılır (çıkış yapınca giriş sayfası açılır)
 
@@ -2976,7 +3015,7 @@
     big.style.setProperty('--ring', avSel.c);
     if (ph) { im.style.background = ''; im.innerHTML = '<img alt="" src="' + avPhoto + '">'; }
     else { im.style.background = hexA(avSel.c, .16); im.innerHTML = prSvg(avSel.c); }
-    if (pop && big.animate) big.animate([{ transform: 'scale(.94)' }, { transform: 'scale(1)' }], { duration: 260, easing: EASE });
+    if (pop && big.animate) big.animate([{ transform: 'scale(.94)' }, { transform: 'scale(1)' }], { duration: 210, easing: EASE });
   }
   function avPick(id, c) { avSel = { id: id, c: c }; avMark(); avPreview(true); vib(4); }
   $('#avCats').addEventListener('click', function (e) {
@@ -3005,11 +3044,11 @@
     avPhoto = p.img || ''; if (avPhoto) avSel = { id: 'foto', c: avSel.c };   // kayıtlı fotoğraf varsa o seçili açılır
     avRender(); avPreview(false); $('#avBody').scrollTop = 0;
     avEl.style.display = 'flex'; homeView.inert = true;
-    avEl.animate([{ opacity: 0, transform: 'translateY(28px)' }, { opacity: 1, transform: 'none' }], { duration: 360, easing: EASE });
+    avEl.animate([{ opacity: 0, transform: 'translateY(28px)' }, { opacity: 1, transform: 'none' }], { duration: 300, easing: EASE });
   }
   function closeAv() {
     if (!avIsOpen) return; avIsOpen = false; homeView.inert = false;
-    var a = avEl.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(28px)' }], { duration: 260, easing: EASE, fill: 'forwards' });
+    var a = avEl.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(28px)' }], { duration: 210, easing: EASE, fill: 'forwards' });
     a.onfinish = function () { avEl.style.display = 'none'; a.cancel(); };
   }
   $('#avBack').onclick = closeAv;
@@ -3067,12 +3106,12 @@
   }
   function openInfo() {
     if (inOpen) return; inOpen = true; inView.style.display = 'flex'; $('#inBody').scrollTop = 0; inPaint();
-    inView.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 440, easing: EASE });
+    inView.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 360, easing: EASE });
     homeView.inert = true; vib(4);
   }
   function closeInfo() {
     if (!inOpen) return; inOpen = false; homeView.inert = false;
-    var a = inView.animate([{ transform: 'none' }, { transform: 'translateX(100%)' }], { duration: 380, easing: EASE, fill: 'forwards' });
+    var a = inView.animate([{ transform: 'none' }, { transform: 'translateX(100%)' }], { duration: 310, easing: EASE, fill: 'forwards' });
     a.onfinish = function () { inView.style.display = 'none'; a.cancel(); };
   }
   $('#prInfo').onclick = openInfo;
@@ -3289,7 +3328,7 @@
   }
 
   /* ================= Sayfa geçişleri (Web Animations) ================= */
-  var EASE = 'cubic-bezier(.22,.9,.24,1)';
+  var EASE = 'cubic-bezier(.27,.1,.2,1)';   // yumuşak başlangıç, uzun ve sakin bitiş
   var homePend = 0, homeView = $('#home'), groupView = $('#group'), groupOpen = false, dimEl = null, homeAnim = null, groupAnim = null;
 
   function openGroup(id, instant) {
@@ -3303,10 +3342,10 @@
     // instant: yeni grup oluşturulunca sayfa tüm içeriğiyle formun arkasında hazırdır; form yavaşça kayarken sayfa hafifçe yerine oturur
     if (instant) {
       dimEl.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 760, easing: EASE });
-      groupView.animate([{ transform: 'scale(.94)' }, { transform: 'none' }], { duration: 760, easing: EASE });
+      groupView.animate([{ transform: 'scale(.94)' }, { transform: 'none' }], { duration: 620, easing: EASE });
     } else {
       dimEl.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 480, easing: EASE });
-      groupView.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 480, easing: EASE });
+      groupView.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 390, easing: EASE });
     }
     homeAnim = homeView.animate([{ transform: 'none' }, { transform: 'translateX(-22%)' }], { duration: instant ? 1 : 480, easing: EASE, fill: 'forwards' });
     homeView.inert = true; groupOpen = true;
@@ -3315,11 +3354,11 @@
     if (!groupOpen) return;
     groupOpen = false;
     if (homePend) { homePend = 0; $('#homeList').style.setProperty('--d', '160ms'); renderHome(false); setTimeout(function () { $('#homeList').style.removeProperty('--d'); }, 1200); }
-    var a = groupAnim = groupView.animate([{ transform: from || 'none' }, { transform: 'translateX(100%)' }], { duration: 400, easing: EASE, fill: 'forwards' });
-    homeView.animate([{ transform: pf || 'translateX(-22%)' }, { transform: 'none' }], { duration: 400, easing: EASE });
+    var a = groupAnim = groupView.animate([{ transform: from || 'none' }, { transform: 'translateX(100%)' }], { duration: 330, easing: EASE, fill: 'forwards' });
+    homeView.animate([{ transform: pf || 'translateX(-22%)' }, { transform: 'none' }], { duration: 330, easing: EASE });
     if (homeAnim) { homeAnim.cancel(); homeAnim = null; }
     var d = dimEl; dimEl = null;
-    if (d) d.animate([{ opacity: dimFrom == null ? 1 : dimFrom }, { opacity: 0 }], { duration: 400, easing: EASE, fill: 'forwards' }).onfinish = function () { d.remove(); };
+    if (d) d.animate([{ opacity: dimFrom == null ? 1 : dimFrom }, { opacity: 0 }], { duration: 330, easing: EASE, fill: 'forwards' }).onfinish = function () { d.remove(); };
     homeView.inert = false;
     a.onfinish = function () { if (groupAnim !== a) return; groupAnim = null; groupView.style.display = 'none'; a.cancel(); };
   }
@@ -3351,8 +3390,8 @@
       if (!cancel && (dx > W * .33 || v > .6)) { closeGroup(from, pf, 1 - p); }
       else {
         if (dx > 0) groupView.animate([{ transform: from }, { transform: 'none' }], { duration: 320, easing: EASE });
-        homeAnim = homeView.animate([{ transform: pf }, { transform: 'translateX(-22%)' }], { duration: 320, easing: EASE, fill: 'forwards' });
-        if (dimEl) dimEl.animate([{ opacity: 1 - p }, { opacity: 1 }], { duration: 320, easing: EASE });
+        homeAnim = homeView.animate([{ transform: pf }, { transform: 'translateX(-22%)' }], { duration: 260, easing: EASE, fill: 'forwards' });
+        if (dimEl) dimEl.animate([{ opacity: 1 - p }, { opacity: 1 }], { duration: 260, easing: EASE });
       }
     }
     strip.addEventListener('touchend', function () { end(false); });
@@ -3408,7 +3447,7 @@
       };
     }
     formView.style.display = 'flex';
-    formView.animate([{ transform: 'translateY(100%)' }, { transform: 'none' }], { duration: 460, easing: EASE });
+    formView.animate([{ transform: 'translateY(100%)' }, { transform: 'none' }], { duration: 380, easing: EASE });
     homeView.inert = true; groupView.inert = true; libView.inert = true; wizView.inert = true; formOpen = true;
     formSnap = null; setTimeout(function () { if (formOpen) formSnap = formState(); }, 120);   // form kurulduktan sonra başlangıç hali
   }
@@ -4630,9 +4669,18 @@
 
   /* ----- Aç / kapat ----- */
   function reveal(from) {
-    // clip-path animasyonu her karede yeniden boyama yaptırır; opaklık + dönüşüm ise GPU'da çalışır
-    return P.animate(from ? [{ opacity: 0, transform: 'scale(1.04)' }, { opacity: 1, transform: 'none' }] : [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(1.03)' }],
-      { duration: from ? 420 : 320, easing: EASE, fill: from ? 'none' : 'forwards' });
+    // Giriş: perde yavaşça açılır, içerik sırayla yukarı süzülür. Çıkış: içerik önce solar, sonra perde kapanır.
+    // Hepsi opaklık + dönüşüm: GPU'da çalışır
+    var parts = [].slice.call(P.querySelectorAll('.pl-top, .pl-main, .pl-ctl')), extra = [];
+    if (!RM) parts.forEach(function (el, i) {
+      extra.push(from
+        ? el.animate([{ opacity: 0, transform: 'translateY(12px)' }, { opacity: 1, transform: 'none' }], { duration: 360, delay: 60 + i * 40, easing: EASE, fill: 'backwards' })
+        : el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 140, easing: 'ease-in-out', fill: 'forwards' }));
+    });
+    var a = P.animate(from ? [{ opacity: 0, transform: 'scale(1.025)' }, { opacity: 1, transform: 'none' }] : [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(1.015)' }],
+      { duration: from ? 360 : 260, delay: 0, easing: from ? EASE : 'cubic-bezier(.4,0,.2,1)', fill: from ? 'none' : 'forwards' });
+    a.addEventListener('finish', function () { extra.forEach(function (x) { x.cancel(); }); });
+    return a;
   }
   function openPlayer(g) {
     if (!g || !g.exercises.length || WK) return;
@@ -4947,7 +4995,7 @@
 
   /* ----- Panel tutamacı: aşağı sürükle ya da dokun, panel kapansın ----- */
   (function () {
-    var map = { ctx: 'cxCancel', addSheet: 'aCancel', vSheet: 'vDone', nSheet: 'nDone', plMore: 'mKeep', plInfo: 'piOk', plQuit: 'qKeep', dsh: 'dshNo', cdsh: 'cdNo', plMtSh: 'plMtDone', mtSh: 'mtDone', pfSheet: 'pfsNo', profSheet: 'psNo', bkSheet: 'bkNo', rsSheet: 'rsNo', lgSheet: 'lgNo', wzCf: 'wzCfNo', xsh: 'xshNo' };
+    var map = { ctx: 'cxCancel', addSheet: 'aCancel', vSheet: 'vDone', nSheet: 'nDone', plMore: 'mKeep', plInfo: 'piOk', plQuit: 'qKeep', dsh: 'dshNo', cdsh: 'cdNo', plMtSh: 'plMtDone', mtSh: 'mtDone', pfSheet: 'pfsNo', profSheet: 'psNo', bkSheet: 'bkNo', rsSheet: 'rsNo', lgSheet: 'lgNo', rpSheet: 'rpNo', wzCf: 'wzCfNo', xsh: 'xshNo' };
     Object.keys(map).forEach(function (id) {
       var ov = document.getElementById(id), card = ov && ov.querySelector('.sht-card, .dsh-card, .q-card'), btn = document.getElementById(map[id]);
       if (!card || !btn) return;
@@ -5143,18 +5191,18 @@
     setDim = document.createElement('div'); setDim.className = 'dim';
     stage.insertBefore(setDim, setView);
     setDim.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 480, easing: EASE });
-    setView.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 480, easing: EASE });
-    setHomeAnim = homeView.animate([{ transform: 'none' }, { transform: 'translateX(-22%)' }], { duration: 480, easing: EASE, fill: 'forwards' });
+    setView.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 390, easing: EASE });
+    setHomeAnim = homeView.animate([{ transform: 'none' }, { transform: 'translateX(-22%)' }], { duration: 390, easing: EASE, fill: 'forwards' });
     homeView.inert = true; setOpen = true;
   }
   function closeSettings(from, pf, dimFrom) {
     if (!setOpen) return;
     setOpen = false; $('#vSheet').classList.remove('open'); $('#nSheet').classList.remove('open'); cancelSpeech();
-    var a = setView.animate([{ transform: from || 'none' }, { transform: 'translateX(100%)' }], { duration: 400, easing: EASE, fill: 'forwards' });
-    homeView.animate([{ transform: pf || 'translateX(-22%)' }, { transform: 'none' }], { duration: 400, easing: EASE });
+    var a = setView.animate([{ transform: from || 'none' }, { transform: 'translateX(100%)' }], { duration: 330, easing: EASE, fill: 'forwards' });
+    homeView.animate([{ transform: pf || 'translateX(-22%)' }, { transform: 'none' }], { duration: 330, easing: EASE });
     if (setHomeAnim) { setHomeAnim.cancel(); setHomeAnim = null; }
     var d = setDim; setDim = null;
-    if (d) d.animate([{ opacity: dimFrom == null ? 1 : dimFrom }, { opacity: 0 }], { duration: 400, easing: EASE, fill: 'forwards' }).onfinish = function () { d.remove(); };
+    if (d) d.animate([{ opacity: dimFrom == null ? 1 : dimFrom }, { opacity: 0 }], { duration: 330, easing: EASE, fill: 'forwards' }).onfinish = function () { d.remove(); };
     homeView.inert = false;
     a.onfinish = function () { setView.style.display = 'none'; a.cancel(); };
   }
@@ -5165,11 +5213,11 @@
   function openDev() {
     if (devOpen || !setOpen) return; devOpen = true; $('#devBody').scrollTop = 0;
     devView.style.display = 'flex'; setView.inert = true; vib(4);
-    devView.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 420, easing: EASE });
+    devView.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 340, easing: EASE });
   }
   function closeDev() {
     if (!devOpen) return; devOpen = false; $('#nSheet').classList.remove('open'); setView.inert = false;
-    var a = devView.animate([{ transform: 'none' }, { transform: 'translateX(100%)' }], { duration: 360, easing: EASE, fill: 'forwards' });
+    var a = devView.animate([{ transform: 'none' }, { transform: 'translateX(100%)' }], { duration: 300, easing: EASE, fill: 'forwards' });
     a.onfinish = function () { devView.style.display = 'none'; a.cancel(); };
   }
   $('#setDev').onclick = openDev;
@@ -5251,8 +5299,8 @@
       if (!cancel && (dx > W * .33 || v > .6)) { closeSettings(from, pf, 1 - p); }
       else {
         if (dx > 0) setView.animate([{ transform: from }, { transform: 'none' }], { duration: 320, easing: EASE });
-        setHomeAnim = homeView.animate([{ transform: pf }, { transform: 'translateX(-22%)' }], { duration: 320, easing: EASE, fill: 'forwards' });
-        if (setDim) setDim.animate([{ opacity: 1 - p }, { opacity: 1 }], { duration: 320, easing: EASE });
+        setHomeAnim = homeView.animate([{ transform: pf }, { transform: 'translateX(-22%)' }], { duration: 260, easing: EASE, fill: 'forwards' });
+        if (setDim) setDim.animate([{ opacity: 1 - p }, { opacity: 1 }], { duration: 260, easing: EASE });
       }
     }
     strip.addEventListener('touchend', function () { end(false); });
@@ -5526,7 +5574,7 @@
     $('#exScroll').scrollTop = 0; $('#exHead').style.setProperty('--p', 0); exView.style.setProperty('--hp', 0);
     if (exAnim) { exAnim.cancel(); exAnim = null; }   // yarım kalan kapanış animasyonu yeni açılışı gizlemesin
     exView.style.display = 'flex';
-    exView.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 440, easing: EASE });
+    exView.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 360, easing: EASE });
     if (exLib) libView.inert = true; else groupView.inert = true;
   }
   function closeEx(instant) {
@@ -5534,7 +5582,7 @@
     exId = null; groupView.inert = false; libView.inert = false;
     if (exAnim) { exAnim.cancel(); exAnim = null; }
     if (instant) { exView.style.display = 'none'; return; }
-    var a = exAnim = exView.animate([{ transform: 'none' }, { transform: 'translateX(100%)' }], { duration: 380, easing: EASE, fill: 'forwards' });
+    var a = exAnim = exView.animate([{ transform: 'none' }, { transform: 'translateX(100%)' }], { duration: 310, easing: EASE, fill: 'forwards' });
     a.onfinish = function () { if (exAnim !== a) return; exAnim = null; exView.style.display = 'none'; a.cancel(); };
   }
   $('#exBack').onclick = function () { closeEx(); };
@@ -5719,18 +5767,18 @@
     libDim = document.createElement('div'); libDim.className = 'dim';
     stage.insertBefore(libDim, libView);
     libDim.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 480, easing: EASE });
-    libView.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 480, easing: EASE });
-    libHomeAnim = homeView.animate([{ transform: 'none' }, { transform: 'translateX(-22%)' }], { duration: 480, easing: EASE, fill: 'forwards' });
+    libView.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 390, easing: EASE });
+    libHomeAnim = homeView.animate([{ transform: 'none' }, { transform: 'translateX(-22%)' }], { duration: 390, easing: EASE, fill: 'forwards' });
     homeView.inert = true; libOpen = true;
   }
   function closeLib(from, pf, dimFrom) {
     if (!libOpen) return;
     libOpen = false;
-    var a = libAnim = libView.animate([{ transform: from || 'none' }, { transform: 'translateX(100%)' }], { duration: 400, easing: EASE, fill: 'forwards' });
-    homeView.animate([{ transform: pf || 'translateX(-22%)' }, { transform: 'none' }], { duration: 400, easing: EASE });
+    var a = libAnim = libView.animate([{ transform: from || 'none' }, { transform: 'translateX(100%)' }], { duration: 330, easing: EASE, fill: 'forwards' });
+    homeView.animate([{ transform: pf || 'translateX(-22%)' }, { transform: 'none' }], { duration: 330, easing: EASE });
     if (libHomeAnim) { libHomeAnim.cancel(); libHomeAnim = null; }
     var d = libDim; libDim = null;
-    if (d) d.animate([{ opacity: dimFrom == null ? 1 : dimFrom }, { opacity: 0 }], { duration: 400, easing: EASE, fill: 'forwards' }).onfinish = function () { d.remove(); };
+    if (d) d.animate([{ opacity: dimFrom == null ? 1 : dimFrom }, { opacity: 0 }], { duration: 330, easing: EASE, fill: 'forwards' }).onfinish = function () { d.remove(); };
     homeView.inert = false;
     renderHome(false);
     a.onfinish = function () { if (libAnim !== a) return; libAnim = null; libView.style.display = 'none'; a.cancel(); };
@@ -5815,8 +5863,23 @@
   function histRepeat(e) {
     var b = e.target.closest('.hc-re'); if (!b || b.disabled) return;
     var h = state.hist.filter(function (x) { return x.id === b.dataset.id; })[0], g = h && findGroup(h.g);
-    if (g) { vib(8); openPlayer(g); }
+    if (g) { vib(6); rpAsk(h, g); }
   }
+  // Tekrarla: önce alttan onay paneli açılır; "Başlat" denince panel iner, antrenman yumuşakça açılır
+  var rpId = null;
+  function rpAsk(h, g) {
+    rpId = h.id;
+    $('#rpP').innerHTML = '<b>' + esc(g.name) + '</b> grubu ' + g.exercises.length + ' hareketiyle baştan başlayacak. Önceki antrenmanın: ' + hDur(h.sec) + ' · ' + h.kcal + ' kcal.';
+    $('#rpSheet').classList.add('open');
+  }
+  function rpClose() { $('#rpSheet').classList.remove('open'); }
+  $('#rpNo').onclick = rpClose;
+  $('#rpSheet').addEventListener('click', function (e) { if (e.target === this) rpClose(); });
+  $('#rpOk').onclick = function () {
+    var h = state.hist.filter(function (x) { return x.id === rpId; })[0], g = h && findGroup(h.g);
+    rpClose(); rpId = null;
+    if (g) { vib(8); setTimeout(function () { openPlayer(g); }, 280); }
+  };
   $('#anaBody').addEventListener('click', function (e) {
     if (e.target.closest('#anaAll')) { openHist(); return; }
     histRepeat(e);
@@ -5832,18 +5895,18 @@
     histDim = document.createElement('div'); histDim.className = 'dim';
     stage.insertBefore(histDim, histView);
     histDim.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 480, easing: EASE });
-    histView.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 480, easing: EASE });
-    histHomeAnim = homeView.animate([{ transform: 'none' }, { transform: 'translateX(-22%)' }], { duration: 480, easing: EASE, fill: 'forwards' });
+    histView.animate([{ transform: 'translateX(100%)' }, { transform: 'none' }], { duration: 390, easing: EASE });
+    histHomeAnim = homeView.animate([{ transform: 'none' }, { transform: 'translateX(-22%)' }], { duration: 390, easing: EASE, fill: 'forwards' });
     homeView.inert = true; histOpen = true; vib(6);
   }
   function closeHist(from, pf, dimFrom) {
     if (!histOpen) return;
     histOpen = false;
-    var a = histAnim = histView.animate([{ transform: from || 'none' }, { transform: 'translateX(100%)' }], { duration: 400, easing: EASE, fill: 'forwards' });
-    homeView.animate([{ transform: pf || 'translateX(-22%)' }, { transform: 'none' }], { duration: 400, easing: EASE });
+    var a = histAnim = histView.animate([{ transform: from || 'none' }, { transform: 'translateX(100%)' }], { duration: 330, easing: EASE, fill: 'forwards' });
+    homeView.animate([{ transform: pf || 'translateX(-22%)' }, { transform: 'none' }], { duration: 330, easing: EASE });
     if (histHomeAnim) { histHomeAnim.cancel(); histHomeAnim = null; }
     var d = histDim; histDim = null;
-    if (d) d.animate([{ opacity: dimFrom == null ? 1 : dimFrom }, { opacity: 0 }], { duration: 400, easing: EASE, fill: 'forwards' }).onfinish = function () { d.remove(); };
+    if (d) d.animate([{ opacity: dimFrom == null ? 1 : dimFrom }, { opacity: 0 }], { duration: 330, easing: EASE, fill: 'forwards' }).onfinish = function () { d.remove(); };
     homeView.inert = false;
     a.onfinish = function () { if (histAnim !== a) return; histAnim = null; histView.style.display = 'none'; a.cancel(); };
   }
@@ -5876,8 +5939,8 @@
       if (!cancel && (dx > W * .33 || v > .6)) { closeHist(from, pf, 1 - p); }
       else {
         if (dx > 0) histView.animate([{ transform: from }, { transform: 'none' }], { duration: 320, easing: EASE });
-        histHomeAnim = homeView.animate([{ transform: pf }, { transform: 'translateX(-22%)' }], { duration: 320, easing: EASE, fill: 'forwards' });
-        if (histDim) histDim.animate([{ opacity: 1 - p }, { opacity: 1 }], { duration: 320, easing: EASE });
+        histHomeAnim = homeView.animate([{ transform: pf }, { transform: 'translateX(-22%)' }], { duration: 260, easing: EASE, fill: 'forwards' });
+        if (histDim) histDim.animate([{ opacity: 1 - p }, { opacity: 1 }], { duration: 260, easing: EASE });
       }
     }
     strip.addEventListener('touchend', function () { end(false); });
@@ -5914,8 +5977,8 @@
       if (!cancel && (dx > W * .33 || v > .6)) { closeLib(from, pf, 1 - p); }
       else {
         if (dx > 0) libView.animate([{ transform: from }, { transform: 'none' }], { duration: 320, easing: EASE });
-        libHomeAnim = homeView.animate([{ transform: pf }, { transform: 'translateX(-22%)' }], { duration: 320, easing: EASE, fill: 'forwards' });
-        if (libDim) libDim.animate([{ opacity: 1 - p }, { opacity: 1 }], { duration: 320, easing: EASE });
+        libHomeAnim = homeView.animate([{ transform: pf }, { transform: 'translateX(-22%)' }], { duration: 260, easing: EASE, fill: 'forwards' });
+        if (libDim) libDim.animate([{ opacity: 1 - p }, { opacity: 1 }], { duration: 260, easing: EASE });
       }
     }
     strip.addEventListener('touchend', function () { end(false); });
@@ -5975,7 +6038,7 @@
     pickView.style.display = 'flex';
     [].forEach.call(pickView.querySelectorAll('.swt-scroll'), function (sc) { sc.scrollTop = 0; });
     pkTabs.go(0, true);
-    pickView.animate([{ transform: 'translateY(100%)' }, { transform: 'none' }], { duration: 460, easing: EASE });
+    pickView.animate([{ transform: 'translateY(100%)' }, { transform: 'none' }], { duration: 380, easing: EASE });
     (pkWiz ? wizView : groupView).inert = true; pickOpen = true;
   }
   function closePicker(cb) {
@@ -5983,7 +6046,7 @@
     pickOpen = false;
     if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
     groupView.inert = false; wizView.inert = false;
-    var a = pickAnim = pickView.animate([{ transform: 'none' }, { transform: 'translateY(100%)' }], { duration: 380, easing: EASE, fill: 'forwards' });
+    var a = pickAnim = pickView.animate([{ transform: 'none' }, { transform: 'translateY(100%)' }], { duration: 310, easing: EASE, fill: 'forwards' });
     a.onfinish = function () { if (pickAnim === a) { pickAnim = null; pickView.style.display = 'none'; a.cancel(); } if (cb) cb(); };
   }
   $('#pkClose').onclick = function () { closePicker(); };
@@ -6057,7 +6120,7 @@
     wzGo(0, true);
     wizView.style.display = 'flex';
     wzGrow(wzNm); wzGrow(wzDs);
-    wizView.animate([{ transform: 'translateY(100%)' }, { transform: 'none' }], { duration: 460, easing: EASE });
+    wizView.animate([{ transform: 'translateY(100%)' }, { transform: 'none' }], { duration: 380, easing: EASE });
     homeView.inert = true; wizOpen = true;
     setTimeout(function () { if (wizOpen && wzStep === 0 && !formOpen) wzNm.focus({ preventScroll: true }); }, 520);
   }
@@ -6383,7 +6446,7 @@
   }
   function caretIntoView() {
     var a = document.activeElement;
-    if (!a || !a.matches || !a.matches('input,textarea')) return;
+    if (!a || !a.matches || !a.matches('input,textarea') || a.id === 'prName') return;   // rumuz alanı en üstte: kaydırma gerekmez
     var sc = a.closest('.scroll'); if (!sc) return;
     var r = a.getBoundingClientRect(), c = sc.getBoundingClientRect();
     if (r.bottom > c.bottom - 24) sc.scrollTop += r.bottom - c.bottom + 24;
@@ -6391,10 +6454,18 @@
   }
   window.addEventListener('scroll', function () { window.scrollTo(0, 0); });
   if (window.visualViewport) {
-    visualViewport.addEventListener('resize', function () { fit(); setTimeout(caretIntoView, 340); });
+    visualViewport.addEventListener('resize', function () {
+      var a = document.activeElement;
+      if (a && a.id === 'prName') { clearTimeout(window.__vvT); window.__vvT = setTimeout(fit, 120); return; }   // animasyon bitene kadar bekle
+      fit(); setTimeout(caretIntoView, 340);
+    });
     visualViewport.addEventListener('scroll', function () { fit(); window.scrollTo(0, 0); });
   }
-  document.addEventListener('focusin', function () { [50, 250, 500].forEach(function (t) { setTimeout(function () { fit(); caretIntoView(); }, t); }); });
+  document.addEventListener('focusin', function (e) {
+    // rumuz alanında klavye animasyonu sürerken ölçü/yerleşim güncellenmez; bittikten sonra bir kez ölçülür
+    var ts = e.target && e.target.id === 'prName' ? [420] : [50, 250, 500];
+    ts.forEach(function (t) { setTimeout(function () { fit(); caretIntoView(); }, t); });
+  });
   document.addEventListener('focusout', function () {
     setTimeout(function () {
       var ae = document.activeElement;
