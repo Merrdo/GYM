@@ -1525,8 +1525,6 @@
   function done() { if (el.parentNode) el.parentNode.removeChild(el); var c = document.getElementById('introCss'); if (c && c.parentNode) c.parentNode.removeChild(c); }
   try { if (sessionStorage.getItem('introSeen') === '1') { done(); return; } sessionStorage.setItem('introSeen', '1'); } catch (e) {}
   el.addEventListener('animationend', function (e) { if (e.animationName === 'inOut') done(); });
-  // Dokununca geç
-  el.addEventListener('click', function () { el.style.animation = 'inOut .3s ease forwards'; setTimeout(done, 340); });
   setTimeout(done, 3200);   // güvenlik: animasyon olayı gelmezse yine kapanır
 })();
 </script>
