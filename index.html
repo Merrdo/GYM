@@ -917,11 +917,71 @@
   /* Zorluk kadranı: yarım çizgi kadran, seviye rengiyle dolar */
   .stats3 .st b.zr { display: flex; align-items: center; gap: 9px; height: 1.2em; }
   .stats3 .st b.zr em { font-style: normal; color: var(--zc); }
+  /* Grup sayfası: sağ üst köşede kırmızı zorlaştır ikonu (+ seviye varsa sıfırla). Başlık, butonların yanındaki ilk satırda yer bırakır; sonraki satırlar tam genişlikte kalır */
+  .zcorner { position: absolute; top: 24px; right: 20px; z-index: 2; display: flex; align-items: center; gap: 8px; }
+  #group:not(.zon) .zcorner, #exview:not(.zon) .zcorner { display: none; }
+  .zfire, .zun { position: relative; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; -webkit-touch-callout: none; touch-action: manipulation; transition: transform .15s var(--ease), opacity .2s, background .2s; }
+  .zfire { background: rgba(255,90,77,.14); color: var(--danger); }
+  .zfire svg { width: 19px; height: 19px; }
+  .zfire:active, .zfire.hold { transform: scale(.9); background: rgba(255,90,77,.24); }
+  .zfire.max { opacity: .5; }
+  .zfire.bump { animation: zpop .34s var(--ease); }
+  @keyframes zpop { 0% { transform: scale(.86); } 55% { transform: scale(1.12); } 100% { transform: scale(1); } }
+  .zbd { position: absolute; top: -4px; right: -5px; min-width: 17px; height: 17px; padding: 0 4px; border-radius: 9px; display: grid; place-items: center; background: var(--danger-fill, #e5372b); color: #fff; font-style: normal; font-size: .68rem; font-weight: 750; line-height: 1; font-variant-numeric: tabular-nums; box-shadow: 0 0 0 2px var(--bg); pointer-events: none; }
+  .zbd[hidden] { display: none; }
+  .zun { background: var(--surface2); color: var(--dim); }
+  .zun[hidden] { display: none; }
+  .zun svg { width: 17px; height: 17px; }
+  .zun:active { transform: scale(.9); }
+  #gTitle { overflow-wrap: break-word; }
+  #gTitle::before, #exTitle::before { content: ""; float: right; width: 0; height: 32px; }
+  #group.zon #gTitle::before, #exview.zon #exTitle::before { width: 56px; }
+  #group.zon.zl #gTitle::before, #exview.zon.zl #exTitle::before { width: 102px; }
+  #exTitle { overflow-wrap: break-word; }
+  #zX { display: none; }
+  /* Uyarı ve zorlaştırılanlar paneli */
+  .zic { flex: none; order: -1; width: 46px; height: 46px; border-radius: 15px; display: grid; place-items: center; margin: 0 0 14px; background: rgba(255,90,77,.14); color: var(--danger); }
+  .zic:empty { display: none; }
+  .zic svg { width: 24px; height: 24px; }
+  #zSheet .sht-list { margin: 2px -20px 4px; padding: 0 20px; }
+  #zSheet .sht-list:empty, #zSheet .sh-d:empty, #zSheet .ssub.eb:empty { display: none; }
+  #zSheet.zrs .primary.sec { color: var(--danger); }
+  #zSheet.zrs .primary.sec:active { background: rgba(255,90,77,.12); }
+  .zr { padding: 16px 0 15px; border-top: 1px solid var(--line); }
+  .zr:first-child { border-top: 0; padding-top: 6px; }
+  .zh { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+  .zh b { min-width: 0; font-size: 1.05rem; font-weight: 650; letter-spacing: -.01em; line-height: 1.25; overflow-wrap: anywhere; }
+  .zlv { flex: none; padding: 3px 9px; border-radius: 10px; background: rgba(255,90,77,.12); color: var(--danger); font-size: .78rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .zr p { margin: -2px 0 0; color: var(--dim); font-size: .9rem; line-height: 1.4; }
+  .zc { display: flex; align-items: center; gap: 12px; min-height: 32px; font-variant-numeric: tabular-nums; }
+  .zk { flex: none; width: 72px; color: var(--dim); font-size: .85rem; font-weight: 550; }
+  .zv { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 10px; min-width: 0; }
+  .za { color: var(--dim); font-size: .98rem; white-space: nowrap; }
+  .zar { flex: none; width: 30px; height: 12px; color: var(--accent); opacity: .85; }
+  .zn { color: var(--accent); font-size: 1.1rem; font-weight: 750; letter-spacing: -.01em; white-space: nowrap; }
+  #zSheet.zdn .zn { color: var(--ink); }
+  #zSheet.zdn .zar { color: var(--dim); }
+  /* Hareket sayfası: zorluk özeti kartı */
+  .zl-card { margin-top: 26px; padding: 16px 18px 6px; background: var(--surface); border-radius: var(--r); }
+  .zl-card[hidden] { display: none; }
+  .zl-hd { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .zl-hd b { font-size: 1.05rem; font-weight: 700; letter-spacing: -.01em; }
+  .zl-hd span { color: var(--dim); font-size: .9rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .zl-hd span em { font-style: normal; color: var(--danger); font-size: 1.15rem; font-weight: 750; }
+  .zl-seg { display: flex; gap: 4px; margin: 12px 0 8px; }
+  .zl-seg i { flex: 1; height: 6px; border-radius: 3px; background: var(--surface2); }
+  .zl-seg i.on { background: var(--danger); }
+  .zl-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 13px 0; border-top: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+  .zl-row:first-of-type { border-top: 0; }
+  .zl-row > span:first-child { color: var(--dim); font-size: .92rem; font-weight: 550; }
+  .zl-v { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 4px 10px; min-width: 0; }
+  .zl-v .za { font-size: 1rem; }
+  .zl-v .zn { font-size: 1.2rem; }
   .gz { flex: none; width: 42px; height: 25px; overflow: visible; }
   .gz .tk { fill: none; stroke-width: 4; stroke-linecap: butt; opacity: .22; }
   .gz .pg { fill: none; stroke: var(--zc); stroke-width: 4; stroke-linecap: round; animation: gz .9s var(--ease) .12s both; }
   .tk.t0 { stroke: var(--lv0); } .tk.t1 { stroke: var(--lv1); } .tk.t2 { stroke: var(--lv2); }
-  @keyframes gz { from { stroke-dasharray: 0 100; } }
+  @keyframes gz { from { stroke-dasharray: var(--gz0, 0) 100; } }
   @media (prefers-reduced-motion: reduce) { .gz .pg { animation: none; } }
   .sech { display: flex; align-items: baseline; gap: 8px; margin: 34px 0 4px; }
   .sech h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -.025em; }
@@ -1929,9 +1989,11 @@
     <div class="scroll stretch" id="exScroll">
       <div class="gw"><div class="cap"></div><div class="hero" id="exHero"></div></div>
       <div class="gbody">
+        <div class="zcorner" id="exZw"><button type="button" class="zun" id="exZun" aria-label="Zorluğu tamamen sıfırla" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 103-6.2M4 4v4h4"/></svg></button><button type="button" class="zfire" id="exZup" aria-label="Hareketi bir seviye zorlaştır. Basılı tutarsan değişimler listelenir."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 002.5 2.5z"/></svg><i class="zbd" id="exZbd" hidden></i></button></div>
         <h1 class="gt" id="exTitle"></h1>
         <div class="exmeta" id="exMeta"></div>
         <div class="stats3" id="exStats"></div>
+        <div class="zl-card" id="exZl" hidden></div>
         <div class="sech"><h2>Anlatım</h2></div>
         <div class="exdesc" id="exDesc"></div>
       </div>
@@ -1947,6 +2009,7 @@
     <div class="scroll stretch" id="groupScroll">
       <div class="gw" id="gw"><div class="cap"></div><div class="hero" id="hero"></div></div>
       <div class="gbody">
+      <div class="zcorner" id="gZw"><button type="button" class="zun" id="gZun" aria-label="Zorluğu tamamen sıfırla" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 103-6.2M4 4v4h4"/></svg></button><button type="button" class="zfire" id="gZup" aria-label="Grubu bir seviye zorlaştır. Basılı tutarsan zorlaştırılanlar listelenir."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 002.5 2.5z"/></svg><i class="zbd" id="gZbd" hidden></i></button></div>
         <h1 class="gt" id="gTitle"></h1>
         <p class="gdesc" id="gDesc"></p>
         <div class="gwk" id="gWk"></div>
@@ -2156,6 +2219,20 @@
     </div>
   </div>
 
+  <!-- Zorlaştır: uyarı ve sonuç paneli -->
+  <div class="sht" id="zSheet" style="z-index:50">
+    <div class="sht-card">
+      <div class="zic" id="zIc" aria-hidden="true"></div>
+      <p class="ssub eb" id="zEb"></p>
+      <h2 id="zT"></h2>
+      <p class="sh-d" id="zD"></p>
+      <div class="sht-list" id="zL"></div>
+      <button class="primary" id="zOk"></button>
+      <button class="primary sec" id="zNo"></button>
+      <button type="button" id="zX" hidden aria-hidden="true" tabindex="-1"></button>
+    </div>
+  </div>
+
   <!-- Seçim / sıralama kipi alt çubuğu -->
   <div class="mbar" id="mbar"><div id="mbarIn"></div></div>
 
@@ -2276,6 +2353,108 @@
       '- Boyun fıtığı ya da yakın zamanda boyun yaralanman varsa önce doktora danış.',
       '## Neden bu sıra',
       '- Isınmada önce yavaş hareket, sonra tutuş gelir. Tutuşları 15 sn tuttuk; kaynaklar genelde 10–30 sn arası öneriyor.'
+    ].join('\n') },
+    { key: 'one-kol-kaldirma-4', name: 'Öne Kol Kaldırma', type: 'time', value: 105, sets: 2, rest: 20,
+      desc: [
+      '## Sıra ve süre · toplam 105 sn',
+      '- 00:00–01:00 · Dönüşümlü tek kol (Sağ, sonra sol, dönüşümlü kaldır)',
+      '- 01:00–01:45 · İki kol birlikte (İki kolu aynı anda kaldır, birlikte indir)',
+      '## Süre ve tempo',
+      '- 105 sn · 2 set · setler arası 20 sn dinlenme',
+      '- Tempo: 2 sn’de kaldır, 3 sn’de indir. Bir tekrar yaklaşık 5 sn sürer.',
+      '- Dönüşümlü bölümde her kol 30 sn çalışır, yaklaşık 6 tekrar (toplam 12). İki kol bölümünde yaklaşık 9 tekrar yaparsın.',
+      '## Nasıl yapılır',
+      '1. Ayaklar omuz genişliğinde, dizler hafif yumuşak, karın hafif sıkı, göğüs dik, kollar yanlarda dursun.',
+      '2. Avuç içi aşağı bakacak şekilde, bir kolu dirseği hafif bükülü hâlde düz öne doğru omuz hizasına kadar kaldır.',
+      '3. Omuz hizasına gelince dur, sonra kolu 3 sn’de kontrollü indir. Diğer kolla aynısını yap ve dönüşümlü devam et.',
+      '4. Sonraki bölümde iki kolu aynı anda düz öne, omuz hizasına kadar kaldır. Birlikte yavaşça indir.',
+      '5. Gövde sabit kalsın. Hareket yalnızca omuzdan gelsin.',
+      '## Dikkat',
+      '- Kolları omuz hizasından yukarı çıkarma. Savurma, gövdeyle ivme verme.',
+      '- Omuzlarını kulaklarına doğru kaldırma. Boynun gevşek kalsın.',
+      '- Belini geriye kavislendirme. Karnını sık, gövdeyi sabit tut.',
+      '- Dirsekleri kilitleme, hafif bükülü kalsın.',
+      '- Nefes: kaldırırken ver, indirirken al. Nefesini tutma.',
+      '- Normal hissin omuzun ön kısmında yorgunluk. Omuz üstünde sıkışma ya da keskin ağrı olmamalı; olursa hemen bırak.',
+      '- Omuz sıkışması ya da çıkığı geçmişin varsa kolları yarım yüksekliğe kadar kaldır.'
+    ].join('\n') },
+    { key: 'yana-kol-kaldirma-4', name: 'Yana Kol Kaldırma', type: 'time', value: 105, sets: 2, rest: 20,
+      desc: [
+      '## Sıra ve süre · toplam 105 sn',
+      '- 00:00–01:00 · Dönüşümlü tek kol (Sağ, sonra sol, dönüşümlü kaldır)',
+      '- 01:00–01:45 · İki kol birlikte (İki kolu aynı anda kaldır, birlikte indir)',
+      '## Süre ve tempo',
+      '- 105 sn · 2 set · setler arası 20 sn dinlenme',
+      '- Tempo: 2 sn’de kaldır, 3 sn’de indir. Bir tekrar yaklaşık 5 sn sürer.',
+      '- Dönüşümlü bölümde her kol 30 sn çalışır, yaklaşık 6 tekrar (toplam 12). İki kol bölümünde yaklaşık 9 tekrar yaparsın.',
+      '## Nasıl yapılır',
+      '1. Ayaklar omuz genişliğinde, dizler hafif yumuşak, karın hafif sıkı, göğüs dik, kollar yanlarda dursun.',
+      '2. Avuç içi aşağı bakacak şekilde, bir kolu dirseği hafif bükülü hâlde yana doğru omuz hizasına kadar kaldır. Kol tam yanda değil, gövde çizgisinin hafif önünde olsun.',
+      '3. Omuz hizasına gelince dur, sonra kolu 3 sn’de kontrollü indir. Diğer kolla aynısını yap ve dönüşümlü devam et.',
+      '4. Sonraki bölümde iki kolu aynı anda yana, omuz hizasına kadar kaldır. Birlikte yavaşça indir.',
+      '5. Gövde sabit kalsın. Hareket yalnızca omuzdan gelsin.',
+      '## Dikkat',
+      '- Kolları omuz hizasından yukarı çıkarma. Savurma, gövdeyle ivme verme.',
+      '- Omuzlarını kulaklarına doğru kaldırma. Boynun gevşek kalsın.',
+      '- Belini geriye kavislendirme. Karnını sık, gövdeyi sabit tut.',
+      '- Dirsekleri kilitleme, hafif bükülü kalsın.',
+      '- Nefes: kaldırırken ver, indirirken al. Nefesini tutma.',
+      '- Normal hissin omuzun yan kısmında yorgunluk. Omuz üstünde sıkışma ya da keskin ağrı olmamalı; olursa hemen bırak.',
+      '- Omuz sıkışması ya da çıkığı geçmişin varsa kolları yarım yüksekliğe kadar kaldır.'
+    ].join('\n') },
+    { key: 'one-kol-kaldirma-bekletmeli-4', name: 'Öne Kol Kaldırma (Bekletmeli)', type: 'time', value: 112, sets: 2, rest: 20,
+      desc: [
+      '## Sıra ve süre · toplam 112 sn',
+      '- 00:00–01:04 · Dönüşümlü tek kol bekletme (Sağ, sonra sol; havada bekle)',
+      '- 01:04–01:52 · İki kol birlikte bekletme (İki kolu aynı anda kaldır, havada bekle)',
+      '## Süre ve tempo',
+      '- 112 sn · 2 set · setler arası 20 sn dinlenme',
+      '- Tempo: 2 sn’de kaldır, havada 3 sn bekle, 3 sn’de indir. Bir tekrar yaklaşık 8 sn sürer.',
+      '- Dönüşümlü bölümde her kol 32 sn çalışır, yaklaşık 4 tekrar (toplam 8). İki kol bölümünde yaklaşık 6 tekrar yaparsın.',
+      '- Bu varyant normal hareketten daha zordur. Önce normal hareketi rahat tamamlayabildiğinde bu varyanta geç.',
+      '## Nasıl yapılır',
+      '1. Ayaklar omuz genişliğinde, dizler hafif yumuşak, karın hafif sıkı, göğüs dik, kollar yanlarda dursun.',
+      '2. Avuç içi aşağı bakacak şekilde, bir kolu dirseği hafif bükülü hâlde düz öne doğru omuz hizasına kadar kaldır.',
+      '3. Omuz hizasına gelince kolu havada sabit tut ve 3 sn bekle. Bu sırada nefesini tutma.',
+      '4. Sonra kolu 3 sn’de kontrollü indir. Diğer kolla aynısını yap ve dönüşümlü devam et.',
+      '5. Sonraki bölümde iki kolu aynı anda düz öne, omuz hizasına kadar kaldır. Havada 3 sn bekle, sonra birlikte yavaşça indir.',
+      '6. Gövde sabit kalsın. Hareket yalnızca omuzdan gelsin.',
+      '## Dikkat',
+      '- Kolları omuz hizasından yukarı çıkarma. Savurma, gövdeyle ivme verme.',
+      '- Omuzlarını kulaklarına doğru kaldırma. Boynun gevşek kalsın.',
+      '- Belini geriye kavislendirme. Karnını sık, gövdeyi sabit tut.',
+      '- Dirsekleri kilitleme, hafif bükülü kalsın.',
+      '- Beklerken kol titriyor ya da omuz yükseliyorsa kolu biraz aşağıda tut ya da hemen indir.',
+      '- Nefes: kaldırırken ver, indirirken al. Nefesini tutma.',
+      '- Normal hissin omuzun ön kısmında yorgunluk. Omuz üstünde sıkışma ya da keskin ağrı olmamalı; olursa hemen bırak.',
+      '- Omuz sıkışması ya da çıkığı geçmişin varsa kolları yarım yüksekliğe kadar kaldır.'
+    ].join('\n') },
+    { key: 'yana-kol-kaldirma-bekletmeli-4', name: 'Yana Kol Kaldırma (Bekletmeli)', type: 'time', value: 112, sets: 2, rest: 20,
+      desc: [
+      '## Sıra ve süre · toplam 112 sn',
+      '- 00:00–01:04 · Dönüşümlü tek kol bekletme (Sağ, sonra sol; havada bekle)',
+      '- 01:04–01:52 · İki kol birlikte bekletme (İki kolu aynı anda kaldır, havada bekle)',
+      '## Süre ve tempo',
+      '- 112 sn · 2 set · setler arası 20 sn dinlenme',
+      '- Tempo: 2 sn’de kaldır, havada 3 sn bekle, 3 sn’de indir. Bir tekrar yaklaşık 8 sn sürer.',
+      '- Dönüşümlü bölümde her kol 32 sn çalışır, yaklaşık 4 tekrar (toplam 8). İki kol bölümünde yaklaşık 6 tekrar yaparsın.',
+      '- Bu varyant normal hareketten daha zordur. Önce normal hareketi rahat tamamlayabildiğinde bu varyanta geç.',
+      '## Nasıl yapılır',
+      '1. Ayaklar omuz genişliğinde, dizler hafif yumuşak, karın hafif sıkı, göğüs dik, kollar yanlarda dursun.',
+      '2. Avuç içi aşağı bakacak şekilde, bir kolu dirseği hafif bükülü hâlde yana doğru omuz hizasına kadar kaldır. Kol tam yanda değil, gövde çizgisinin hafif önünde olsun.',
+      '3. Omuz hizasına gelince kolu havada sabit tut ve 3 sn bekle. Bu sırada nefesini tutma.',
+      '4. Sonra kolu 3 sn’de kontrollü indir. Diğer kolla aynısını yap ve dönüşümlü devam et.',
+      '5. Sonraki bölümde iki kolu aynı anda yana, omuz hizasına kadar kaldır. Havada 3 sn bekle, sonra birlikte yavaşça indir.',
+      '6. Gövde sabit kalsın. Hareket yalnızca omuzdan gelsin.',
+      '## Dikkat',
+      '- Kolları omuz hizasından yukarı çıkarma. Savurma, gövdeyle ivme verme.',
+      '- Omuzlarını kulaklarına doğru kaldırma. Boynun gevşek kalsın.',
+      '- Belini geriye kavislendirme. Karnını sık, gövdeyi sabit tut.',
+      '- Dirsekleri kilitleme, hafif bükülü kalsın.',
+      '- Beklerken kol titriyor ya da omuz yükseliyorsa kolu biraz aşağıda tut ya da hemen indir.',
+      '- Nefes: kaldırırken ver, indirirken al. Nefesini tutma.',
+      '- Normal hissin omuzun yan kısmında yorgunluk. Omuz üstünde sıkışma ya da keskin ağrı olmamalı; olursa hemen bırak.',
+      '- Omuz sıkışması ya da çıkığı geçmişin varsa kolları yarım yüksekliğe kadar kaldır.'
     ].join('\n') }
   ];
   (function () {
@@ -2349,10 +2528,13 @@
     var score = .30 * c(n / 10) + .35 * c(total / 60 / 40) + .35 * c(kcal / 250);
     return score < .35 ? { s: score, t: 'Kolay', c: 'var(--lv0)' } : score < .65 ? { s: score, t: 'Orta', c: 'var(--lv1)' } : { s: score, t: 'Zor', c: 'var(--lv2)' };
   }
-  function gaugeHTML(d) {
+  var gzLast = { id: '', pct: 0 }, gzKeep = false;   // zorlaştırırken kadran önceki doluluktan devam eder
+  function gaugeHTML(d, id) {
     var pct = Math.round(Math.max(.07, Math.min(1, d.s)) * 100);
+    var from = id && gzKeep && gzLast.id === id ? gzLast.pct : 0;
+    if (id) gzLast = { id: id, pct: pct };
     var arc = 'd="M4 21A16 16 0 0 1 36 21" pathLength="100"';
-    return '<b class="zr" style="--zc:' + d.c + '"><svg class="gz" viewBox="0 0 40 25" aria-hidden="true">' +
+    return '<b class="zr" style="--zc:' + d.c + '"><svg class="gz" viewBox="0 0 40 25" style="--gz0:' + from + '" aria-hidden="true">' +
       '<path ' + arc + ' class="tk t0" stroke-dasharray="31 100"/>' +
       '<path ' + arc + ' class="tk t1" stroke-dasharray="31 100" stroke-dashoffset="-34.5"/>' +
       '<path ' + arc + ' class="tk t2" stroke-dasharray="31 100" stroke-dashoffset="-69"/>' +
@@ -3337,7 +3519,7 @@
 
   function gStatsHTML(g) {
     var n = g.exercises.length;
-    return n ? '<div class="st"><b>' + n + '</b><span>Hareket</span></div><div class="st"><b>' + fmtEst(estSec(g)) + '</b><span>Süre</span></div><div class="st">' + gaugeHTML(groupDiff(g)) + '<span>Zorluk</span></div>' : '';
+    return n ? '<div class="st"><b>' + n + '</b><span>Hareket</span></div><div class="st"><b>' + fmtEst(estSec(g)) + '</b><span>Süre</span></div><div class="st">' + gaugeHTML(groupDiff(g), g.id) + '<span>Zorluk</span></div>' : '';
   }
   function exRowHTML(e, i) {
       return '<button class="it x' + picked('group', e.id) + '" data-id="' + e.id + '" style="--i:' + i + '"><div class="gcv xcv" aria-hidden="true">' + esc((e.name.trim().charAt(0) || '·').toLocaleUpperCase('tr')) + '</div><div class="bd"><div class="nm">' + esc(e.name) + '</div><div class="sb">' + exMeasure(e) + mtTag(e) + '</div></div>' + MK + '</button>';
@@ -3354,6 +3536,7 @@
     $('#gTitle').textContent = g.name; $('#gHeadT').textContent = g.name; $('#gHead').style.setProperty('--p', 0); $('#group').style.setProperty('--hp', 0);
     $('#hero').innerHTML = '<div class="hl" aria-hidden="true">' + esc((g.name.trim().charAt(0) || '·').toLocaleUpperCase('tr')) + '</div>';
     $('#gStats').innerHTML = gStatsHTML(g);
+    zPaintGr(g);
     $('#gSech').style.display = n ? '' : 'none';
     $('#gCount').textContent = n ? '(' + n + ')' : '';
     mtGroupRefresh(false);
@@ -3803,7 +3986,7 @@
     var W = lib === 'wiz', g = lib ? null : findGroup(curId); if (!lib && !g) return;
     var arr = W ? wiz.exercises : lib ? state.library : g.exercises;
     var ex = exId ? arr.filter(function (e) { return e.id === exId; })[0] : null;
-    var d = ex ? { name: ex.name, desc: ex.desc || '', type: ex.type, time: ex.type === 'time' ? ex.value : 30, reps: ex.type === 'reps' ? ex.value : 12, sets: ex.sets, rest: ex.rest || 0, metro: !!ex.metro, tempo: ex.tempo || 3 }
+    var d = ex ? { name: ex.name, desc: zStrip(ex.desc), type: ex.type, time: ex.type === 'time' ? ex.value : 30, reps: ex.type === 'reps' ? ex.value : 12, sets: ex.sets, rest: ex.rest || 0, metro: !!ex.metro, tempo: ex.tempo || 3 }
                : { name: '', desc: '', type: 'time', time: 30, reps: 12, sets: 3, rest: 30, metro: false, tempo: 3 };
 
     // Her .fsec bir bölüm; yeni özellik için yeni bölüm veya satır eklemek yeterli
@@ -4359,6 +4542,12 @@
     { re: /kol cevir|arm circle|omuz cevir/,
       setup: 'Kollar yanlara açık. Küçük dairelerle başla, yavaşça büyüt.',
       tips: ['Düzenli nefes al.', 'Omuzlarını kulaklarına kaldırma.', 'Hareketi omuzdan yap, akıcı git.', 'Yönü ara ara değiştir.'] },
+    { re: /bekletmeli/,
+      setup: 'Ayaklar omuz genişliğinde, karın sıkı. Kolu omuz hizasına kaldır, havada üç saniye bekle, yavaşça indir.',
+      tips: ['Kaldırırken nefes ver, beklerken normal nefes al.', 'Beklerken omuzlarını kulaklarından uzak tut.', 'Kol titriyorsa biraz aşağıda tut.', 'Kolu bırakma, yavaş indir.', 'Gövdeni geriye yatırma.'] },
+    { re: /kol kaldirma/,
+      setup: 'Ayaklar omuz genişliğinde, karın sıkı. Avuç içi aşağı, kolu omuz hizasına kadar kaldır.',
+      tips: ['Kaldırırken nefes ver, indirirken nefes al.', 'Omuz hizasından yukarı çıkma.', 'Omuzlarını kulaklarına kaldırma.', 'Savurma, gövdeyle ivme verme.', 'Yavaş indir, kontrolü bırakma.'] },
     { re: /esnet|stretch|germe|mobilite/,
       setup: '',
       tips: ['Gerilim hissetmelisin, ağrı değil.', 'Yavaş ve derin nefes al, nefes verirken gevşe.', 'Sallanma, ani hareket yapma.', 'Omuzlarını gevşek bırak.'] }
@@ -5037,7 +5226,7 @@
 
   /* ----- Panel tutamacı: aşağı sürükle ya da dokun, panel kapansın ----- */
   (function () {
-    var map = { ctx: 'cxCancel', addSheet: 'aCancel', vSheet: 'vDone', nSheet: 'nDone', plMore: 'mKeep', plInfo: 'piOk', plQuit: 'qKeep', dsh: 'dshNo', cdsh: 'cdNo', plMtSh: 'plMtDone', mtSh: 'mtDone', pfSheet: 'pfsNo', profSheet: 'psNo', bkSheet: 'bkNo', rsSheet: 'rsNo', lgSheet: 'lgNo', rpSheet: 'rpNo', wzCf: 'wzCfNo', xsh: 'xshNo' };
+    var map = { ctx: 'cxCancel', addSheet: 'aCancel', vSheet: 'vDone', nSheet: 'nDone', plMore: 'mKeep', plInfo: 'piOk', plQuit: 'qKeep', dsh: 'dshNo', cdsh: 'cdNo', plMtSh: 'plMtDone', mtSh: 'mtDone', pfSheet: 'pfsNo', profSheet: 'psNo', bkSheet: 'bkNo', rsSheet: 'rsNo', lgSheet: 'lgNo', rpSheet: 'rpNo', wzCf: 'wzCfNo', xsh: 'xshNo', zSheet: 'zX' };
     Object.keys(map).forEach(function (id) {
       var ov = document.getElementById(id), card = ov && ov.querySelector('.sht-card, .dsh-card, .q-card'), btn = document.getElementById(map[id]);
       if (!card || !btn) return;
@@ -5559,7 +5748,8 @@
   wireLP('home'); wireLP('group'); wireLP('lib');
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
-    if ($('#cdsh').classList.contains('open')) closeCd();
+    if ($('#zSheet').classList.contains('open')) zClose();
+    else if ($('#cdsh').classList.contains('open')) closeCd();
     else if ($('#ctx').classList.contains('open')) closeCtx();
     else if ($('#addSheet').classList.contains('open')) closeAdd();
     else if (mm) exitMode();
@@ -5604,11 +5794,19 @@
     $('#exTitle').textContent = e.name; $('#exHeadT').textContent = e.name;
     $('#exHero').innerHTML = '<div class="hl" aria-hidden="true">' + esc((e.name.trim().charAt(0) || '·').toLocaleUpperCase('tr')) + '</div>';
     $('#exStats').innerHTML = '<div class="st"><b>' + e.sets + '</b><span>Set</span></div><div class="st"><b>' + (e.type === 'time' ? fmtTime(e.value) : e.value) + '</b><span>' + (e.type === 'time' ? 'Süre' : 'Tekrar') + '</span></div><div class="st"><b>' + (e.rest ? fmtTime(e.rest) : 'Yok') + '</b><span>Dinlenme</span></div>';
-    var d = $('#exDesc'); d.classList.toggle('none', !e.desc);
-    d.classList.toggle('rich', !!e.desc); if (e.desc) d.innerHTML = descHTML(e.desc); else d.textContent = exLib ? 'Bu hareket için henüz tarif eklenmemiş.' : 'Henüz tarif eklenmemiş. Sağ üstteki düğmeyle düzenleyip duruş, nefes ve dikkat noktalarını yazabilirsin.';
+    var zi = zInfo(e), zc = !!(e.zb && zi.l > 0 && !zi.skip), ds = zc ? zStrip(e.desc).trim() : e.desc, zl = $('#exZl');
+    zl.hidden = !zc;
+    if (zc) {
+      var sg = ''; for (var q = 1; q <= zi.n; q++) sg += '<i' + (q <= zi.l ? ' class="on"' : '') + '></i>';
+      zl.innerHTML = '<div class="zl-hd"><b>Zorluk seviyesi</b><span><em>' + zi.l + '</em> / ' + zi.n + '</span></div><div class="zl-seg" aria-hidden="true">' + sg + '</div>' +
+        zDiff(e).map(function (c) { return '<div class="zl-row"><span>' + esc(c.k) + '</span><span class="zl-v"><span class="za">' + esc(c.a) + '</span>' + Z_AR + '<span class="zn">' + esc(c.b) + '</span></span></div>'; }).join('');
+    }
+    var d = $('#exDesc'); d.classList.toggle('none', !ds);
+    d.classList.toggle('rich', !!ds); if (ds) d.innerHTML = descHTML(ds); else d.textContent = exLib ? 'Bu hareket için henüz tarif eklenmemiş.' : 'Henüz tarif eklenmemiş. Sağ üstteki düğmeyle düzenleyip duruş, nefes ve dikkat noktalarını yazabilirsin.';
     $('#exMeta').innerHTML = exLib ? '<span>' + (e.preset ? 'Hazır hareket' : 'Kendi hareketim') + '</span>' : '';
     $('#exEdit').style.display = exLib ? 'none' : ''; $('#exFav').style.display = exLib ? '' : 'none';
     $('#exFav').classList.toggle('on', !!e.fav); $('#exFav').setAttribute('aria-pressed', !!e.fav);
+    zPaintEx(e);
   }
   function openEx(id, lib) {
     if (exId) return;
@@ -5630,6 +5828,247 @@
   $('#exBack').onclick = function () { closeEx(); };
   $('#exEdit').onclick = function () { if (exId && !exLib) exForm(exId); };
   $('#exFav').onclick = function () { if (exId && exLib) toggleFav(exId); };
+
+  /* ----- Zorlaştır: küçük ve sınırlı adımlarla güvenli ilerleme -----
+     Her adımda tek şey değişir. Sıra: süre/tekrar (+%15, tabanın en çok 1,5 katı) → set (en çok 4) → dinlenme (en az 15 sn) → havada bekleme (en çok 5 sn).
+     İlk değerler e.zb'de, seviye e.zl'de saklanır. Hareket elle düzenlenirse form yeni bir nesne yazar; yeni değerler taban olur. */
+  var Z_SETS = 4, Z_REST = 15, Z_HOLD = 5, Z_CAP = 1.5, Z_STEP = .15;
+  function zSkip(e) { return /esnet|stretch|germe|mobilite/.test(coachKey(e.name)); }
+  function zHoldOf(d) { var m = /havada (\d+) sn bekle/i.exec(d || ''); return m ? +m[1] : 0; }
+  function zStrip(d) { return String(d || '').replace(/^## Zorluk seviyesi\n[^\n]*\n?/, ''); }
+  function zSum(a) { return a.reduce(function (x, y) { return x + y; }, 0); }
+  function zParts(d, total) {
+    var out = [];
+    String(d || '').split('\n').forEach(function (l) {
+      var m = /^[-•]\s*(\d{1,2}):(\d{2})\s*[–-]\s*(\d{1,2}):(\d{2})/.exec(l.trim());
+      if (m) out.push((+m[3]) * 60 + (+m[4]) - (+m[1]) * 60 - (+m[2]));
+    });
+    return out.length > 1 && out.every(function (x) { return x > 0; }) && zSum(out) === total ? out : null;
+  }
+  function zSnap(e) { return { type: e.type, value: e.value, sets: e.sets, rest: e.rest || 0, desc: zStrip(e.desc) }; }
+  function zPlan(b) {
+    var time = b.type === 'time', d0 = time ? zParts(b.desc, b.value) : null;
+    function inc(x) { return time ? Math.max(5, Math.round(x * Z_STEP / 5) * 5) : Math.max(1, Math.round(x * Z_STEP)); }
+    var add = d0 ? d0.map(inc) : [inc(b.value)], cap = Math.ceil(b.value * Z_CAP), out = [], k;
+    var cur = { v: b.value, d: d0, s: b.sets, r: b.rest || 0, h: zHoldOf(b.desc) };
+    function nx(o) { cur = { v: o.v === undefined ? cur.v : o.v, d: o.d === undefined ? cur.d : o.d, s: o.s === undefined ? cur.s : o.s, r: o.r === undefined ? cur.r : o.r, h: o.h === undefined ? cur.h : o.h }; out.push(cur); }
+    for (k = 0; k < 3; k++) {
+      var d = cur.d ? cur.d.map(function (x, i) { return x + add[i]; }) : null, n = d ? zSum(d) : cur.v + add[0];
+      if (n > cap) break;
+      nx({ v: n, d: d });
+    }
+    while (cur.s < Z_SETS) nx({ s: cur.s + 1 });
+    while (cur.r > Z_REST) nx({ r: Math.max(Z_REST, cur.r - 5) });
+    while (cur.h && cur.h < Z_HOLD) nx({ h: cur.h + 1 });
+    return out;
+  }
+  function zFmt(s) { return pad2(Math.floor(s / 60)) + ':' + pad2(s % 60); }
+  // Tarifi yeni değerlere uydurur: zaman çizelgesi, toplam/set satırı, bekleme süresi ve tekrar sayıları
+  function zDesc(b, st, L, N) {
+    var d = String(b.desc || ''), time = b.type === 'time', h0 = zHoldOf(d), cyc = +((/Bir tekrar yaklaşık (\d+) sn sürer/.exec(d) || [])[1] || 0), t = 0, i = 0;
+    if (time && st.d) d = d.split('\n').map(function (l) {
+      var m = /^(\s*[-•]\s*)(\d{1,2}):(\d{2})\s*[–-]\s*(\d{1,2}):(\d{2})(.*)$/.exec(l);
+      if (!m || i >= st.d.length) return l;
+      var a = t; t += st.d[i++]; return m[1] + zFmt(a) + '–' + zFmt(t) + m[6];
+    }).join('\n');
+    if (time) {
+      d = d.replace(/(## Sıra ve süre · toplam )\d+( sn)/, '$1' + st.v + '$2');
+      d = d.replace(/- \d+ sn · \d+ set · setler arası \d+ sn dinlenme/, '- ' + st.v + ' sn · ' + st.s + ' set · setler arası ' + st.r + ' sn dinlenme');
+      d = d.replace(/(\d+) sn yaklaşık (\d+)–(\d+) tekrar eder/, function (m, a, x, y) { return st.v + ' sn yaklaşık ' + Math.round(x * st.v / b.value) + '–' + Math.round(y * st.v / b.value) + ' tekrar eder'; });
+    }
+    if (h0) {
+      d = d.replace(/(\d+) sn bekle/g, st.h + ' sn bekle');
+      if (cyc) d = d.replace(/Bir tekrar yaklaşık \d+ sn sürer/, 'Bir tekrar yaklaşık ' + (cyc + st.h - h0) + ' sn sürer');
+    }
+    if (cyc && st.d && st.d.length === 2) {
+      var c = cyc + (h0 ? st.h - h0 : 0), t1 = Math.floor(st.d[0] / c), n2 = Math.floor(st.d[1] / c); t1 -= t1 % 2;   // dönüşümlüde sağ ve sol eşit sayıda
+      d = d.replace(/her kol \d+ sn çalışır, yaklaşık \d+ tekrar \(toplam \d+\)\. İki kol bölümünde yaklaşık \d+ tekrar yaparsın\./,
+        'her kol ' + Math.round(st.d[0] / 2) + ' sn çalışır, yaklaşık ' + Math.round(t1 / 2) + ' tekrar (toplam ' + t1 + '). İki kol bölümünde yaklaşık ' + n2 + ' tekrar yaparsın.');
+    }
+    var ch = [];
+    if (st.v !== b.value) ch.push(time ? 'Süre ' + fmtTime(b.value) + ' → ' + fmtTime(st.v) : 'Tekrar ' + b.value + ' → ' + st.v);
+    if (st.s !== b.sets) ch.push('Set ' + b.sets + ' → ' + st.s);
+    if (st.r !== (b.rest || 0)) ch.push('Dinlenme ' + fmtTime(b.rest || 0) + ' → ' + fmtTime(st.r));
+    if (h0 && st.h !== h0) ch.push('Havada bekleme ' + h0 + ' → ' + st.h + ' sn');
+    return '## Zorluk seviyesi\n- Seviye ' + L + ' / ' + N + ' · ' + ch.join(' · ') + '\n' + d;
+  }
+  function zSet(e, L) {
+    var b = e.zb, pl = zPlan(b), st = L ? pl[L - 1] : { v: b.value, d: null, s: b.sets, r: b.rest || 0, h: 0 };
+    e.value = st.v; e.sets = st.s; e.rest = st.r; e.desc = L ? zDesc(b, st, L, pl.length) : b.desc;
+    if (L) e.zl = L; else { delete e.zb; delete e.zl; }
+  }
+  function zInfo(e) { var b = e.zb || zSnap(e); return { b: b, n: zPlan(b).length, l: e.zb ? e.zl || 0 : 0, skip: zSkip(e) }; }
+  // Bir seviye ilerler / geri alır; değişenleri [{ k, a, b }] olarak döndürür (olmazsa false)
+  function zMove(e, dir) {
+    var i = zInfo(e), nl = i.l + dir; if (i.skip || nl < 0 || nl > i.n) return false;
+    var o = { v: e.value, s: e.sets, r: e.rest || 0, h: zHoldOf(e.desc) }, tm = e.type === 'time', ch = [];
+    function f(x) { return tm ? fmtTime(x) : String(x); }
+    if (!e.zb) e.zb = i.b;
+    zSet(e, nl);
+    if (o.v !== e.value) ch.push({ k: tm ? 'Süre' : 'Tekrar', a: f(o.v), b: f(e.value) });
+    if (o.s !== e.sets) ch.push({ k: 'Set', a: String(o.s), b: String(e.sets) });
+    if (o.r !== (e.rest || 0)) ch.push({ k: 'Dinlenme', a: fmtTime(o.r), b: fmtTime(e.rest || 0) });
+    var h = zHoldOf(e.desc); if (o.h && h !== o.h) ch.push({ k: 'Bekleme', a: o.h + ' sn', b: h + ' sn' });
+    return ch;
+  }
+  /* Uyarı yalnızca bir seri başında verilir: son 7 günde zorlaştırılmış ve son basıştan 10 dk geçmişse. Onaylanınca seri sürer, tekrar sorulmaz. */
+  var Z_STREAK = 10 * 60e3;
+  function zRecent(a) { var t = a && a.length ? Math.max.apply(null, a) : 0, d = Date.now() - t; return !!t && d < 7 * 864e5 && d > Z_STREAK; }
+  // Hareketin ilk haline göre değişenleri [{ k, a, b }] verir
+  function zDiff(e) {
+    var b = e.zb, tm = e.type === 'time', ch = [];
+    if (!b) return ch;
+    function f(x) { return tm ? fmtTime(x) : String(x); }
+    if (b.value !== e.value) ch.push({ k: tm ? 'Süre' : 'Tekrar', a: f(b.value), b: f(e.value) });
+    if (b.sets !== e.sets) ch.push({ k: 'Set', a: String(b.sets), b: String(e.sets) });
+    if ((b.rest || 0) !== (e.rest || 0)) ch.push({ k: 'Dinlenme', a: fmtTime(b.rest || 0), b: fmtTime(e.rest || 0) });
+    var h0 = zHoldOf(b.desc), h1 = zHoldOf(e.desc); if (h0 && h0 !== h1) ch.push({ k: 'Bekleme', a: h0 + ' sn', b: h1 + ' sn' });
+    return ch;
+  }
+  function zStamp(o, dir) { if (dir > 0) o.zt = (o.zt || []).concat(Date.now()).slice(-8); else if (o.zt && o.zt.length) o.zt.pop(); }
+  function zNextName(e) { var f = !/bekletmeli/i.test(e.name) && libFind(e.name + ' (Bekletmeli)'); return f ? f.name : ''; }
+  function zCur() { var g = findGroup(curId), src = exLib ? state.library : (g ? g.exercises : []); return src.filter(function (x) { return x.id === exId; })[0]; }
+
+  /* Alt panel: uyarı ve sonuç. ok = ana düğme, no = alttaki ikinci düğme ({ t, fn }); fn yoksa panel kapanır */
+  var zM = null;
+  var Z_AR = '<svg class="zar" viewBox="0 0 30 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="2.4" cy="6" r="1.7" fill="currentColor" stroke="none"/><path d="M5.5 6h20.5M21.4 1.8L26 6l-4.6 4.2"/></svg>';
+  var Z_IC = {
+    warn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L2.6 17.2A2 2 0 004.3 20h15.4a2 2 0 001.7-2.8L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4.5M12 16.8v.01"/></svg>',
+    max: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 002.5 2.5z"/></svg>'
+  };
+  function zRowsHTML(rows) {
+    return (rows || []).map(function (r) {
+      return '<div class="zr">' + (r.name || r.lv ? '<div class="zh"><b>' + esc(r.name || '') + '</b>' + (r.lv ? '<span class="zlv">Seviye ' + esc(r.lv) + '</span>' : '') + '</div>' : '') + (r.note ? '<p>' + esc(r.note) + '</p>' : '') +
+        (r.ch || []).map(function (c) { return '<div class="zc"><span class="zk">' + esc(c.k) + '</span><span class="zv"><span class="za">' + esc(c.a) + '</span>' + Z_AR + '<span class="zn">' + esc(c.b) + '</span></span></div>'; }).join('') + '</div>';
+    }).join('');
+  }
+  function zOpen(m) {
+    zM = m;
+    $('#zIc').innerHTML = m.ic ? Z_IC[m.ic] : '';
+    $('#zEb').textContent = m.eb || ''; $('#zT').textContent = m.t; $('#zD').innerHTML = m.d || '';
+    $('#zL').innerHTML = zRowsHTML(m.rows); $('#zL').scrollTop = 0;
+    $('#zOk').textContent = m.ok.t; $('#zNo').textContent = m.no ? m.no.t : ''; $('#zNo').style.display = m.no ? '' : 'none';
+    $('#zSheet').classList.toggle('zdn', !!m.down); $('#zSheet').classList.toggle('zrs', !!(m.no && m.no.red)); $('#zSheet').classList.add('open');
+  }
+  function zClose() { $('#zSheet').classList.remove('open'); }
+  function zPress(b) { var f = zM && zM[b] && zM[b].fn; if (f) f(); else zClose(); }
+  $('#zOk').onclick = function () { zPress('ok'); };
+  $('#zNo').onclick = function () { zPress('no'); };
+  $('#zX').onclick = zClose;
+  $('#zSheet').addEventListener('click', function (e) { if (e.target === this) zClose(); });
+  function zWarn(name, fn) {
+    zOpen({ ic: 'warn', eb: name, t: 'Vücuduna süre tanı', d: 'Son 7 gün içinde zaten zorlaştırdın. Gelişim dinlenirken olur; peş peşe artırmak sakatlanma riskini yükseltir. Bu uyarıyı bir kez görürsün; devam edersen sonraki basışlar doğrudan uygulanır.', ok: { t: 'Vazgeç' }, no: { t: 'Yine de zorlaştır', fn: function () { zClose(); fn(); } } });
+  }
+
+  function zPaintEx(e) {
+    var v = $('#exview'); if (!v || !$('#exZw')) return;
+    var i = zInfo(e);
+    v.classList.toggle('zon', !i.skip); v.classList.toggle('zl', i.l > 0);
+    $('#exZun').hidden = i.l <= 0; $('#exZbd').hidden = i.l <= 0; $('#exZbd').textContent = i.l;
+    $('#exZup').classList.toggle('max', !i.skip && i.l >= i.n);
+  }
+  function zPaintGr(g) {
+    var grp = $('#group'); if (!grp || !$('#gZw')) return;
+    var mx = 0, ok = 0, L = 0, N = 0;
+    g.exercises.forEach(function (e) { if (zSkip(e)) return; var i = zInfo(e); ok++; L += i.l; N += i.n; mx = Math.max(mx, i.l); });
+    grp.classList.toggle('zon', !!g.exercises.length); grp.classList.toggle('zl', mx > 0);
+    $('#gZun').hidden = mx <= 0;
+    $('#gZbd').hidden = mx <= 0; $('#gZbd').textContent = mx;
+    $('#gZup').classList.toggle('max', !!ok && L >= N);
+  }
+
+
+  // Tek hareket: dokunma bir seviye zorlaştırır (sessiz), basılı tutma değişimleri listeler, sıfırla ilk değerlere döndürür
+  function zBump(id) { var b = $(id); b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }
+  function zExRun(e) {
+    if (zMove(e, 1) === false) return;
+    zStamp(e, 1); save(); homePend = 1; gzKeep = true;
+    if (exLib) { renderEx(); renderLib(false); } else renderGroup(false);
+    gzKeep = false; vib(14); zBump('#exZup');
+  }
+  function zExReset(e) {
+    if (!e.zb) return;
+    zSet(e, 0); delete e.zt; save(); homePend = 1; gzKeep = true;
+    if (exLib) { renderEx(); renderLib(false); } else renderGroup(false);
+    gzKeep = false; vib(10);
+  }
+  function zExTap() {
+    var e = zCur(); if (!e) return;
+    var i = zInfo(e); if (i.skip) return;
+    if (i.l >= i.n) {
+      var nx = zNextName(e); vib(8);
+      zOpen({ ic: 'max', eb: e.name, t: 'Üst sınırdasın', d: 'Bu hareket bu düzeyin sınırında.' + (nx ? ' Daha fazlası için bir üst varyanta geçebilirsin.' : ' Bundan fazlası için hareketi değiştirmek daha güvenli.'), rows: nx ? [{ name: nx, note: 'Bir üst adım' }] : [], ok: { t: 'Tamam' } });
+      return;
+    }
+    if (zRecent(e.zt)) zWarn(e.name, function () { zExRun(e); }); else zExRun(e);
+  }
+  function zExList() {
+    var e = zCur(); if (!e) return;
+    var i = zInfo(e); if (i.skip) return;
+    if (i.l <= 0) { zOpen({ eb: e.name, t: 'Zorluk değişimi', d: 'Henüz zorlaştırılmadı. Kırmızı butona her bastığında hareket bir seviye zorlaşır.', ok: { t: 'Tamam' } }); return; }
+    zOpen({ eb: e.name, t: 'Zorluk değişimi', d: 'İlk haline göre <b>seviye ' + i.l + '/' + i.n + '</b>.', rows: [{ ch: zDiff(e) }], ok: { t: 'Tamam' }, no: { t: 'Sıfırla', red: true, fn: function () { zClose(); zExReset(e); } } });
+  }
+
+  // Grup: her hareketi kendi seviyesinden bir adım ilerletir. Her basış sessizdir; sonuç kadran, rozet ve hareket değerlerinde görünür.
+  function zGrList(g) {
+    return g.exercises.filter(function (e) { if (zSkip(e)) return false; var i = zInfo(e); return i.l < i.n; });
+  }
+  function zGrRun(g) {
+    var list = zGrList(g); if (!list.length) return;
+    list.forEach(function (e) { zMove(e, 1); zStamp(e, 1); });
+    zStamp(g, 1); save(); homePend = 1; gzKeep = true; renderGroup(false); gzKeep = false; vib(14); zBump('#gZup');
+  }
+  // Tüm hareketleri ilk değerlerine döndürür
+  function zGrReset(g) {
+    var n = 0;
+    g.exercises.forEach(function (e) { if (e.zb) { zSet(e, 0); n++; } delete e.zt; });
+    delete g.zt;
+    if (!n) return;
+    save(); homePend = 1; gzKeep = true; renderGroup(false); gzKeep = false; vib(10);
+  }
+  // Basılı tutma: zorlaştırılan hareketler ve ilk haline göre değişimleri
+  function zShowList(g) {
+    var rows = [], top = 0, sk = 0;
+    g.exercises.forEach(function (e) {
+      if (zSkip(e)) { sk++; return; }
+      var i = zInfo(e); if (i.n && i.l >= i.n) top++;
+      if (i.l > 0) rows.push({ name: e.name, lv: i.l + '/' + i.n, ch: zDiff(e) });
+    });
+    if (!rows.length) { zOpen({ eb: g.name, t: 'Zorlaştırılanlar', d: 'Henüz zorlaştırılan hareket yok. Kırmızı butona her bastığında hareketler bir seviye zorlaşır.', ok: { t: 'Tamam' } }); return; }
+    var d = '<b>' + rows.length + ' hareket</b> ilk haline göre zorlaştırıldı.';
+    if (top) d += ' ' + top + ' hareket üst sınırda.';
+    if (sk) d += ' ' + sk + ' esneme hareketi atlandı.';
+    zOpen({ eb: g.name, t: 'Zorlaştırılanlar', d: d, rows: rows, ok: { t: 'Tamam' }, no: { t: 'Hepsini sıfırla', red: true, fn: function () { zClose(); zGrReset(g); } } });
+  }
+  function zGrTap() {
+    var g = findGroup(curId); if (!g || !g.exercises.length) return;
+    var el = g.exercises.filter(function (e) { return !zSkip(e); });
+    if (!el.length) { zOpen({ eb: g.name, t: 'Zorlaştırılamaz', d: 'Bu gruptaki hareketler esneme ve mobilite hareketleri. Bunlar süre uzatılarak zorlaştırılmaz; ağrısız ve kontrollü yapmak yeterli.', ok: { t: 'Tamam' } }); return; }
+    if (!zGrList(g).length) {
+      var up = el.filter(function (e) { return zNextName(e); }).map(function (e) { return { name: e.name, note: 'Bir üst adım: ' + zNextName(e) }; });
+      vib(8);
+      zOpen({ ic: 'max', eb: g.name, t: 'Üst sınırdasın', d: 'Bu gruptaki tüm hareketler bu düzeyin sınırında.' + (up.length ? ' Daha fazlası için bir üst varyanta geçebilirsin.' : ' Bundan fazlası için hareketleri değiştirmek daha güvenli.'), rows: up, ok: { t: 'Tamam' } });
+      return;
+    }
+    if (zRecent(g.zt)) zWarn(g.name, function () { zGrRun(g); }); else zGrRun(g);
+  }
+
+  $('#gZun').onclick = function () { var g = findGroup(curId); if (g) zGrReset(g); };
+  $('#exZun').onclick = function () { var e = zCur(); if (e) zExReset(e); };
+  function zHold(b, tap, hold) {
+    var tm = 0, sx = 0, sy = 0, fired = false;
+    function clr() { clearTimeout(tm); tm = 0; b.classList.remove('hold'); }
+    b.addEventListener('pointerdown', function (e) {
+      fired = false; sx = e.clientX; sy = e.clientY; b.classList.add('hold'); clearTimeout(tm);
+      tm = setTimeout(function () { tm = 0; fired = true; b.classList.remove('hold'); vib(12); hold(); }, 460);
+    });
+    b.addEventListener('pointermove', function (e) { if (tm && (Math.abs(e.clientX - sx) > 10 || Math.abs(e.clientY - sy) > 10)) clr(); });
+    ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (n) { b.addEventListener(n, clr); });
+    b.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+    b.addEventListener('click', function () { if (fired) { fired = false; return; } tap(); });
+  }
+  zHold($('#gZup'), zGrTap, function () { var g = findGroup(curId); if (g) zShowList(g); });
+  zHold($('#exZup'), zExTap, zExList);
 
 
 
