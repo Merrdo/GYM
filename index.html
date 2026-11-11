@@ -827,11 +827,11 @@
 
   /* ---------- Ana kabuk: sayfalar + alt sekme çubuğu ---------- */
   #home { --tbh: calc(54px + var(--pb) - 12px); }
-  .tpages { position: absolute; left: 0; top: 0; bottom: var(--tbh); width: 300%; display: flex; will-change: transform; }
-  .tpage { position: relative; flex: 0 0 33.3333%; min-width: 0; display: flex; flex-direction: column; overflow: hidden; overflow: clip; will-change: transform; backface-visibility: hidden; }
+  .tpages { position: absolute; left: 0; top: 0; bottom: var(--tbh); width: 400%; display: flex; will-change: transform; }
+  .tpage { position: relative; flex: 0 0 25%; min-width: 0; display: flex; flex-direction: column; overflow: hidden; overflow: clip; will-change: transform; backface-visibility: hidden; }
   #tpGroups .bar { padding-bottom: 12px; bottom: 0; }
   #homeList { padding-bottom: calc(54px + 12px + 12px + 28px); }
-  .tabbar { position: absolute; left: 0; right: 0; bottom: 0; height: var(--tbh); z-index: 6; display: grid; grid-template-columns: repeat(3, 1fr); padding: 5px 10px calc(var(--pb) - 12px); background: var(--bg); border-top: 1px solid var(--line); }
+  .tabbar { position: absolute; left: 0; right: 0; bottom: 0; height: var(--tbh); z-index: 6; display: grid; grid-template-columns: repeat(4, 1fr); padding: 5px 10px calc(var(--pb) - 12px); background: var(--bg); border-top: 1px solid var(--line); }
   html.kbd .tabbar { opacity: 0; pointer-events: none; transition: opacity .2s; }
   .tb { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--dim); -webkit-tap-highlight-color: transparent; }
   html.ready .tb { transition: color .35s var(--ease); }   /* açılışta renk geçişi yok: sekme baştan doğru renkte */
@@ -840,7 +840,7 @@
   .tb:active svg { transform: scale(.88); }
   .tb.on { color: var(--accent); }
   .tb.on svg { transform: translateY(-1px); }
-  .tb-ind { position: absolute; top: -1px; left: 0; width: calc((100% - 20px) / 3); height: 2px; margin-left: 10px; display: block; pointer-events: none; will-change: transform; }
+  .tb-ind { position: absolute; top: -1px; left: 0; width: calc((100% - 20px) / 4); height: 2px; margin-left: 10px; display: block; pointer-events: none; will-change: transform; }
   .tb-ind::after { content: ""; display: block; width: 26px; height: 2px; margin: 0 auto; border-radius: 0 0 2px 2px; background: var(--accent); }
 
 
@@ -1792,6 +1792,58 @@
 </head>
 <body>
 <!-- ================= Açılış animasyonu: halter çizilir, isim belirir, perde kalkar ================= -->
+<style id="hzCss">
+  .hz-w { display: block !important; }
+  .hz-wt { display: flex; align-items: center; gap: 10px; } .hz-wt b { flex: 1; min-width: 0; font-size: .98rem; line-height: 1.3; }
+  .hz-ws { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 9px; }
+  .hz-ws .gz { width: 34px; height: 20px; }
+  .hz-w b.zr, .hz-gm b.zr { display: flex; align-items: center; gap: 6px; padding: 0; border: 0; font-size: .8rem; font-weight: 650; flex: none; }
+  .hz-w b.zr em, .hz-gm b.zr em { font-style: normal; color: var(--zc); }
+  .hz-meta { align-items: center; }
+  .hz-meta span { display: inline-flex; align-items: center; justify-content: center; height: 38px; padding: 0 14px !important; line-height: 1; box-sizing: border-box; }
+  .hz-gm b.zr { height: 100%; } .hz-gm b.zr em { line-height: 1; }
+  .hz-inf { display: none; position: absolute; inset: 0; z-index: 30; align-items: flex-end; justify-content: center; padding: 0 16px var(--pb); }
+  .hz-ib { position: absolute; inset: 0; background: rgba(0,0,0,.55); }
+  .hz-ic { position: relative; width: 100%; max-width: 460px; padding: 22px 20px 16px; border-radius: 24px; background: var(--sheet); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px; }
+  .hz-ic b { font-size: 1.1rem; letter-spacing: -.02em; } .hz-ic p { font-size: .9rem; line-height: 1.55; color: var(--dim); margin-bottom: 8px; } .hz-ic .primary { margin-top: 4px; }
+  #tpWork .top { padding-bottom: 10px; }
+  #hz { display: none; z-index: 16; } #hzp { display: none; z-index: 14; }
+  .hz-plan { margin: 4px 0 14px; box-shadow: 0 10px 28px -12px rgba(var(--acc-rgb),.5); }
+  .hz-feat { width: 100%; text-align: left; padding: 20px; border-radius: var(--r); background: linear-gradient(145deg, var(--cov-a), var(--cov-b)); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+  .hz-feat small { font-size: .66rem; font-weight: 700; letter-spacing: .12em; color: var(--accent); }
+  .hz-feat b { font-size: 1.5rem; letter-spacing: -.03em; }
+  .hz-feat span { font-size: .84rem; color: var(--dim); }
+  .hz-cap { font-size: .74rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--dim); margin: 18px 4px 8px; }
+  .hz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .hz-t { text-align: left; padding: 16px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px; transition: transform .15s var(--ease); }
+  .hz-t:active, .hz-w:active, .hz-pw:active { transform: scale(.97); }
+  .hz-t b { font-size: 1rem; letter-spacing: -.01em; } .hz-t small, .hz-w small, .hz-pw small { color: var(--dim); font-size: .78rem; }
+  .hz-w { width: 100%; display: flex; align-items: center; gap: 10px; text-align: left; padding: 15px 16px; margin-bottom: 8px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); transition: transform .15s var(--ease); }
+  .hz-wi { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; } .hz-wi b { font-size: .98rem; }
+  .hz-ch { width: 18px; height: 18px; color: var(--dim); flex: none; }
+  .hz-note { padding: 14px 16px; border-radius: 16px; background: var(--accent-soft); font-size: .84rem; line-height: 1.5; margin-bottom: 4px; }
+  .hz-ds { padding-bottom: 130px; } .hz-desc { color: var(--dim); font-size: .92rem; line-height: 1.5; margin: 4px 2px 12px; }
+  .hz-meta { display: flex; gap: 8px; margin-bottom: 14px; } .hz-meta span { padding: 6px 12px; border-radius: 99px; background: var(--surface); border: 1px solid var(--line); font-size: .78rem; font-weight: 650; }
+  .hz-ex { border-radius: 16px; background: var(--surface); border: 1px solid var(--line); margin-bottom: 8px; overflow: hidden; }
+  .hz-eh { width: 100%; display: flex; align-items: center; gap: 12px; padding: 13px 14px; text-align: left; }
+  .hz-eh i { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-size: .8rem; font-weight: 700; background: var(--accent-soft); color: var(--accent); flex: none; }
+  .hz-eh span { flex: 1; display: flex; flex-direction: column; gap: 2px; } .hz-eh small { color: var(--dim); font-size: .78rem; }
+  .hz-eh[aria-expanded="true"] .hz-ch { transform: rotate(90deg); } .hz-ch { transition: transform .25s var(--ease); }
+  .hz-eb { padding: 0 16px 14px; font-size: .88rem; line-height: 1.5; } .hz-eb h3 { font-size: .8rem; color: var(--accent); margin: 10px 0 4px; } .hz-eb .stp { display: flex; gap: 8px; margin: 4px 0; } .hz-eb .stp i { font-style: normal; color: var(--accent); font-weight: 700; } .hz-eb .bl { margin: 3px 0; color: var(--dim); }
+  .hz-ft { position: absolute; left: 0; right: 0; bottom: 0; display: flex; gap: 10px; padding: 12px 20px var(--pb); background: linear-gradient(transparent, var(--bg) 28%); }
+  .hz-ft .primary { flex: 1; }
+  .hz-chips { display: flex; gap: 8px; overflow-x: auto; padding: 2px 20px 10px; scrollbar-width: none; flex: none; } .hz-chips::-webkit-scrollbar { display: none; }
+  .hz-chip { flex: none; padding: 9px 15px; border-radius: 99px; background: var(--surface); border: 1px solid var(--line); font-size: .85rem; font-weight: 650; white-space: nowrap; }
+  .hz-chip.on { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+  .hz-sum { padding: 4px 24px 8px; font-size: .8rem; color: var(--dim); flex: none; }
+  .hz-day { display: flex; gap: 12px; padding: 13px; margin-bottom: 8px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); }
+  .hz-day.now { border-color: var(--accent); } .hz-day.off { opacity: .6; }
+  .hz-dn { width: 84px; flex: none; display: flex; flex-direction: column; gap: 3px; } .hz-dn b { font-size: .92rem; } .hz-dn small { color: var(--dim); font-size: .72rem; }
+  .hz-dw { flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .hz-pw { text-align: left; padding: 9px 12px; border-radius: 12px; background: var(--surface2); display: flex; flex-direction: column; gap: 1px; transition: transform .15s var(--ease); } .hz-pw b { font-size: .85rem; }
+  .hz-rest { color: var(--dim); font-size: .84rem; padding: 8px 0; }
+  #hzp .scroll { padding-bottom: 110px; }
+</style>
 <style id="introCss">
   #intro { position: fixed; left: 0; top: 0; width: 100%; height: var(--full-h, 100%); z-index: 100000; display: grid; place-items: center; background: var(--bg, #000); overflow: hidden; animation: inOut .55s cubic-bezier(.4,0,.2,1) 2.4s forwards; }
   #intro .in-c { display: flex; flex-direction: column; align-items: center; gap: 22px; margin-top: -4vh; }
@@ -1826,11 +1878,18 @@
 </script>
 <div class="stage" id="stage">
 
-  <!-- Ana kabuk: 3 sayfa (Ana · Gruplarım · Profil) + alt sekme çubuğu. Ayarlar: profildeki dişliden açılır -->
+  <!-- Ana kabuk: 4 sayfa (Ana · Antrenmanlar · Gruplarım · Profil) + alt sekme çubuğu. Ayarlar: profildeki dişliden açılır -->
   <section class="view" id="home">
     <div class="tpages" id="tpages">
       <div class="tpage" id="tpAna" role="tabpanel" aria-label="Ana">
         <div class="scroll" id="anaBody"></div>
+      </div>
+      <div class="tpage" id="tpWork" role="tabpanel" aria-label="Antrenmanlar">
+        <div class="top">
+          <div class="ttl"><h1>Antrenmanlar</h1></div>
+
+        </div>
+        <div class="scroll" id="hzBody"></div>
       </div>
       <div class="tpage" id="tpGroups" role="tabpanel" aria-label="Gruplarım">
         <div class="top">
@@ -1870,9 +1929,17 @@
     <nav class="tabbar" id="tabbar" role="tablist" aria-label="Sayfalar">
       <i class="tb-ind" id="tbInd"></i>
       <button type="button" class="tb on" role="tab" data-t="0" aria-label="Ana" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.8L12 4l8 6.8V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z"/></svg><span>Ana</span></button>
-      <button type="button" class="tb" role="tab" data-t="1" aria-label="Gruplarım"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg><span>Gruplarım</span></button>
-      <button type="button" class="tb" role="tab" data-t="2" aria-label="Profil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.7"/><path d="M5 20c.8-3.7 3.6-5.6 7-5.6s6.2 1.9 7 5.6"/></svg><span>Profil</span></button>
+      <button type="button" class="tb" role="tab" data-t="1" aria-label="Antrenmanlar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg><span>Antrenmanlar</span></button>
+      <button type="button" class="tb" role="tab" data-t="2" aria-label="Gruplarım"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg><span>Gruplarım</span></button>
+      <button type="button" class="tb" role="tab" data-t="3" aria-label="Profil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.7"/><path d="M5 20c.8-3.7 3.6-5.6 7-5.6s6.2 1.9 7 5.6"/></svg><span>Profil</span></button>
     </nav>
+  </section>
+
+    <section class="view" id="hz" aria-label="Hazır antrenman"></section>
+  <section class="view" id="hzp" aria-label="Haftalık plan">
+    <div class="top"><button class="icon-btn" data-hb aria-label="Geri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><div class="ttl"><h1>Haftalık plan</h1></div><button class="icon-btn" data-info="plan" aria-label="Bilgi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.6v.1"/></svg></button></div>
+    <div class="scroll" id="hzpD"></div>
+    <div class="hz-ft"><button type="button" class="primary" id="hzpSave">Planı kaydet</button></div>
   </section>
 
   <!-- Ayarlar: profildeki dişliden açılan tam ekran sayfa -->
@@ -5758,7 +5825,7 @@
   /* ================= Sekmeler: Ana · Gruplarım · Profil ================= */
   var tpages = $('#tpages'), tabbar = $('#tabbar'), tbInd = $('#tbInd'), tabs = tabbar.querySelectorAll('.tb'), pages = tpages.children;
   var tabIdx = 0, tabAnim = null;
-  function tabPct(i) { return -i * 100 / 3; }
+  function tabPct(i) { return -i * 100 / 4; }
   function tabPaint(i, anim) {
     Array.prototype.forEach.call(tabs, function (b, k) { b.classList.toggle('on', k === i); b.setAttribute('aria-selected', k === i); });
     var w = tabs[0].offsetWidth, x = w * i, f = tbInd._x == null ? x : tbInd._x;
@@ -5776,7 +5843,7 @@
     function settle() {
       for (k = 0; k < pages.length; k++) if (k !== tabIdx && !pages[k].inert) pages[k].inert = true;
     }
-    if (i === 2) prPaint();
+    if (i === 3) prPaint();
     if (instant) { settle(); return; }
     tabAnim = tpages.animate([{ transform: 'translate3d(' + tabPct(from) + '%,0,0)' }, { transform: 'translate3d(' + tabPct(i) + '%,0,0)' }], { duration: 520, easing: EASE });
     tabAnim.onfinish = function () { tabAnim = null; settle(); };
@@ -5798,7 +5865,7 @@
       if (!on) return; on = false;
       var t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy, v = Math.abs(dx) / Math.max(1, Date.now() - st);
       if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy) * 1.7 || (Math.abs(dx) < 90 && v < .35)) return;
-      tabGo(Math.max(0, Math.min(2, tabIdx + (dx < 0 ? 1 : -1))));
+      tabGo(Math.max(0, Math.min(3, tabIdx + (dx < 0 ? 1 : -1))));
     }, { passive: true });
   })();
 
@@ -7688,6 +7755,338 @@
 
   fit();
   requestAnimationFrame(function () { requestAnimationFrame(function () { root.classList.add('ready'); }); });
+
+
+  /* ================= Hazır Antrenmanlar (sekme 2) · Boy Uzatma · Haftalık Plan ================= */
+  (function () {
+    var D = function (a) { return a.join('\n'); };
+    // Hareket: [ad, tür(t=süre sn, r=tekrar), değer, set, dinlenme sn, tarif]
+    var E = {
+      warm: ['Eklem ısınması', 't', 45, 1, 0, D(['## Nasıl yapılır', '1. Boynu, omuzları, bilekleri ve kalçayı sırayla yavaşça çevir.', '2. Dizleri ve ayak bileklerini küçük dairelerle hareket ettir.', '## İpucu', '- Hareket küçükten büyüğe, ağrı olmadan ilerlesin.'])],
+      reach: ['Yukarı uzanma', 't', 30, 2, 10, D(['## Nasıl yapılır', '1. Ayaklar kalça genişliğinde dur, parmakları kenetleyip avuçlar yukarı bakacak şekilde kolları başının üstüne uzat.', '2. Topuklar yerdeyken tavana doğru kendini uzat, kaburgaları kapalı tut.', '## İpucu', '- Nefes verirken biraz daha uzan, beli aşırı çukurlaştırma.'])],
+      mountain: ['Dağ duruşu', 't', 30, 2, 10, D(['## Nasıl yapılır', '1. Ayaklar yan yana, ağırlık iki ayağa eşit dağılsın.', '2. Kuyruk sokumunu hafif içeri al, göğsü aç, omuzlar geride, çene paralel.', '3. Başının tepesinden tavana asılıyormuş gibi uzun dur.', '## İpucu', '- Aynada profilden kontrol et: kulak, omuz, kalça, ayak bileği aynı hatta olmalı.'])],
+      wallstand: ['Duvar duruşu', 't', 45, 2, 15, D(['## Nasıl yapılır', '1. Topuk, kalça, sırt ve başın arkası duvara değsin.', '2. Boyun ile duvar arasında el kalınlığı boşluk kalsın, çeneyi hafif içeri al.', '3. Bu duruşu nefes alıp vererek koru.', '## İpucu', '- Bel ile duvar arasındaki boşluğu karnını sıkarak azalt.'])],
+      pelvic: ['Pelvik tilt', 'r', 10, 2, 15, D(['## Nasıl yapılır', '1. Sırtüstü uzan, dizler bükük, ayaklar yerde.', '2. Karnı sıkıp belini yere yapıştır, kalçayı hafif kaldır; 2 sn tut, bırak.', '## İpucu', '- Hareket küçüktür; bacaklarla değil karınla yap.'])],
+      catcow: ['Kedi-deve', 'r', 10, 2, 10, D(['## Nasıl yapılır', '1. Dört ayak üstü pozisyonda eller omuz, dizler kalça altında.', '2. Nefes verip sırtı yuvarla ve çeneyi göğse yaklaştır (kedi).', '3. Nefes alıp göğsü öne, bakışı hafif yukarı al, sırtı çukurlaştır (deve).', '## İpucu', '- Omurganın her bölümünü tek tek hareket ettirmeyi düşün.'])],
+      cobra: ['Kobra', 't', 30, 2, 10, D(['## Nasıl yapılır', '1. Yüzüstü uzan, eller omuz hizasında yerde.', '2. Kalçayı yere bastırıp göğsü yavaşça kaldır, dirsekler hafif bükük.', '3. Bakış ileri, boyun omurgayla aynı çizgide.', '## İpucu', '- Belde ağrı hissedersen yüksekliği azalt.'])],
+      fold: ['Öne eğilme', 't', 40, 2, 10, D(['## Nasıl yapılır', '1. Ayaklar kalça genişliğinde, dizler hafif bükük.', '2. Kalçadan öne eğil, kafayı ve kolları serbest bırak.', '3. Her nefeste biraz daha gevşe.', '## İpucu', '- Sırtı zorla yuvarlama; arka bacakta hafif gerilme yeterli.'])],
+      hang: ['Bara asılma', 't', 30, 4, 45, D(['## Nasıl yapılır', '1. Barı omuz genişliğinden biraz geniş tut, ayaklar yerden kesilsin.', '2. Omuzları kulaklardan uzaklaştır, vücudu gevşet ve uzamaya bırak.', '3. Nefes al, süre boyunca sallanmadan asıl.', '## İpucu', '- Bar gerektirir. Bilek ya da omuz ağrısında bırak; süreyi yavaş artır.'])],
+      legsup: ['Bacak yukarı (duvar)', 't', 120, 1, 0, D(['## Nasıl yapılır', '1. Kalçan duvara yakın, sırtüstü yat ve bacaklarını duvara dayayıp yukarı uzat.', '2. Kollar iki yanda gevşek, derin nefes al.', '## İpucu', '- Omurga ve bacaklar gün boyu yüklenmenin ardından dinlenir.'])],
+      breath: ['Karın nefesi', 't', 60, 1, 0, D(['## Nasıl yapılır', '1. Sırtüstü yat, bir elin karnında.', '2. Burundan 4 sn nefes al, karın şişsin; 6 sn ağızdan ver.', '## İpucu', '- Omuzlar gevşek kalsın; uykudan önce sakinleştirir.'])],
+      jrope: ['Hayali ip atlama', 't', 45, 3, 20, D(['## Nasıl yapılır', '1. Ayak ucunda hafif zıpla, dizler yumuşak, kollar iple atlıyormuş gibi dönsün.', '2. Zemine yumuşak in, topuklar yere sert basmasın.', '## İpucu', '- Zıplama hareketleri kemik yoğunluğunu destekler; sert zemin yerine mat tercih et.'])],
+      swim: ['Yüzme (yüzüstü)', 't', 30, 3, 20, D(['## Nasıl yapılır', '1. Yüzüstü uzan, kollar ve bacaklar uzatılmış.', '2. Karşılıklı kol ve bacağı hafif kaldırıp kısa hızlı vuruşlar yap.', '## İpucu', '- Boynu uzun tut, yukarı bakma.'])],
+      pushup: ['Şınav', 'r', 12, 3, 45, D(['## Nasıl yapılır', '1. Eller omuzdan biraz geniş, vücut baştan topuğa düz.', '2. Dirsekleri yaklaşık 45° bükerek göğsü yere yaklaştır.', '3. Yerden güçlü it.', '## İpucu', '- Zorlanırsan dizler yerdeyken yap.'])],
+      diamond: ['Elmas şınav', 'r', 8, 3, 45, D(['## Nasıl yapılır', '1. Başparmak ve işaret parmakları elmas oluşturacak şekilde elleri göğüs altına koy.', '2. Dirsekleri vücuda yakın bükerek in ve it.', '## İpucu', '- Arka kolu (triceps) çalıştırır; dizler yerde başlayabilirsin.'])],
+      pike: ['Pike şınav', 'r', 10, 3, 45, D(['## Nasıl yapılır', '1. Kalça yukarıda ters V pozisyonu al.', '2. Dirsekleri bükerek kafanı eller arasına indir, sonra it.', '## İpucu', '- Omuzları çalıştırır; sırt düz kalsın.'])],
+      dips: ['Sandalye dips', 'r', 12, 3, 45, D(['## Nasıl yapılır', '1. Ellerini sağlam bir sandalyenin kenarına koy, kalça önde.', '2. Dirsekleri 90° olana dek in, yukarı it.', '## İpucu', '- Omuzları kulaklardan uzak tut; dirsekler geriye baksın.'])],
+      superman: ['Süpermen', 't', 30, 3, 30, D(['## Nasıl yapılır', '1. Yüzüstü uzan, kollar öne uzatılmış.', '2. Kol, göğüs ve bacakları aynı anda yerden kaldır, 2 sn tut.', '## İpucu', '- Sırt ve kalça kaslarını çalıştırır; boynu aşırı geriye atma.'])],
+      tap: ['Plank omuz dokunuşu', 't', 30, 3, 30, D(['## Nasıl yapılır', '1. Şınav pozisyonunda ayaklar geniş.', '2. Sırayla bir eliyle karşı omzuna dokun; kalçan sallanmasın.', '## İpucu', '- Ayakları genişlet, denge kolaylaşır.'])],
+      armc: ['Kol çemberi', 't', 30, 2, 10, D(['## Nasıl yapılır', '1. Kolları yana aç, küçük dairelerle ileri sonra geri çevir.', '## İpucu', '- Daireleri yavaşça büyüt.'])],
+      plank: ['Plank', 't', 40, 3, 30, D(['## Nasıl yapılır', '1. Dirsekler omuz altında, vücut düz çizgi.', '2. Karnı ve kalçayı sık, nefesini tutma.', '## İpucu', '- Bel çukurlaşıyorsa kalçanı biraz sık.'])],
+      sidep: ['Yan plank', 't', 30, 2, 20, D(['## Nasıl yapılır', '1. Yan yat, dirsek omuz altında; kalçayı kaldır.', '2. Süre dolunca tarafı değiştir.', '## İpucu', '- Süre her tarafa ayrı uygulanır.'])],
+      mclimb: ['Dağcı', 't', 30, 3, 20, D(['## Nasıl yapılır', '1. Şınav pozisyonunda dizleri sırayla göğse çek.', '## İpucu', '- Kalça yukarı çıkmasın.'])],
+      bike: ['Bisiklet crunch', 'r', 20, 3, 30, D(['## Nasıl yapılır', '1. Sırtüstü, eller ensede; dirseği karşı dize götür.', '## İpucu', '- Boynu çekme, hareket gövdeden gelsin.'])],
+      lraise: ['Bacak kaldırma', 'r', 12, 3, 30, D(['## Nasıl yapılır', '1. Sırtüstü bacakları 90° kaldır, yavaşça indir.', '## İpucu', '- Bel yerden kalkıyorsa daha az in.'])],
+      dead: ['Dead bug', 'r', 12, 3, 30, D(['## Nasıl yapılır', '1. Sırtüstü kollar tavana, dizler 90°.', '2. Karşı kol ve bacağı uzat, geri dön.', '## İpucu', '- Bel yerde kalsın.'])],
+      squat: ['Squat', 'r', 15, 3, 40, D(['## Nasıl yapılır', '1. Ayaklar omuz genişliğinde, kalçayı geriye oturtur gibi in.', '2. Dizler ayak yönünde, topuklardan güçlen.', '## İpucu', '- Sırt dik, göğüs açık.'])],
+      lunge: ['Hamle (lunge)', 'r', 12, 3, 40, D(['## Nasıl yapılır', '1. Büyük adım at, iki diz 90° olana dek in.', '2. Ön topuktan itip geri dön.', '## İpucu', '- Tekrar her bacağa ayrı sayılır.'])],
+      bridge: ['Kalça köprüsü', 'r', 15, 3, 30, D(['## Nasıl yapılır', '1. Sırtüstü dizler bükük; kalçayı yukarı it.', '2. Üstte kalçayı sık, yavaş in.', '## İpucu', '- Beli değil kalçayı kullan.'])],
+      wsit: ['Duvar oturuşu', 't', 40, 3, 30, D(['## Nasıl yapılır', '1. Sırtını duvara yasla, dizler 90° olacak şekilde otur.', '## İpucu', '- Dizler ayak bileğinin üstünde.'])],
+      calf: ['Baldır kaldırma', 'r', 20, 3, 30, D(['## Nasıl yapılır', '1. Ayak uçlarına yüksel, 1 sn bekle, yavaş in.', '## İpucu', '- Dengen için duvara tutun.'])],
+      sumo: ['Sumo squat', 'r', 15, 3, 40, D(['## Nasıl yapılır', '1. Ayaklar geniş, uçlar dışa; dizler ayak yönünde olacak şekilde in.', '## İpucu', '- İç bacak ve kalçayı çalıştırır.'])],
+      jsq: ['Sıçrama squat', 'r', 12, 3, 40, D(['## Nasıl yapılır', '1. Squat yap, güçlü zıpla, yumuşak in.', '## İpucu', '- Dizlerin içe çökmesine izin verme.'])],
+      jjack: ['Jumping jack', 't', 40, 3, 20, D(['## Nasıl yapılır', '1. Zıplayarak ayakları aç, kollar yukarı; tekrar kapat.', '## İpucu', '- Hafif ve ritimli ilerle.'])],
+      hknee: ['Yüksek diz çekme', 't', 30, 3, 20, D(['## Nasıl yapılır', '1. Yerinde koşarken dizleri bele kadar çek.', '## İpucu', '- Ayak ucunda, dik dur.'])],
+      burpee: ['Burpee', 'r', 10, 3, 45, D(['## Nasıl yapılır', '1. Çömel, ellerle yere gel, bacakları arkaya at.', '2. Şınav (isteğe bağlı), geri çek, zıpla.', '## İpucu', '- Tempoyu başta düşük tut.'])],
+      skater: ['Paten adımı', 't', 30, 3, 20, D(['## Nasıl yapılır', '1. Yana geniş sıçrayıp karşı bacağı arkadan çaprazla.', '## İpucu', '- Yumuşak iniş yap.'])],
+      bkick: ['Topuk vurma', 't', 30, 3, 20, D(['## Nasıl yapılır', '1. Yerinde koşarken topukları kalçaya çek.', '## İpucu', '- Dizleri yere doğru tut.'])],
+      neck: ['Boyun esnetme', 't', 30, 2, 10, D(['## Nasıl yapılır', '1. Başı yavaşça sağa eğ, 15 sn tut; sonra sola.', '## İpucu', '- Çekme, sadece başın ağırlığı yeterli.'])],
+      chest: ['Göğüs açma', 't', 30, 2, 10, D(['## Nasıl yapılır', '1. Ellerini arkada kenetle, göğsü aç, kürek kemiklerini yaklaştır.', '## İpucu', '- Omuzlar kulaklardan uzak.'])],
+      hams: ['Arka bacak esnetme', 't', 30, 2, 10, D(['## Nasıl yapılır', '1. Bir bacak önde topuk yerde, diğer dizi bük; kalçadan öne eğil.', '## İpucu', '- Her bacağa ayrı uygula.'])],
+      quad: ['Ön bacak esnetme', 't', 30, 2, 10, D(['## Nasıl yapılır', '1. Ayakta bir topuğu kalçaya çek, dizler yan yana.', '## İpucu', '- Her bacağa ayrı uygula.'])],
+      hipf: ['Kalça önü esnetme', 't', 40, 2, 10, D(['## Nasıl yapılır', '1. Diz üstü hamle pozisyonu al, kalçayı öne ver.', '2. Karnı sıkıp hafif gövdeyi dik tut.', '## İpucu', '- Uzun oturanlar için çok değerlidir; her bacağa ayrı.'])],
+      side: ['Yan esneme', 't', 30, 2, 10, D(['## Nasıl yapılır', '1. Bir kol başının üstünden karşı yana uzansın, gövde yana kavislensin.', '## İpucu', '- Öne eğilme, yana uzan.'])],
+      child: ['Çocuk pozu', 't', 45, 1, 0, D(['## Nasıl yapılır', '1. Dizlerin üstüne otur, kolları öne uzatıp alnını yere bırak.', '## İpucu', '- Her nefeste biraz daha gevşe.'])],
+      pigeon: ['Güvercin pozu', 't', 40, 2, 10, D(['## Nasıl yapılır', '1. Bir diz önde bükülü, arka bacak uzatılmış; gövdeyi öne bırak.', '## İpucu', '- Her yan için ayrı yap.'])],
+      dogd: ['Aşağı bakan köpek', 't', 40, 2, 10, D(['## Nasıl yapılır', '1. Kalçayı yukarı iterek ters V şekli al; topuklar yere doğru.', '## İpucu', '- Dizler hafif bükük olabilir.'])],
+      warr: ['Savaşçı 1', 't', 30, 2, 10, D(['## Nasıl yapılır', '1. Bir adım ileri, ön diz 90°; kolları yukarı kaldır.', '## İpucu', '- Her bacağa ayrı uygula.'])],
+      tree: ['Ağaç pozu', 't', 30, 2, 10, D(['## Nasıl yapılır', '1. Bir ayağı karşı bacağın iç tarafına yerleştir, ellerini göğüste birleştir.', '## İpucu', '- Bakışı sabit bir noktaya ver; her yan ayrı.'])],
+      sun: ['Güneşe selam', 'r', 5, 2, 20, D(['## Nasıl yapılır', '1. Kolları yukarı, öne eğil, plank, kobra, köpek, geri dön.', '## İpucu', '- Hareketi nefese bağla.'])],
+      shav: ['Şavasana', 't', 60, 1, 0, D(['## Nasıl yapılır', '1. Sırtüstü uzan, avuçlar yukarı; tüm vücudu bırak.', '## İpucu', '- Nefesini doğal akışına bırak.'])],
+      wallp: ['Duvar şınavı', 'r', 15, 3, 30, D(['## Nasıl yapılır', '1. Duvara bir kol boyu uzaklıkta dur, eller omuz hizasında duvarda.', '2. Dirsekleri bükerek göğsü duvara yaklaştır, sonra it.', '## İpucu', '- Şınavın en hafif hâli; vücut düz kalsın.'])],
+      kneep: ['Dizli şınav', 'r', 10, 3, 40, D(['## Nasıl yapılır', '1. Dizler yerde, eller omuzdan geniş.', '2. Baştan dize düz çizgi, göğsü yere yaklaştır ve it.', '## İpucu', '- Şınava geçiş için en iyi basamak.'])],
+      widep: ['Geniş şınav', 'r', 10, 3, 45, D(['## Nasıl yapılır', '1. Eller omuzdan belirgin geniş, vücut düz.', '2. Göğsü yere indir ve güçlü it.', '## İpucu', '- Göğüs kaslarını daha çok çalıştırır; omuz ağrırsa daralt.'])],
+      hipush: ['Yüksek ayak şınav', 'r', 8, 3, 45, D(['## Nasıl yapılır', '1. Ayakları sağlam bir sandalye ya da yatağa koy, eller yerde.', '2. Şınav yap, kalça sarkmasın.', '## İpucu', '- Üst göğüs ve omuzları zorlar.'])],
+      rsnow: ['Ters kar meleği', 't', 30, 3, 20, D(['## Nasıl yapılır', '1. Yüzüstü uzan, kollar yanda avuçlar yere dönük.', '2. Kolları yerde kalmadan başın üstüne süpür, geri getir.', '## İpucu', '- Kürek kemiklerini birbirine yaklaştırmayı hisset.'])],
+      wangel: ['Duvar melek', 'r', 10, 3, 20, D(['## Nasıl yapılır', '1. Sırtın, kalçan ve başın duvarda; kollar W şeklinde duvarda.', '2. Kolları duvardan ayırmadan yukarı kaydır, geri in.', '## İpucu', '- Duruş ve omuz hareketliliği için çok iyi.'])],
+      bird: ['Bird dog', 'r', 10, 3, 20, D(['## Nasıl yapılır', '1. Dört ayak üstü; karşı kolu ve bacağı aynı anda uzat.', '2. 2 sn tut, geri dön, tarafı değiştir.', '## İpucu', '- Bel çukurlaşmasın, kalça yana kaymasın.'])],
+      hollow: ['Hollow hold', 't', 20, 3, 25, D(['## Nasıl yapılır', '1. Sırtüstü uzan, belin yerde; omuz ve bacakları hafif kaldır.', '2. Muz şeklinde pozisyonu koru.', '## İpucu', '- Zorlanırsan dizleri bük.'])],
+      vup: ['V-up', 'r', 10, 3, 30, D(['## Nasıl yapılır', '1. Sırtüstü kollar başın arkasında uzatılmış.', '2. Gövde ve bacakları aynı anda V şekline kaldır.', '## İpucu', '- Dizleri bükerek kolaylaştırabilirsin.'])],
+      russ: ['Russian twist', 'r', 20, 3, 30, D(['## Nasıl yapılır', '1. Kalçanın üstünde geriye yaslan, ayaklar yerde.', '2. Gövdeyi sağa sola çevir, eller birleşik.', '## İpucu', '- Zorlaştırmak için ayakları kaldır.'])],
+      pjack: ['Plank jack', 't', 30, 3, 20, D(['## Nasıl yapılır', '1. Plank pozisyonunda ayakları zıplayarak açıp kapat.', '## İpucu', '- Kalçan yukarı kalkmasın.'])],
+      bear: ['Ayı yürüyüşü', 't', 30, 3, 20, D(['## Nasıl yapılır', '1. Dizler yerden hafif havada, dört ayak üstü ilerle.', '2. Karşı el ve ayakla küçük adımlar at.', '## İpucu', '- Sırt düz, kalça düşük.'])],
+      sprint: ['Yerinde sprint', 't', 30, 3, 15, D(['## Nasıl yapılır', '1. Olduğun yerde olabildiğince hızlı koş, kollar aktif.', '## İpucu', '- Süre sonunda toparlan; nefesini düzenle.'])],
+      march: ['Yerinde yürüyüş', 't', 60, 3, 15, D(['## Nasıl yapılır', '1. Dizleri belden yukarı çekerek rahat tempoda yürü.', '## İpucu', '- Düşük etkili kardiyo; yeni başlayanlar için ideal.'])],
+      box: ['Gölge boks', 't', 45, 3, 20, D(['## Nasıl yapılır', '1. Yüzün korumada, hafif diz bükük; sağ-sol yumruk at.', '2. Kalçanı döndürerek vuruşlara güç ver.', '## İpucu', '- Omuzlar gevşek.'])],
+      rlunge: ['Ters hamle', 'r', 12, 3, 40, D(['## Nasıl yapılır', '1. Bir adım geriye at, iki diz 90° olana kadar in.', '2. Ön topuktan iterek dön.', '## İpucu', '- Dizleri korumak için daha güvenlidir; her bacak ayrı.'])],
+      slunge: ['Yan hamle', 'r', 12, 3, 40, D(['## Nasıl yapılır', '1. Yana büyük adım at, kalçayı geriye ver, diğer bacak düz.', '2. İterek geri dön.', '## İpucu', '- Her bacak ayrı; dizi ayak yönünde tut.'])],
+      bulg: ['Bulgar split squat', 'r', 10, 3, 45, D(['## Nasıl yapılır', '1. Arka ayağını sandalyeye koy, ön bacakla çömel.', '2. Ön topuktan iterek kalk.', '## İpucu', '- Her bacak ayrı; dengeni bulana kadar yavaş git.'])],
+      qhold: ['Squat tutuş', 't', 30, 3, 25, D(['## Nasıl yapılır', '1. Squat\'ın alt noktasında dizler 90°, göğüs açık.', '2. Süre boyunca pozisyonu koru.', '## İpucu', '- Ağırlık topuklarda.'])],
+      sbridge: ['Tek bacak köprü', 'r', 10, 3, 30, D(['## Nasıl yapılır', '1. Sırtüstü bir bacağı havada tut, diğer ayakla kalçayı kaldır.', '## İpucu', '- Her bacak ayrı; kalça dengede kalsın.'])],
+      donkey: ['Donkey kick', 'r', 15, 3, 25, D(['## Nasıl yapılır', '1. Dört ayak üstü bir bacağı dizi bükülü şekilde tavana it.', '## İpucu', '- Her bacak ayrı; beli çukurlaştırma.'])],
+      hydrant: ['Fire hydrant', 'r', 15, 3, 25, D(['## Nasıl yapılır', '1. Dört ayak üstü dizi bükülü bacağı yana kaldır.', '## İpucu', '- Her bacak ayrı; kalça yana kayarsa azalt.'])],
+      clam: ['Clamshell', 'r', 15, 3, 25, D(['## Nasıl yapılır', '1. Yan yat, dizler bükük; ayaklar birleşikken üst dizi aç.', '## İpucu', '- Her yan ayrı; dış kalçayı çalıştırır.'])],
+      sleg: ['Tek ayak denge', 't', 30, 2, 10, D(['## Nasıl yapılır', '1. Bir ayağın üstünde dur, diğer diz bükülü.', '2. Bakışı sabit bir noktada tut.', '## İpucu', '- Her bacak ayrı; gerekirse duvara dokun.'])],
+      ankle: ['Ayak bileği çevirme', 't', 30, 2, 10, D(['## Nasıl yapılır', '1. Ayağı havada tut, bileği yavaş dairelerle çevir.', '## İpucu', '- Her iki yön, her ayak.'])],
+      wrist: ['Bilek esnetme', 't', 30, 2, 10, D(['## Nasıl yapılır', '1. Kolu öne uzat, diğer elle parmakları geriye çek.', '2. Avuç yönünü değiştir.', '## İpucu', '- Hafifçe çek.'])],
+      shrug: ['Omuz silkme', 't', 30, 2, 10, D(['## Nasıl yapılır', '1. Omuzları kulağa çek, 3 sn tut, bırak.', '## İpucu', '- Bırakırken tamamen gevşe.'])],
+      cross: ['Çapraz kol esnetme', 't', 30, 2, 10, D(['## Nasıl yapılır', '1. Bir kolu göğsünün önünden karşıya uzat, diğer elle sıkıştır.', '## İpucu', '- Her kol ayrı.'])],
+      tric: ['Arka kol esnetme', 't', 30, 2, 10, D(['## Nasıl yapılır', '1. Bir kolu bükerek elini sırtına indir, diğer elle dirseği hafif çek.', '## İpucu', '- Her kol ayrı.'])],
+      kneechest: ['Diz göğse', 't', 30, 2, 10, D(['## Nasıl yapılır', '1. Sırtüstü bir dizi iki elle göğsüne çek.', '## İpucu', '- Bel gevşer; her bacak ayrı.'])],
+      twist: ['Yatarak omurga çevirme', 't', 30, 2, 10, D(['## Nasıl yapılır', '1. Sırtüstü dizler bükük; iki dizi bir yana bırak, bakış karşı yana.', '## İpucu', '- Omuzlar yerde, her yan ayrı.'])],
+      butter: ['Kelebek esnetme', 't', 40, 2, 10, D(['## Nasıl yapılır', '1. Otur, ayak tabanlarını birleştir, dizler yana açık.', '2. Sırtı dik tutarak hafifçe öne eğil.', '## İpucu', '- Zorlamadan, iç bacağı hisset.'])],
+      fig4: ['4 figürü esnetme', 't', 30, 2, 10, D(['## Nasıl yapılır', '1. Sırtüstü bir ayak bileğini karşı dizin üstüne koy.', '2. Alttaki bacağı göğsüne çek.', '## İpucu', '- Kalçanın dışında gerilme olmalı; her bacak ayrı.'])],
+      calfs: ['Baldır esnetme', 't', 30, 2, 10, D(['## Nasıl yapılır', '1. Duvara yaslan, bir bacak arkada düz, topuk yerde.', '## İpucu', '- Her bacak ayrı.'])],
+      b478: ['4-7-8 nefesi', 't', 60, 1, 0, D(['## Nasıl yapılır', '1. 4 sn burundan nefes al, 7 sn tut, 8 sn ağızdan ver.', '## İpucu', '- Uykuya geçişi ve sakinleşmeyi kolaylaştırır.'])],
+      boxb: ['Kutu nefesi', 't', 60, 1, 0, D(['## Nasıl yapılır', '1. 4 sn al, 4 sn tut, 4 sn ver, 4 sn bekle.', '## İpucu', '- Stres anında kalp atışını düzenler.'])],
+      pmr: ['Kas gevşetme', 't', 90, 1, 0, D(['## Nasıl yapılır', '1. Ayaktan başa doğru her kası 5 sn sık, sonra bırak.', '## İpucu', '- Bırakırken fark farkını hisset.'])],
+      tcurl: ['Havlu biceps', 't', 30, 3, 20, D(['## Nasıl yapılır', '1. Havlunun iki ucunu tut, kollarla zıt yönde çek, dirsek 90°.', '## İpucu', '- Ön kolu çalıştırır; ekipmansız.'])]
+    };
+    // Antrenman: [id, kategori, ad, seviye(0-2), bölüm, açıklama, [hareket anahtarı[:set[:değer]]]]
+    var W = [
+      ['bu1', 'bu', 'Sabah rutini · Uzama', 0, 'Sabah rutini', 'Uyanınca omurga diskleri en uzun halindedir; bu rutin onu açar ve güne dik başlatır.', ['warm', 'reach', 'catcow', 'cobra', 'fold', 'pelvic', 'wallstand']],
+      ['bu2', 'bu', 'Öğle rutini · Duruş molası', 0, 'Öğle rutini', 'Gün ortası yüklenmesini azaltır; masa başı için ideal.', ['neck', 'wallstand', 'side', 'hipf', 'pelvic', 'reach']],
+      ['bu3', 'bu', 'Akşam rutini · Omurga dinlendirme', 0, 'Yatmadan önce', 'Gün boyu sıkışan omurgayı gevşetir; uyku kalitesini destekler.', ['child', 'catcow', 'hams', 'pigeon', 'legsup', 'breath']],
+      ['bu4', 'bu', 'Boy güçlendirme · Zıplama & core', 1, 'Genel egzersizler', 'Duruşu taşıyan kasları ve zıplama ile kemik yüklenmesini hedefler. Haftada 3 gün.', ['warm', 'jrope', 'swim', 'plank', 'bridge', 'superman']],
+      ['bu5', 'bu', 'Asılma seansı (bar gerekir)', 1, 'Genel egzersizler', 'Omurga boşluklarını açar ve omuz kuşağını güçlendirir.', ['warm', 'hang', 'fold', 'cobra', 'child']],
+      ['tv1', 'tv', 'Tüm vücut · Başlangıç', 0, '', 'Her kas grubuna dokunan kısa ve dengeli devre.', ['jjack:2:40', 'squat:2:12', 'pushup:2:10', 'lunge:2:10', 'plank:2:30', 'bridge:2:12']],
+      ['tv2', 'tv', 'Tüm vücut · Yoğun', 2, '', 'Güç ve kardiyoyu birleştiren zorlu devre.', ['burpee', 'jsq', 'pushup', 'mclimb', 'lunge', 'plank', 'bike']],
+      ['uv1', 'uv', 'Üst vücut · Temel', 0, '', 'Göğüs, omuz, arka kol ve sırt için temel.', ['pushup', 'pike', 'dips', 'superman', 'tap']],
+      ['uv2', 'uv', 'Üst vücut · Güç', 2, '', 'Daha fazla set ile güç odaklı üst vücut.', ['pushup:4:12', 'dips:4:12', 'pike:4:10', 'diamond', 'superman']],
+      ['av1', 'av', 'Alt vücut · Temel', 0, '', 'Kalça ve bacak kaslarını dengeli çalıştırır.', ['squat', 'lunge', 'bridge', 'calf', 'wsit']],
+      ['av2', 'av', 'Alt vücut · Yoğun', 2, '', 'Patlayıcı güç ve kalça odaklı.', ['jsq', 'sumo', 'lunge:4:12', 'bridge:4:15', 'calf:3:25']],
+      ['bc1', 'bc', 'Bacak günü', 1, '', 'Bacak gelişimi için ana antrenman.', ['squat:4:15', 'lunge', 'sumo', 'bridge', 'calf', 'wsit']],
+      ['bc2', 'bc', 'Kalça & bacak şekillendirme', 1, '', 'Kalça odaklı, esneme ile biter.', ['bridge:4:15', 'sumo', 'lunge', 'quad', 'hams']],
+      ['kl1', 'kl', 'Kol şekillendirme', 1, '', 'Ön ve arka kol için.', ['armc', 'diamond', 'dips', 'pushup:3:8', 'tap']],
+      ['kl2', 'kl', 'Kol · Başlangıç', 0, '', 'Yeni başlayanlar için hafif kol programı.', ['armc', 'pushup:2:8', 'dips:2:8', 'tap:2:20']],
+      ['kr1', 'kr', 'Karın · Temel', 0, '', 'Core stabilitesi için.', ['plank', 'bike', 'lraise', 'dead']],
+      ['kr2', 'kr', 'Karın · Yoğun', 2, '', 'Zorlu core antrenmanı.', ['mclimb', 'bike:3:24', 'lraise:3:15', 'sidep', 'plank:3:50']],
+      ['kd1', 'kd', 'Kardiyo · Isınma', 0, '', 'Kalp atışını yükselten kısa seans.', ['jjack', 'hknee', 'bkick', 'skater']],
+      ['kd2', 'kd', 'HIIT kardiyo', 2, '', 'Yüksek yoğunluklu aralıklı antrenman.', ['burpee', 'mclimb', 'jsq', 'hknee', 'skater']],
+      ['gc1', 'gc', 'Güç · Temel', 1, '', 'Vücut ağırlığıyla temel güç.', ['squat:4:12', 'pushup:4:10', 'lunge:3:10', 'plank:3:40']],
+      ['gc2', 'gc', 'Güç · Karma', 2, '', 'Üst ve alt vücut güç karması.', ['jsq:4:10', 'pike:4:8', 'sumo:4:12', 'dips:4:10', 'dead:3:12']],
+      ['dy1', 'dy', 'Dayanıklılık devresi', 1, '', 'Uzun süre kasılma dayanıklılığı.', ['wsit:3:60', 'plank:3:60', 'lunge:3:20', 'pushup:3:15']],
+      ['dy2', 'dy', 'Kardiyo dayanıklılık', 1, '', 'Uzun aralıklı kardiyo.', ['jjack:3:60', 'hknee:3:45', 'skater:3:45', 'bkick:3:45']],
+      ['es1', 'es', 'Tüm vücut esneme', 0, '', 'Antrenman sonrası ya da dinlenme günü.', ['neck', 'chest', 'quad', 'hams', 'hipf', 'child']],
+      ['es2', 'es', 'Bacak & kalça esneme', 0, '', 'Bacak ve kalça için.', ['hams', 'quad', 'pigeon', 'hipf', 'fold']],
+      ['yg1', 'yg', 'Yoga akışı', 1, '', 'Güç ve denge karışık akış.', ['catcow', 'dogd', 'warr', 'tree', 'child']],
+      ['yg2', 'yg', 'Yoga · Sakinleşme', 0, '', 'Akşam için yumuşak seans.', ['sun', 'cobra', 'pigeon', 'child', 'shav']],
+      ['sb1', 'sb', 'Sabah uyanış', 0, '', 'Güne enerjiyle başla.', ['warm', 'reach', 'catcow', 'squat:2:12', 'jjack:2:30']],
+      ['sb2', 'sb', 'Sabah enerji', 1, '', 'Hızlı ve dinamik.', ['hknee', 'jjack', 'squat:2:15', 'pushup:2:10', 'plank:2:30']],
+      ['og1', 'og', 'Öğle molası', 0, '', 'Masa başı çalışanlar için.', ['neck', 'chest', 'side', 'hipf', 'fold']],
+      ['og2', 'og', 'Öğle hızlı güç', 1, '', 'Kısa ve etkili.', ['squat:2:15', 'pushup:2:10', 'plank:2:30', 'lunge:2:10']],
+      ['ak1', 'ak', 'Akşam güç', 1, '', 'Gün sonu güç antrenmanı.', ['squat:3:15', 'pushup:3:10', 'lunge:3:10', 'bridge:3:15', 'plank:3:40']],
+      ['ak2', 'ak', 'Akşam gevşeme', 0, '', 'Uykuya hazırlan.', ['neck', 'hams', 'pigeon', 'child', 'shav']],
+      ['gg1', 'gg', 'Göğüs · Başlangıç', 0, '', 'Göğüs ve omuz için yumuşak başlangıç.', ['wallp', 'kneep:2:8', 'tap:2:20', 'superman:2:20']],
+      ['gg2', 'gg', 'Göğüs · Orta', 1, '', 'Şınav varyasyonlarıyla göğüs gelişimi.', ['pushup:4:10', 'widep', 'diamond:3:6', 'tap']],
+      ['gg3', 'gg', 'Göğüs · Zor', 2, '', 'Yüksek hacimli göğüs seansı.', ['pushup:4:15', 'widep:4:10', 'hipush', 'diamond:3:8']],
+      ['sr1', 'sr', 'Sırt · Temel', 0, '', 'Sırt ve duruş kasları.', ['superman', 'bird', 'rsnow', 'wangel']],
+      ['sr2', 'sr', 'Sırt · Duruş', 1, '', 'Kamburluğa karşı sırt ve omuz kuşağı.', ['wangel', 'rsnow', 'superman:4:30', 'swim', 'bird:3:12', 'child']],
+      ['om1', 'om', 'Omuz · Temel', 0, '', 'Omuz çevresi kuvveti.', ['armc', 'pike:3:8', 'tap', 'wangel']],
+      ['om2', 'om', 'Omuz · Güç', 1, '', 'Omuz gücü ve dayanıklılığı.', ['pike:4:12', 'tap:4:30', 'armc', 'pushup:3:10']],
+      ['kc1', 'kc', 'Kalça · Aktivasyon', 0, '', 'Kalça kaslarını uyandırır.', ['bridge', 'clam', 'hydrant', 'donkey']],
+      ['kc2', 'kc', 'Kalça · Güç', 1, '', 'Kalça odaklı güç.', ['sbridge', 'donkey:4:15', 'hydrant:4:15', 'sumo', 'rlunge']],
+      ['kc3', 'kc', 'Kalça · Yoğun', 2, '', 'Zorlu kalça antrenmanı.', ['sbridge:4:12', 'bulg', 'jsq', 'donkey', 'hydrant']],
+      ['bc3', 'bc', 'Bacak · Başlangıç', 0, '', 'Yeni başlayanlar için bacak.', ['squat:2:10', 'rlunge:2:8', 'bridge:2:12', 'calf:2:15', 'qhold:2:20']],
+      ['bc4', 'bc', 'Bacak · Güç', 2, '', 'Tek bacak ve yüksek hacim.', ['bulg:4:10', 'squat:4:20', 'rlunge', 'slunge', 'calf:4:25']],
+      ['av3', 'av', 'Alt vücut · Denge', 1, '', 'Tek bacak ve denge odaklı.', ['sleg', 'slunge', 'rlunge', 'sbridge', 'calf']],
+      ['tv3', 'tv', 'Tüm vücut · 15 dakika', 1, '', 'Evde hızlı tam vücut.', ['jjack', 'squat', 'pushup:2:10', 'mclimb', 'plank', 'bridge']],
+      ['uv3', 'uv', 'Üst vücut · Başlangıç', 0, '', 'Yeni başlayanlar için üst vücut.', ['wallp', 'kneep:2:8', 'dips:2:8', 'superman:2:20']],
+      ['kl3', 'kl', 'Kol · Yoğun', 2, '', 'Ön ve arka kol yoğun seans.', ['diamond:4:10', 'dips:4:15', 'pushup:3:12', 'tcurl', 'tap']],
+      ['kr3', 'kr', 'Karın · Başlangıç', 0, '', 'Karın kaslarına yumuşak giriş.', ['dead:2:10', 'plank:2:25', 'bridge:2:12', 'bike:2:12']],
+      ['kr4', 'kr', 'Karın · Alt karın', 1, '', 'Alt karın ve derin core.', ['lraise:4:12', 'vup', 'hollow', 'dead', 'plank']],
+      ['kr5', 'kr', 'Karın · Yan karın', 1, '', 'Oblik ve gövde dönüşü.', ['russ', 'sidep', 'bike', 'mclimb']],
+      ['kd3', 'kd', 'Kardiyo · Düşük etki', 0, '', 'Eklem dostu, sakin kardiyo.', ['march', 'box:3:30', 'bkick:2:20', 'march:2:45']],
+      ['kd4', 'kd', 'Kardiyo · Boks', 1, '', 'Eğlenceli kardiyo.', ['box:4:45', 'skater', 'jjack', 'hknee']],
+      ['hi1', 'hi', 'HIIT · 12 dakika', 2, '', 'Kısa ve yüksek yoğunluk.', ['sprint', 'burpee:2:8', 'jsq:2:10', 'mclimb', 'skater']],
+      ['hi2', 'hi', 'HIIT · Alt vücut', 2, '', 'Bacak odaklı aralıklı antrenman.', ['sprint', 'jsq', 'skater', 'bkick', 'hknee']],
+      ['hi3', 'hi', 'Tabata · Core', 2, '', '20 sn çalış, kısa dinlen.', ['mclimb:4:20', 'pjack:4:20', 'bear:4:20', 'hollow:3:20']],
+      ['hi4', 'hi', 'HIIT · Başlangıç', 1, '', 'Yeni başlayanlara uygun aralıklı.', ['march', 'jjack:3:30', 'squat:2:10', 'hknee:2:20']],
+      ['ys1', 'ys', 'Başlangıç · Gün 1', 0, '', 'İlk adım: vücudu tanı.', ['march:2:45', 'wallp', 'squat:2:8', 'plank:2:15']],
+      ['ys2', 'ys', 'Başlangıç · Gün 2', 0, '', 'Alt vücut ve core.', ['kneep:2:6', 'bridge:2:10', 'rlunge:2:6', 'dead:2:8']],
+      ['ys3', 'ys', 'Başlangıç · Gün 3', 0, '', 'Esneme ve hafif güç.', ['catcow', 'squat:2:10', 'wallp:2:10', 'child', 'hams']],
+      ['gc3', 'gc', 'Güç · Yeni başlayan', 0, '', 'Temel güç hareketleri.', ['squat:3:10', 'kneep:3:8', 'bridge:3:12', 'plank:3:25']],
+      ['dy3', 'dy', 'Dayanıklılık · Core', 1, '', 'Uzun süreli core çalışması.', ['plank:3:60', 'sidep:3:40', 'hollow:3:25', 'bird:3:12']],
+      ['es3', 'es', 'Üst vücut esneme', 0, '', 'Boyun, omuz ve kol.', ['neck', 'chest', 'cross', 'tric', 'side']],
+      ['es4', 'es', 'Sırt & bel esneme', 0, '', 'Bel ve sırt gevşemesi.', ['catcow', 'child', 'kneechest', 'twist', 'cobra']],
+      ['es5', 'es', 'Baldır & ayak esneme', 0, '', 'Koşu ve yürüyüş sonrası.', ['calfs', 'ankle', 'hams', 'quad']],
+      ['es6', 'es', 'Kalça açma', 0, '', 'Kalça hareketliliği.', ['hipf', 'pigeon', 'fig4', 'butter']],
+      ['yg3', 'yg', 'Yoga · Güç', 1, '', 'Dinamik ve güçlü akış.', ['sun:3:4', 'warr:3:40', 'dogd', 'tree', 'cobra']],
+      ['yg4', 'yg', 'Yoga · Sabah', 0, '', 'Güne yumuşak başlangıç.', ['catcow', 'sun', 'dogd', 'warr', 'child']],
+      ['yg5', 'yg', 'Yoga · Esneklik', 0, '', 'Derin esneme ve gevşeme.', ['fold', 'pigeon', 'butter', 'twist', 'shav']],
+      ['sb3', 'sb', 'Sabah · 5 dakika', 0, '', 'Zamanın azsa.', ['warm:1:30', 'reach:1:30', 'catcow:1:8', 'squat:1:10', 'jjack:1:20']],
+      ['sb4', 'sb', 'Sabah · Mobilite', 0, '', 'Eklemleri uyandırır.', ['warm', 'catcow', 'hipf', 'wangel', 'child']],
+      ['og3', 'og', 'Öğle · Yürüyüş ve güç', 1, '', 'Kısa enerji molası.', ['march', 'squat:2:12', 'pushup:2:8', 'plank:1:30']],
+      ['og4', 'og', 'Öğle · Omuz ve boyun', 0, '', 'Ofis gerginliğini al.', ['neck', 'shrug', 'wrist', 'cross']],
+      ['ak3', 'ak', 'Akşam · Hafif kardiyo', 1, '', 'Uykudan 3 saat önce bitir.', ['jjack:2:30', 'hknee:2:20', 'box:2:30', 'squat:2:10']],
+      ['ak4', 'ak', 'Akşam · Nefes ve uyku', 0, '', 'Sinir sistemini sakinleştir.', ['breath', 'b478', 'pmr']],
+      ['nf1', 'nf', 'Nefes · 4-7-8', 0, '', 'Hızlı sakinleşme.', ['breath', 'b478']],
+      ['nf2', 'nf', 'Gevşeme · Kas gevşetme', 0, '', 'Tüm vücut gevşemesi.', ['pmr', 'breath', 'shav']],
+      ['nf3', 'nf', 'Stres azaltma', 0, '', 'Boyun, sırt ve nefes.', ['neck', 'catcow', 'boxb', 'child']],
+      ['of1', 'of', 'Masa başı · 5 dakika', 0, '', 'İş arasında yapılabilir.', ['neck', 'shrug', 'wrist', 'cross', 'chest']],
+      ['of2', 'of', 'Masa başı · Bel ve kalça', 0, '', 'Uzun oturma sonrası.', ['hipf', 'twist', 'catcow', 'fold']],
+      ['of3', 'of', 'Masa başı · Ayakta güç', 1, '', 'Kalkıp hareket et.', ['squat:2:12', 'wallp:2:12', 'calf:2:15', 'wsit:2:30']],
+      ['mb1', 'mb', 'Denge', 0, '', 'Denge ve koordinasyon.', ['sleg', 'tree', 'warr', 'calfs']],
+      ['mb2', 'mb', 'Mobilite', 0, '', 'Eklem hareket alanı.', ['warm', 'catcow', 'hipf', 'wangel', 'ankle', 'twist']],
+      ['mb3', 'mb', 'Eklem sağlığı', 0, '', 'Omuz, bilek ve ayak bileği.', ['warm', 'armc', 'ankle', 'wrist']],
+      ['bu6', 'bu', 'Sabah · Hızlı uzama (5 dk)', 0, 'Sabah rutini', 'Zamanın azsa sabah için kısa versiyon.', ['reach', 'cobra', 'fold', 'wallstand:1:30']],
+      ['bu7', 'bu', 'Öğle · Ofiste uzama (3 dk)', 0, 'Öğle rutini', 'Ayakta kısa duruş molası.', ['mountain', 'side', 'reach', 'pelvic:1:10']],
+      ['bu8', 'bu', 'Gece · Derin uzama', 0, 'Yatmadan önce', 'Yatmadan önce omurgayı rahatlat.', ['fold', 'cobra', 'child', 'kneechest', 'legsup']],
+      ['bu9', 'bu', 'Duruş düzeltme', 1, 'Genel egzersizler', 'Kamburluğu azaltan sırt ve omuz hareketleri.', ['wangel', 'wallstand', 'rsnow', 'bird', 'mountain']],
+      ['bu10', 'bu', 'Omurga hareketliliği', 0, 'Genel egzersizler', 'Omurgayı her yöne hareket ettirir.', ['catcow', 'twist', 'cobra', 'child', 'fold']],
+      ['bu11', 'bu', 'Zıplama seansı', 2, 'Genel egzersizler', 'Zıplamayla kemik yükleme. Mat üstünde yap.', ['jrope:4:45', 'jsq:3:10', 'skater', 'calf']]    ];
+    var C = [['ys', 'Yeni başlayanlar'], ['tv', 'Tüm vücut'], ['uv', 'Üst vücut'], ['gg', 'Göğüs'], ['sr', 'Sırt'], ['om', 'Omuz'], ['kl', 'Kol'], ['kr', 'Karın & core'], ['av', 'Alt vücut'], ['bc', 'Bacak'], ['kc', 'Kalça'], ['kd', 'Kardiyo'], ['hi', 'HIIT & Tabata'], ['gc', 'Güç'], ['dy', 'Dayanıklılık'], ['es', 'Esneme'], ['yg', 'Yoga'], ['mb', 'Denge & mobilite'], ['nf', 'Nefes & gevşeme'], ['of', 'Masa başı'], ['sb', 'Sabah'], ['og', 'Öğle'], ['ak', 'Akşam']];
+    var LV = ['Kolay', 'Orta', 'Zor'];
+    var NOTE = 'Boy uzunluğu büyük ölçüde genetiğe ve büyüme plaklarına bağlıdır. Bu rutinler duruşu düzeltmeyi, omurgayı açmayı ve gün içindeki boyunu en yükseğe taşımayı hedefler. Uyku (8–10 sa), protein ve kalsiyum da işin parçasıdır.';
+    function exOf(k) {
+      var p = k.split(':'), b = E[p[0]];
+      var type = b[1] === 't' ? 'time' : 'reps';
+      return { id: uid(), name: b[0], desc: b[5], type: type, value: p[2] ? +p[2] : b[2], sets: p[1] ? +p[1] : b[3], rest: b[4], metro: false, tempo: 3 };
+    }
+    var wCache = {};
+    function wInfo(w) { var c = wCache[w[0]]; if (!c) { var g = mkGroup(w); c = wCache[w[0]] = { d: groupDiff(g), t: groupTimes(g).total }; } return c; }
+    function wMin(w) { return Math.max(1, Math.round(wInfo(w).t / 60)); }
+    function wMinOld(w) { var s = 5; w[6].forEach(function (k) { var e = exOf(k); s += e.sets * (e.type === 'time' ? e.value : e.value * 3) + (e.sets) * e.rest; }); return Math.max(1, Math.round(s / 60)); }
+    function wGet(id) { return W.filter(function (w) { return w[0] === id; })[0]; }
+    function mkGroup(w) { return { id: 'hz-' + w[0], name: w[2], desc: w[5], days: [], exercises: w[6].map(exOf) }; }
+    var ov = $('#hz'), pv = $('#hzp'), stack = [];
+    var inf = document.createElement('div'); inf.className = 'hz-inf'; inf.innerHTML = '<div class="hz-ib"></div><div class="hz-ic"><b></b><div></div><button type="button" class="primary">Tamam</button></div>'; $('#stage').appendChild(inf);
+    function info(title, lines) {
+      inf.querySelector('b').textContent = title; inf.querySelector('.hz-ic > div').innerHTML = lines.map(function (l) { return '<p>' + esc(l) + '</p>'; }).join('');
+      inf.style.display = 'flex'; try { inf.querySelector('.hz-ic').animate([{ transform: 'translateY(30px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 300, easing: EASE }); } catch (e) {} vib(4);
+    }
+    inf.addEventListener('click', function (e) { if (e.target.closest('.primary') || e.target.classList.contains('hz-ib')) inf.style.display = 'none'; });
+    function anim(el, k) {
+      try {
+        if (k === 'swap') [].forEach.call(el.children, function (c) { c.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 170, easing: 'ease-out' }); });
+        else el.animate([{ transform: 'translateY(100%)' }, { transform: 'none' }], { duration: 360, easing: EASE });
+      } catch (e) {}
+    }
+    function fadeOut(el, done) { var tk = el._tk = (el._tk || 0) + 1; try { el.animate([{ transform: 'none' }, { transform: 'translateY(100%)' }], { duration: 260, easing: 'cubic-bezier(.4,0,.2,1)' }).onfinish = function () { if (el._tk === tk) done(); }; } catch (e) { done(); } }
+    var CH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="hz-ch"><path d="M9 5l7 7-7 7"/></svg>';
+    var BK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>';
+    function wCard(w, sub) {
+      return '<button type="button" class="hz-w" data-w="' + w[0] + '"><div class="hz-wt"><b>' + esc(w[2]) + '</b>' + CH + '</div><div class="hz-ws"><small>' + fmtEst(wInfo(w).t) + ' · ' + w[6].length + ' hareket</small>' + gaugeHTML(wInfo(w).d) + '</div></button>';
+    }
+    var IC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.6v.1"/></svg>';
+    function head(t, info) { return '<div class="top"><button class="icon-btn" data-hb aria-label="Geri">' + BK + '</button><div class="ttl"><h1>' + esc(t) + '</h1></div>' + (info ? '<button class="icon-btn" data-info="' + info + '" aria-label="Bilgi">' + IC + '</button>' : '') + '</div>'; }
+    function home() {
+      var bu = W.filter(function (w) { return w[1] === 'bu'; }).length;
+      $('#hzBody').innerHTML =
+        '<button type="button" class="primary hz-plan" id="hzPlan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>Haftalık plan oluştur</button>' +
+        '<div class="hz-cap">Kategoriler</div><div class="hz-grid">' + [['bu', 'Boy uzatma']].concat(C).map(function (c) { var n = W.filter(function (w) { return w[1] === c[0]; }).length; return '<button type="button" class="hz-t" data-c="' + c[0] + '"><b>' + c[1] + '</b><small>' + n + ' antrenman</small></button>'; }).join('') + '</div>';
+    }
+    function cat(id) {
+      var name = id === 'bu' ? 'Boy Uzatma' : C.filter(function (c) { return c[0] === id; })[0][1], ws = W.filter(function (w) { return w[1] === id; }), h = head(name, id === 'bu' ? 'bu' : '') + '<div class="scroll">';
+      if (id === 'bu') {
+        ['Sabah rutini', 'Öğle rutini', 'Yatmadan önce', 'Genel egzersizler'].forEach(function (s) { h += '<div class="hz-cap">' + s + '</div>' + ws.filter(function (w) { return w[4] === s; }).map(wCard).join(''); });
+      } else h += ws.map(wCard).join('');
+      return h + '</div>';
+    }
+    function detail(w) {
+      var ex = w[6].map(exOf);
+      return head(w[2]) + '<div class="scroll hz-ds"><p class="hz-desc">' + esc(w[5]) + '</p><div class="hz-meta"><span>' + fmtEst(wInfo(w).t) + '</span><span>' + ex.length + ' hareket</span><span class="hz-gm">' + gaugeHTML(wInfo(w).d) + '</span></div>' +
+        ex.map(function (e, i) { return '<div class="hz-ex"><button type="button" class="hz-eh" aria-expanded="false"><i>' + (i + 1) + '</i><span><b>' + esc(e.name) + '</b><small>' + e.sets + ' × ' + e.value + (e.type === 'time' ? ' sn' : ' tekrar') + '</small></span>' + CH + '</button><div class="hz-eb" hidden>' + descHTML(e.desc) + '</div></div>'; }).join('') +
+        '</div><div class="hz-ft"><button type="button" class="primary sec" data-add="' + w[0] + '">Gruplarıma ekle</button><button type="button" class="primary" data-go="' + w[0] + '">Başlat</button></div>';
+    }
+    function paint(first) {   // first: 'in' ileri · 'back' geri
+      var t = stack[stack.length - 1];
+      if (!t) { fadeOut(ov, function () { ov.style.display = 'none'; ov.innerHTML = ''; }); return; }
+      var was = ov.style.display === 'flex';
+      ov._tk = (ov._tk || 0) + 1;
+      ov.innerHTML = t[0] === 'c' ? cat(t[1]) : detail(wGet(t[1]));
+      ov.style.display = 'flex'; anim(ov, was ? 'swap' : 'up');
+    }
+    function push(t) { stack.push(t); paint('in'); vib(4); }
+    ov.addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      if (b.dataset.info) return info('Boy uzatma hakkında', [NOTE]);
+      if (b.hasAttribute('data-hb')) { stack.pop(); paint('back'); return; }
+      if (b.dataset.w) return push(['w', b.dataset.w]);
+      if (b.classList.contains('hz-eh')) { var o = b.getAttribute('aria-expanded') !== 'true'; b.setAttribute('aria-expanded', o); b.nextElementSibling.hidden = !o; return; }
+      if (b.dataset.go) return openPlayer(mkGroup(wGet(b.dataset.go)));
+      if (b.dataset.add) { state.groups.push(mkGroup(wGet(b.dataset.add))); state.groups[state.groups.length - 1].id = uid(); save(); homePend = 1; try { renderHome(false); } catch (x) {} b.textContent = 'Eklendi ✓'; b.disabled = true; vib(8); }
+    });
+    $('#hzBody').addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      if (b.dataset.c) push(['c', b.dataset.c]); else if (b.id === 'hzPlan') openPlan();
+    });
+    /* --- Haftalık plan: toparlanma kuralları ile --- */
+    var DN = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'];
+    var SLOT = { 2: [0, 3], 3: [0, 2, 4], 4: [0, 1, 3, 4], 5: [0, 1, 2, 4, 5], 6: [0, 1, 2, 3, 4, 5] };
+    var LVL = [['Yeni başlıyorum', 4, { L: 2, U: 2, C: 3, R: 3, B: 3 }], ['Orta', 5, { L: 3, U: 3, C: 4, R: 4, B: 3 }], ['İleri', 6, { L: 3, U: 3, C: 5, R: 5, B: 3 }]];
+    // Kas yükü: L bacak · U üst vücut · C karın · R kardiyo · B boy güçlendirme. L, U, B en az 48 saat dinlenir.
+    var TAG = { tv1: 'LUC', tv2: 'LUCR', uv1: 'U', uv2: 'U', av1: 'L', av2: 'L', bc1: 'L', bc2: 'L', kl1: 'U', kl2: 'U', kr1: 'C', kr2: 'C', kd1: 'R', kd2: 'RL', gc1: 'LU', gc2: 'LUC', dy1: 'LUC', dy2: 'R', bu4: 'B', bu5: 'B', bu9: 'B', bu11: 'B', gg1: 'U', gg2: 'U', gg3: 'U', sr1: 'U', sr2: 'U', om1: 'U', om2: 'U', kc1: 'L', kc2: 'L', kc3: 'L', bc3: 'L', bc4: 'L', av3: 'L', tv3: 'LUC', uv3: 'U', kl3: 'U', kr3: 'C', kr4: 'C', kr5: 'C', kd3: 'R', kd4: 'R', hi1: 'RL', hi2: 'RL', hi3: 'RC', hi4: 'R', gc3: 'LU', dy3: 'C' };
+    var FO = [
+      ['tum', 'Tüm vücut', ['ys1', 'tv1', 'gc1', 'tv3', 'tv2']], ['bac', 'Bacak', ['bc3', 'bc1', 'bc2', 'av1', 'bc4']], ['kal', 'Kalça', ['kc1', 'kc2', 'kc3']], ['ust', 'Üst vücut', ['uv3', 'uv1', 'uv2']], ['gog', 'Göğüs', ['gg1', 'gg2', 'gg3']], ['sir', 'Sırt', ['sr1', 'sr2']], ['omz', 'Omuz', ['om1', 'om2']], ['kol', 'Kol', ['kl2', 'kl1', 'kl3']],
+      ['kar', 'Karın & core', ['kr3', 'kr1', 'kr4', 'kr5', 'kr2']], ['kard', 'Kardiyo', ['kd3', 'kd1', 'kd4', 'dy2']], ['hiit', 'HIIT', ['hi4', 'hi1', 'hi2', 'hi3']], ['boy', 'Boy uzatma', ['bu4', 'bu5', 'bu9', 'bu11']], ['yog', 'Yoga & esneme', ['yg4', 'es1', 'yg1', 'yg5']]
+    ];
+    function foGet(id) { return FO.filter(function (x) { return x[0] === id; })[0]; }
+    var planNotes = [];
+    var plan = (function () {
+      var p = state.plan || {}, f = (Array.isArray(p.f) ? p.f : [p.f]).filter(foGet);
+      return { f: f.length ? f.slice(0, 3) : ['bac'], n: p.n || 3, lv: p.lv == null ? 0 : p.lv };
+    })();
+    function build(sel, n, lv) {
+      var cap = LVL[lv][2], cnt = {}, idx = {}, prev = '', rot = 0, li = 0, boy = sel.indexOf('boy') > -1, days = [], i, t;
+      for (i = 0; i < 7; i++) {
+        var d = { kind: 'rest', ids: [] };
+        if (SLOT[n].indexOf(i) > -1) {
+          var got = null;
+          for (t = 0; t < sel.length && !got; t++) {
+            var fo = foGet(sel[(rot + t) % sel.length]), list = fo[2].filter(function (id) { return lv > 0 || wGet(id)[3] < 2; });
+            var id = list[(idx[fo[0]] || 0) % list.length], tg = (TAG[id] || '').split(''), ok = true;
+            tg.forEach(function (c) { if ('LUB'.indexOf(c) > -1 && prev.indexOf(c) > -1) ok = false; if ((cnt[c] || 0) >= cap[c]) ok = false; });
+            if (ok) { got = id; idx[fo[0]] = (idx[fo[0]] || 0) + 1; rot = (rot + t + 1) % sel.length; }
+          }
+          if (got) { d.kind = 'train'; d.ids = [got]; prev = TAG[got] || ''; (TAG[got] || '').split('').forEach(function (c) { cnt[c] = (cnt[c] || 0) + 1; }); }
+          else { d.kind = 'light'; d.ids = ['es2', 'yg2', 'es1'].slice(li % 3, li % 3 + 1); li++; prev = ''; }
+        } else prev = '';
+        if (boy) { d.ids = ['bu1', 'bu2'].concat(d.kind === 'train' ? d.ids : [], ['bu3']); if (d.kind === 'rest') d.kind = 'light'; }
+        days.push(d);
+      }
+      return days;
+    }
+    function planPaint() {
+      var sc = pv.querySelector('#hzpD'), top = sc.scrollTop, mx = LVL[plan.lv][1], req = plan.n, notes = [];
+      if (plan.n > mx) { notes.push('“' + LVL[plan.lv][0] + '” seviyesinde haftada en fazla ' + mx + ' antrenman günü önerilir; ' + (7 - mx) + ' gün dinlenme gerekir.'); plan.n = mx; }
+      planNotes = notes; var days = build(plan.f, plan.n, plan.lv), today = (new Date().getDay() + 6) % 7, tr = 0, lt = 0, i;
+      days.forEach(function (d) { if (d.kind === 'train') tr++; else if (d.kind === 'light') lt++; });
+      if (tr < plan.n && plan.f.indexOf('boy') < 0) notes.push('Aynı kas grubunu 48 saat dolmadan veya haftalık sınırı aşarak çalıştırmamak için ' + (plan.n - tr) + ' günü hafif esneme gününe çevirdim.');
+      notes.push('Aynı kas grubu arka arkaya iki gün çalıştırılmaz; kaslar dinlenirken gelişir. Dinlenme günlerinde 20–30 dk yürüyüş yeterli.');
+      var h = '<div class="hz-cap">Ne çalışmak istiyorsun? (en fazla 3)</div><div class="hz-chips" style="padding:0;flex-wrap:wrap;overflow:visible">' + FO.map(function (x) { return '<button type="button" class="hz-chip' + (plan.f.indexOf(x[0]) > -1 ? ' on' : '') + '" data-f="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>' +
+        '<div class="hz-cap">Seviyen</div><div class="hz-chips" style="padding:0;flex-wrap:wrap;overflow:visible">' + LVL.map(function (x, k) { return '<button type="button" class="hz-chip' + (k === plan.lv ? ' on' : '') + '" data-l="' + k + '">' + x[0] + '</button>'; }).join('') + '</div>' +
+        '<div class="hz-cap">Haftada kaç gün?</div><div class="hz-chips" style="padding:0;flex-wrap:wrap;overflow:visible">' + [2, 3, 4, 5, 6].filter(function (n) { return n <= mx; }).map(function (n) { return '<button type="button" class="hz-chip' + (n === plan.n ? ' on' : '') + '" data-n="' + n + '">' + n + ' gün</button>'; }).join('') + '</div>' +
+        '<div class="hz-cap" style="margin-top:20px">' + tr + ' antrenman · ' + lt + ' hafif · ' + (7 - tr - lt) + ' dinlenme</div>';
+      days.forEach(function (d, i) {
+        h += '<div class="hz-day' + (i === today ? ' now' : '') + (d.kind === 'rest' ? ' off' : '') + '"><div class="hz-dn"><b>' + DN[i] + '</b><small>' + (d.kind === 'train' ? 'Antrenman' : d.kind === 'light' ? 'Hafif gün' : 'Dinlenme') + '</small></div><div class="hz-dw">' +
+          (d.ids.length ? d.ids.map(function (id) { var w = wGet(id); return '<button type="button" class="hz-pw" data-w="' + id + '"><b>' + esc(w[2]) + '</b><small>' + wMin(w) + ' dk</small></button>'; }).join('') : '<span class="hz-rest">Toparlanma günü · yürüyüş serbest</span>') + '</div></div>';
+      });
+      sc.innerHTML = h; sc.scrollTop = top;
+    }
+    function openPlan() { pv._tk = (pv._tk || 0) + 1; pv.style.display = 'flex'; planPaint(); anim(pv, 'up'); vib(4); }
+    pv.addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      if (b.dataset.info) return info('Plan hakkında', planNotes);
+      if (b.hasAttribute('data-hb')) { pv._tk = (pv._tk || 0) + 1; fadeOut(pv, function () { pv.style.display = 'none'; }); return; }
+      if (b.dataset.f) { var k = plan.f.indexOf(b.dataset.f); if (k > -1) { if (plan.f.length > 1) plan.f.splice(k, 1); } else if (plan.f.length < 3) plan.f.push(b.dataset.f); planPaint(); }
+      else if (b.dataset.l) { plan.lv = +b.dataset.l; planPaint(); }
+      else if (b.dataset.n) { plan.n = +b.dataset.n; planPaint(); }
+      else if (b.dataset.w) { stack = [['w', b.dataset.w]]; paint('in'); }
+      else if (b.id === 'hzpSave') { state.plan = { f: plan.f.slice(), n: plan.n, lv: plan.lv }; save(); b.textContent = 'Plan kaydedildi ✓'; vib(8); setTimeout(function () { b.textContent = 'Planı kaydet'; }, 1600); }
+    });
+    home();
+  })();
 
   renderHome(true);
 
