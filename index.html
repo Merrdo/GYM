@@ -430,11 +430,14 @@
   .pl-done.go { opacity: 1; }
   .pl-done .badge { position: relative; width: 132px; height: 132px; display: grid; place-items: center; margin-bottom: 26px; }
   .pl-done .badge svg { width: 100%; height: 100%; overflow: visible; position: relative; }
-  .pl-done .wave { position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--accent); opacity: 0; }
-  .pl-done.go .wave { animation: dwave 2.6s var(--ease) infinite; }
-  .pl-done.go .wave:nth-child(2) { animation-delay: .85s; }
-  .pl-done.go .wave:nth-child(3) { animation-delay: 1.7s; }
-  @keyframes dwave { 0% { transform: scale(.8); opacity: .5; } 100% { transform: scale(2.1); opacity: 0; } }
+  .stat .kf { display: inline-block; width: 22px; height: 22px; color: var(--danger); margin-right: 6px; vertical-align: -3px; }
+  .stat .kf svg { width: 100%; height: 100%; overflow: visible; }
+  .stat .kf path { stroke-dasharray: 100; stroke-dashoffset: 100; fill: rgba(255,90,77,0); }
+  .pl-done.go .stat .kf path { animation: kdraw .9s var(--ease) 1.3s forwards, kfill .6s ease 2s forwards; }
+  .pl-done.go .stat .kf svg { transform-origin: 50% 90%; animation: kflick 1.1s ease-in-out 1.9s; }
+  @keyframes kdraw { to { stroke-dashoffset: 0; } }
+  @keyframes kfill { to { fill: rgba(255,90,77,.22); } }
+  @keyframes kflick { 0%, 100% { transform: scale(1); } 30% { transform: scale(1.18, 1.1) rotate(-4deg); } 60% { transform: scale(.96, 1.06) rotate(3deg); } }
   .d-ring { fill: none; stroke: var(--accent); stroke-width: 5; stroke-linecap: round; stroke-dasharray: 302; stroke-dashoffset: 302; }
   .d-chk { fill: none; stroke: var(--accent); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 70; stroke-dashoffset: 70; }
   .d-trk { fill: none; stroke: rgba(255,255,255,.07); stroke-width: 5; }
@@ -446,7 +449,14 @@
   .pl-done .rise { opacity: 0; transform: translateY(16px); }
   .pl-done.go .rise { animation: rise .7s var(--ease) both; animation-delay: calc(.9s + var(--k) * 90ms); }
   .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; max-width: 360px; margin: 30px 0 28px; }
-  .stat { background: var(--surface); border-radius: 18px; padding: 16px 8px; }
+  .stat { background: var(--surface); border-radius: 18px; padding: 16px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 96px; }
+  .stat .v small { font-size: .72rem; font-weight: 650; color: var(--dim); letter-spacing: 0; margin-left: 3px; }
+  .stat .dz { width: 46px; height: 29px; overflow: visible; display: block; margin: 0 auto 3px; }
+  .stat .dz path { fill: none; stroke-width: 4.5; stroke-linecap: round; }
+  .stat .dz .dz-t { stroke: rgba(255,255,255,.09); }
+  .stat .dz .dz-p { stroke: var(--zc); stroke-dasharray: 0 100; }
+  .stat .zl { font-family: var(--num); font-size: 1.15rem; font-weight: 700; letter-spacing: -.03em; color: var(--zc); opacity: 0; transform: translateY(6px); }
+  .stat.zs .v { display: flex; flex-direction: column; align-items: center; }
   .stat .v { font-family: var(--num); font-size: 1.55rem; font-weight: 700; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
   .stat .l { color: var(--dim); font-size: .7rem; font-weight: 650; letter-spacing: .12em; text-transform: uppercase; margin-top: 4px; }
   .pl-done .primary { flex: none; max-width: 360px; }
@@ -2238,7 +2248,7 @@
     <div class="scroll stretch" id="exScroll">
       <div class="gw"><div class="cap"></div><div class="hero" id="exHero"></div></div>
       <div class="gbody">
-        <div class="zcorner" id="exZw"><button type="button" class="zun" id="exZun" aria-label="Zorluğu tamamen sıfırla" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 103-6.2M4 4v4h4"/></svg></button><button type="button" class="zfire" id="exZup" aria-label="Hareketi bir seviye zorlaştır. Basılı tutarsan değişimler listelenir."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 002.5 2.5z"/></svg><i class="zbd" id="exZbd" hidden></i></button></div>
+        <div class="zcorner" id="exZw"><button type="button" class="zun" id="exZun" aria-label="Zorluğu tamamen sıfırla" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 103-6.2M4 4v4h4"/></svg></button><button type="button" class="zfire" id="exZup" aria-label="Hareketi bir seviye zorlaştır. Basılı tutarsan değişimler listelenir."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2.5L6 13h5.5L10.5 21.5 18 10.5h-5.5z" fill="currentColor"/></svg><i class="zbd" id="exZbd" hidden></i></button></div>
         <h1 class="gt" id="exTitle"></h1>
         <div class="exmeta" id="exMeta"></div>
         <div class="stats3" id="exStats"></div>
@@ -2258,7 +2268,7 @@
     <div class="scroll stretch" id="groupScroll">
       <div class="gw" id="gw"><div class="cap"></div><div class="hero" id="hero"></div></div>
       <div class="gbody">
-      <div class="zcorner" id="gZw"><button type="button" class="zun" id="gZun" aria-label="Zorluğu tamamen sıfırla" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 103-6.2M4 4v4h4"/></svg></button><button type="button" class="zfire" id="gZup" aria-label="Grubu bir seviye zorlaştır. Basılı tutarsan zorlaştırılanlar listelenir."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 002.5 2.5z"/></svg><i class="zbd" id="gZbd" hidden></i></button></div>
+      <div class="zcorner" id="gZw"><button type="button" class="zun" id="gZun" aria-label="Zorluğu tamamen sıfırla" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 103-6.2M4 4v4h4"/></svg></button><button type="button" class="zfire" id="gZup" aria-label="Grubu bir seviye zorlaştır. Basılı tutarsan zorlaştırılanlar listelenir."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2.5L6 13h5.5L10.5 21.5 18 10.5h-5.5z" fill="currentColor"/></svg><i class="zbd" id="gZbd" hidden></i></button></div>
         <h1 class="gt" id="gTitle"></h1>
         <p class="gdesc" id="gDesc"></p>
         <div class="gwk" id="gWk"></div>
@@ -2326,15 +2336,15 @@
     </div>
     <div class="pl-done" id="plDone">
       <div class="badge" aria-hidden="true">
-        <span class="wave"></span><span class="wave"></span><span class="wave"></span>
+        
         <svg viewBox="0 0 120 120"><circle class="d-trk" cx="60" cy="60" r="48"/><circle class="d-ring" cx="60" cy="60" r="48" transform="rotate(-90 60 60)"/><path class="d-chk" d="M38 62l16 16 28-34"/></svg>
       </div>
       <h2 class="rise" style="--k:0">Tamamlandı</h2>
       <div class="gname rise" style="--k:1" id="dnGroup"></div>
       <div class="stats rise" style="--k:2">
-        <div class="stat"><div class="v" id="dnTime"></div><div class="l">Süre</div></div>
-        <div class="stat"><div class="v" id="dnEx"></div><div class="l">Hareket</div></div>
-        <div class="stat"><div class="v" id="dnSets"></div><div class="l">Set</div></div>
+        <div class="stat"><div class="v" id="dnTime">0:00</div><div class="l">Süre</div></div>
+        <div class="stat"><div class="v"><span class="kf" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 002.5 2.5z"/></svg></span><span id="dnKc">0</span><small>kcal</small></div></div>
+        <div class="stat zs" id="dnZ"><div class="v"><svg class="dz" viewBox="0 0 40 25" aria-hidden="true"><path class="dz-t" d="M4 21A16 16 0 0 1 36 21" pathLength="100"/><path class="dz-p" id="dnZp" d="M4 21A16 16 0 0 1 36 21" pathLength="100"/></svg><span class="zl" id="dnZl"></span></div></div>
       </div>
       <button class="primary rise" style="--k:3;width:100%" id="dnBtn">Bitir</button>
     </div>
@@ -5111,6 +5121,13 @@
     var s = cur();
     if (s.k === 'work' && !s.dur) complete(); else setRun(!WK.run);
   }
+  var LV_N0 = ['Kolay', 'Orta', 'Zor'], LV_C0 = ['var(--lv0)', 'var(--lv1)', 'var(--lv2)'];
+  function dnCount(delay, dur, fn) {
+    setTimeout(function () {
+      var t0 = performance.now();
+      (function st(t) { var k = Math.min(1, (t - t0) / dur); fn(1 - Math.pow(1 - k, 3)); if (k < 1) requestAnimationFrame(st); })(t0);
+    }, delay);
+  }
   function finish() {
     plMpOpen(false); WK.done = true; WK.run = false; WK.quitOpen = false;
     swapBusy = false;
@@ -5121,9 +5138,13 @@
     say('Antrenman tamamlandı. Toplam süre ' + sayTime(Math.round(WK.total / 1000)) + '. Eline sağlık!', 900);
     P.classList.remove('paused', 'is-rest', 'is-prep', 'is-cd'); P.classList.add('is-done');
     $('#dnGroup').textContent = WK.g.name;
-    $('#dnTime').textContent = clock(Math.round(WK.total / 1000));
-    $('#dnEx').textContent = WK.n;
-    $('#dnSets').textContent = Object.keys(WK.ok).length;
+    var hh = state.hist[state.hist.length - 1] || {}, secT = Math.round(WK.total / 1000), kcT = hh.kcal || 0, lvI = hh.lv || 0;
+    var zEl = $('#dnZ'), zl = $('#dnZl'), zp = $('#dnZp'), pctZ = Math.round(Math.max(.07, Math.min(1, hh.s != null ? hh.s : (lvI + .5) / 3)) * 100);
+    zEl.style.setProperty('--zc', LV_C0[lvI]); zl.textContent = LV_N0[lvI]; zp.style.strokeDasharray = '0 100';
+    $('#dnTime').textContent = clock(0); $('#dnKc').textContent = '0';
+    dnCount(1250, 1300, function (k) { $('#dnTime').textContent = clock(Math.round(secT * k)); });
+    dnCount(1400, 1300, function (k) { $('#dnKc').textContent = Math.round(kcT * k); });
+    dnCount(1550, 1400, function (k) { zp.style.strokeDasharray = (pctZ * k).toFixed(1) + ' 100'; zl.style.opacity = Math.min(1, k * 1.6); zl.style.transform = 'translateY(' + (6 * (1 - Math.min(1, k * 1.6))) + 'px)'; });
     var d = $('#plDone'); d.style.display = 'flex'; void d.offsetWidth; d.classList.add('go');
   }
 
@@ -6212,7 +6233,7 @@
   var Z_AR = '<svg class="zar" viewBox="0 0 30 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="2.4" cy="6" r="1.7" fill="currentColor" stroke="none"/><path d="M5.5 6h20.5M21.4 1.8L26 6l-4.6 4.2"/></svg>';
   var Z_IC = {
     warn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L2.6 17.2A2 2 0 004.3 20h15.4a2 2 0 001.7-2.8L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4.5M12 16.8v.01"/></svg>',
-    max: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 002.5 2.5z"/></svg>'
+    max: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2.5L6 13h5.5L10.5 21.5 18 10.5h-5.5z" fill="currentColor"/></svg>'
   };
   function zRowsHTML(rows) {
     return (rows || []).map(function (r) {
