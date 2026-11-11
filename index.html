@@ -559,6 +559,92 @@
   .ana-sec h2 { font-size: 1.15rem; font-weight: 700; letter-spacing: -.02em; }
   .ana-sec button { display: inline-flex; align-items: center; gap: 2px; color: var(--accent); font-size: .92rem; font-weight: 600; padding: 6px 0 6px 10px; }
   .ana-sec button svg { width: 15px; height: 15px; }
+  /* Adım sayar: ana sayfa kartı + giriş paneli */
+  .st-hd { padding: var(--pt) 0 18px; }
+  .st-hd h1 { font-size: 1.7rem; letter-spacing: -.03em; font-weight: 700; }
+  .st-hd p { color: var(--dim); font-size: .88rem; font-weight: 500; margin-top: 2px; }
+  .st-card { position: relative; display: flex; align-items: center; gap: 18px; width: 100%; text-align: left; padding: 16px 18px; background: var(--surface); border-radius: var(--r); transition: transform .15s var(--ease), background .2s; -webkit-tap-highlight-color: transparent; }
+  .st-card:active { transform: scale(.985); background: var(--surface2); }
+  .st-ring { position: relative; flex: none; width: 84px; height: 84px; }
+  .st-ring svg.rg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .st-ring circle { fill: none; stroke-width: 17; }
+  .st-ring .tr { stroke: var(--surface2); }
+  .st-ring .pg { stroke: var(--accent); stroke-linecap: round; stroke-dasharray: 527.8; stroke-dashoffset: 527.8; transition: stroke-dashoffset .8s var(--ease); }
+  .st-card:active .st-ring .tr { stroke: var(--line); }
+  .st-ic { position: absolute; inset: 0; display: grid; place-items: center; color: var(--accent); }
+  .st-ic svg { width: 26px; height: 26px; }
+  .st-tx { min-width: 0; display: flex; flex-direction: column; }
+  .st-lb { color: var(--dim); font-size: .8rem; font-weight: 600; letter-spacing: .01em; }
+  .st-nr { display: flex; align-items: baseline; gap: 6px; margin-top: 2px; }
+  .st-n { font-size: 2.3rem; line-height: 1.1; font-weight: 750; letter-spacing: -.045em; font-variant-numeric: tabular-nums; }
+  .st-nr span { color: var(--dim); font-size: .9rem; font-weight: 550; }
+  .st-g { margin-top: 1px; color: var(--dim); font-size: .85rem; font-weight: 550; font-variant-numeric: tabular-nums; }
+  .st-card.done .st-g { color: var(--accent); font-weight: 650; }
+  .st-pen { position: absolute; top: 12px; right: 12px; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--surface2); color: var(--dim); }
+  .st-pen svg { width: 13px; height: 13px; }
+  /* Su takibi */
+  .wa-card { position: relative; display: flex; align-items: center; gap: 18px; width: 100%; margin-top: 12px; padding: 14px 14px 14px 20px; background: var(--surface); border-radius: var(--r); cursor: pointer; text-align: left; transition: transform .15s var(--ease), background .2s; -webkit-tap-highlight-color: transparent; outline: none; }
+  .wa-card:active { transform: scale(.985); background: var(--surface2); }
+  .wa-gl { flex: none; width: 56px; height: 77px; overflow: visible; }
+  .wa-w { transition: transform .9s var(--ease); }
+  .wa-wv { animation: waw 7s linear infinite; }
+  .wa-card.done .wa-wv { animation-play-state: paused; }
+  @keyframes waw { to { transform: translateX(-64px); } }
+  .wa-card .st-tx { flex: 1; }
+  .wa-card.done .st-g { color: #4aa8ff; font-weight: 650; }
+  .wa-add { flex: none; margin-left: auto; height: 40px; padding: 0 14px 0 11px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px; background: rgba(74,168,255,.14); color: #4aa8ff; font-size: .85rem; font-weight: 700; font-variant-numeric: tabular-nums; transition: transform .15s var(--ease), background .2s; }
+  .wa-add:active { transform: scale(.93); background: rgba(74,168,255,.26); }
+  .wa-add svg { width: 15px; height: 15px; }
+  #waSh .st-seg i { background: #4aa8ff; }
+  #waSh .st-num { color: #4aa8ff; }
+  #waSh .st-val { margin: 0; }
+  .wa-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 26px; }
+  .wa-rb { flex: none; width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: var(--surface2); color: var(--ink); transition: transform .15s var(--ease), opacity .2s; }
+  .wa-rb:active { transform: scale(.9); }
+  .wa-rb svg { width: 20px; height: 20px; }
+  .wa-cups { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; margin: 6px 0 14px; }
+  .wa-cups button { height: 38px; border-radius: 6px 6px 11px 11px; background: var(--surface2); transition: background .3s var(--ease), transform .15s var(--ease); }
+  .wa-cups button.on { background: #4aa8ff; }
+  .wa-cups button:active { transform: scale(.88); }
+  #waSh.g .wa-cups, #waSh:not(.g) .wa-ch { display: none; }
+  #waSh .mp-chips { margin-top: 14px; }
+  #waSh .mp-chips button.on { background: #4aa8ff; }
+  #waSh .sht-card { position: relative; }
+  .wa-body { display: flex; flex-direction: column; min-height: 0; }
+  .wa-pen { flex: none; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: rgba(74,168,255,.14); color: #4aa8ff; transition: transform .15s var(--ease), background .2s; }
+  .wa-pen:active { transform: scale(.9); background: rgba(74,168,255,.26); }
+  .wa-pen svg { width: 22px; height: 22px; }
+  #waDone { display: flex; align-items: center; justify-content: center; gap: 6px; }
+  #waDone svg { width: 18px; height: 18px; }
+  #waSh.bk #waDone { color: var(--ink); }
+  #waSh.q .wa-pen, #waSh.q .st-seg, #waSh.q .wa-cups, #waSh.q .wa-ch, #waSh:not(.q) .wa-qp { display: none; }
+  #waSh.q .wa-row { margin-top: 30px; }
+  .wa-qp { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0 12px; }
+  .wa-qp button { height: 46px; border-radius: 23px; background: var(--surface2); color: var(--ink); font-size: .95rem; font-weight: 650; font-variant-numeric: tabular-nums; transition: background .25s var(--ease), color .25s var(--ease), transform .15s var(--ease); }
+  .wa-qp button:active { transform: scale(.94); }
+  .wa-qp button.on { background: #4aa8ff; color: var(--accent-ink); }
+  .wa-card { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+  .stp .st-seg { position: relative; display: grid; grid-template-columns: 1fr 1fr; margin: 22px 0 0; padding: 4px; border-radius: 16px; background: var(--surface2); }
+  .stp .st-seg i { position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px); border-radius: 12px; background: var(--accent); transition: transform .4s var(--ease); }
+  .stp .st-seg.g i { transform: translateX(100%); }
+  .stp .st-seg button { position: relative; height: 38px; font-size: .95rem; font-weight: 650; color: var(--dim); transition: color .3s var(--ease); }
+  .stp .st-seg button.on { color: var(--accent-ink); }
+  .stp .st-val { display: flex; align-items: baseline; justify-content: center; gap: 8px; margin: 26px 2px 0; }
+  .stp .st-num { font-size: 4.4rem; line-height: 1; font-weight: 750; letter-spacing: -.05em; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .stp .st-num.pop { animation: pop .18s var(--ease); }
+  .stp .st-pct { text-align: center; color: var(--dim); font-size: .88rem; font-weight: 550; margin: 8px 0 12px; min-height: 1.2em; }
+  .stp .st-sl { position: relative; height: 80px; margin: 2px -20px 0; overflow: hidden; touch-action: none; cursor: grab; outline: none; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent); mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent); }
+  .stp .st-sl.drag { cursor: grabbing; }
+  .stp .st-sl:focus-visible { box-shadow: 0 0 0 2px var(--accent); border-radius: 12px; }
+  .st-rl { position: absolute; left: 50%; top: 0; width: 0; height: 100%; will-change: transform; }
+  .st-rl i { position: absolute; top: 0; left: calc(var(--k) * var(--s)); width: 0; height: 100%; }
+  .st-rl u { position: absolute; top: 8px; left: -1px; width: 2px; height: 12px; border-radius: 1px; background: var(--dim); opacity: .34; transition: background .2s, opacity .2s; }
+  .st-rl i.w u { height: 22px; opacity: .6; }
+  .st-rl i.cur u { background: var(--accent); opacity: 1; }
+  .st-rl s { position: absolute; top: 44px; left: 0; transform: translateX(-50%); text-decoration: none; color: var(--dim); font-size: .76rem; font-weight: 550; font-variant-numeric: tabular-nums; }
+  .stp .mp-chips { gap: 10px; margin-top: 8px; padding-bottom: 8px; }
+  .stp .mp-chips button { height: 46px; border-radius: 23px; max-width: 80px; font-size: .95rem; }
   .hs { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 18px 4px; }
   .hs > div { text-align: center; padding: 0 6px; }
   .hs > div + div { border-left: 1px solid var(--line); }
@@ -929,6 +1015,7 @@
   @keyframes zpop { 0% { transform: scale(.86); } 55% { transform: scale(1.12); } 100% { transform: scale(1); } }
   .zbd { position: absolute; top: -4px; right: -5px; min-width: 17px; height: 17px; padding: 0 4px; border-radius: 9px; display: grid; place-items: center; background: var(--danger-fill, #e5372b); color: #fff; font-style: normal; font-size: .68rem; font-weight: 750; line-height: 1; font-variant-numeric: tabular-nums; box-shadow: 0 0 0 2px var(--bg); pointer-events: none; }
   .zbd[hidden] { display: none; }
+  .zbd.dot { min-width: 10px; width: 10px; height: 10px; padding: 0; top: 0; right: 0; background: var(--danger); }
   .zun { background: var(--surface2); color: var(--dim); }
   .zun[hidden] { display: none; }
   .zun svg { width: 17px; height: 17px; }
@@ -946,7 +1033,14 @@
   #zSheet .sht-list { margin: 2px -20px 4px; padding: 0 20px; }
   #zSheet .sht-list:empty, #zSheet .sh-d:empty, #zSheet .ssub.eb:empty { display: none; }
   #zSheet.zrs .primary.sec { color: var(--danger); }
-  #zSheet.zrs .primary.sec:active { background: rgba(255,90,77,.12); }
+  /* Sıfırla: panelin sağ üst köşesinde küçük, sakin bir hap; alttaki tam genişlik buton kalkar */
+  #zSheet.zrs .sht-card { position: relative; }
+  #zSheet.zrs #zNo { position: absolute; top: 34px; right: 16px; width: auto; height: 32px; margin: 0; padding: 0 12px 0 10px; border: 0; border-radius: 16px;
+    display: inline-flex; align-items: center; gap: 6px; background: rgba(255,90,77,.10); color: var(--danger); font-size: .82rem; font-weight: 650; letter-spacing: -.005em; box-shadow: none;
+    transition: background .2s, transform .15s var(--ease); }
+  #zSheet.zrs #zNo:active { background: rgba(255,90,77,.2); transform: scale(.95); filter: none; }
+  #zSheet.zrs #zNo svg { width: 15px; height: 15px; flex: none; }
+  #zSheet.zrs .ssub.eb { padding-right: 104px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .zr { padding: 16px 0 15px; border-top: 1px solid var(--line); }
   .zr:first-child { border-top: 0; padding-top: 6px; }
   .zh { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
@@ -2208,6 +2302,35 @@
       </div>
     </div>
 
+  <!-- Adım sayısı: ana sayfadaki karttan açılır -->
+  <div class="sht mts stp" id="stSh" style="z-index:50">
+    <div class="sht-card" role="dialog" aria-label="Adım sayısı">
+      <div class="mp-head"><span class="mp-ic" style="background:var(--accent-soft);color:var(--accent)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3.5c1.7 0 2.7 1.7 2.7 4 0 1.8-.8 3-2.2 3S6 9.2 6 7.5C6 5 6.6 3.5 8 3.5z"/><path d="M6.6 13.2h3.8v1.4a1.9 1.9 0 01-3.8 0z"/><path d="M16 9c1.5 0 2.3 1.5 2.3 3.5 0 1.7-.8 2.8-2 2.8s-2.2-1.2-2.2-2.7C14.1 10.5 14.6 9 16 9z"/><path d="M14.8 17.5h3.4v1.2a1.7 1.7 0 01-3.4 0z"/></svg></span><div class="mp-t"><b>Adımlar</b><small id="stSub">Bugünkü adımını gir</small></div></div>
+      <div class="st-seg" id="stSeg"><i></i><button type="button" class="on" data-m="s">Bugün</button><button type="button" data-m="g">Hedef</button></div>
+      <div class="st-val"><span class="st-num" id="stNum">0</span><span class="mp-u">adım</span></div>
+      <p class="st-pct" id="stPct"></p>
+      <i class="mp-pt"></i>
+      <div class="st-sl" id="stSl" role="slider" tabindex="0" aria-label="Adım sayısı"><div class="st-rl" id="stRl"></div></div>
+      <div class="mp-chips" id="stCh"></div>
+      <button class="primary sec mt-done" id="stDone" type="button">Tamam</button>
+    </div>
+  </div>
+
+  <!-- Su takibi: ana sayfadaki karttan açılır; hedef Bilgilerim ile ortaktır -->
+  <div class="sht mts stp" id="waSh" style="z-index:50">
+    <div class="sht-card" role="dialog" aria-label="Su takibi"><div class="wa-body" id="waBody">
+      <div class="mp-head"><span class="mp-ic" style="background:rgba(74,168,255,.16);color:#4aa8ff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5c3.4 4.1 5.8 7.1 5.8 10.1a5.8 5.8 0 01-11.6 0c0-3 2.4-6 5.8-10.1z"/></svg></span><div class="mp-t"><b id="waTt">Su takibi</b><small id="waSub">Bugün içtiğin su</small></div><button type="button" class="wa-pen" id="waPen" aria-label="Hızlı ekleme miktarını düzenle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.2 2.8L5.5 13.4h5.6l-.9 7.8 8.3-11.1h-5.8z" fill="currentColor" fill-opacity=".18"/></svg></button></div>
+
+      <div class="st-seg" id="waSeg"><i></i><button type="button" class="on" data-m="s">Bugün</button><button type="button" data-m="g">Hedef</button></div>
+      <div class="wa-row"><button type="button" class="wa-rb" id="waMi" aria-label="Azalt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/></svg></button><div class="st-val"><span class="st-num" id="waNum">0</span><span class="mp-u" id="waUn">litre</span></div><button type="button" class="wa-rb" id="waPl" aria-label="Artır"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div>
+      <p class="st-pct" id="waPct" style="margin-top:12px"></p>
+      <div class="wa-cups" id="waCups"></div>
+      <div class="wa-qp" id="waQp"></div>
+      <div class="mp-chips wa-ch" id="waCh"></div>
+      <button class="primary sec mt-done" id="waDone" type="button">Tamam</button>
+    </div></div>
+  </div>
+
   <!-- Gruba hareket ekleme seçenekleri -->
   <div class="sht" id="addSheet" style="z-index:50">
     <div class="sht-card">
@@ -2792,7 +2915,7 @@
   function pfWaterSug() { var w = pfVal('w'); return w ? Math.max(1500, Math.min(5000, Math.round(w * 35 / 250) * 250)) : 0; }
   function pfVal(k) { var p = state.profile; return p && +p[k] > 0 ? +p[k] : null; }
   function pfNeedsFirst() { var p = state.profile; return !(p && (p.skipped || (+p.h > 0 && +p.w > 0))); }
-  function pfLabel() { prPaint(); }
+  function pfLabel() { prPaint(); stPaint(); waPaint(); }
   pfLabel();
   var pfView = $('#profView'), pfWheel = $('#pfWheel'), pfItems = $('#pfItems'), pfBand = $('#pfBand'), pfDoneB = $('#pfDone'), pfSkipB = $('#pfSkip');
   var pfOpenF = false, pfBusy = false, pfIntro = false, pfMode = '', pfSteps = [], pfStepI = 0, pfKey = 'h', pfPos = 0, pfIdx = 0, pfN = 0, pfH = 72, pfDrag = null, pfTok = 0, pfTimers = [], pfWheelAcc = 0, pfHomeInert = false, pfPool = [], pfSheetMode = false, pfSheetEl = $('#pfSheet');
@@ -5947,7 +6070,10 @@
     $('#zIc').innerHTML = m.ic ? Z_IC[m.ic] : '';
     $('#zEb').textContent = m.eb || ''; $('#zT').textContent = m.t; $('#zD').innerHTML = m.d || '';
     $('#zL').innerHTML = zRowsHTML(m.rows); $('#zL').scrollTop = 0;
-    $('#zOk').textContent = m.ok.t; $('#zNo').textContent = m.no ? m.no.t : ''; $('#zNo').style.display = m.no ? '' : 'none';
+    $('#zOk').textContent = m.ok.t;
+    if (m.no && m.no.red) { $('#zNo').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 103-6.2M4 4v4h4"/></svg><span>Sıfırla</span>'; $('#zNo').setAttribute('aria-label', m.no.t); }
+    else { $('#zNo').textContent = m.no ? m.no.t : ''; $('#zNo').removeAttribute('aria-label'); }
+    $('#zNo').style.display = m.no ? '' : 'none';
     $('#zSheet').classList.toggle('zdn', !!m.down); $('#zSheet').classList.toggle('zrs', !!(m.no && m.no.red)); $('#zSheet').classList.add('open');
   }
   function zClose() { $('#zSheet').classList.remove('open'); }
@@ -5963,7 +6089,8 @@
   function zPaintEx(e) {
     var v = $('#exview'); if (!v || !$('#exZw')) return;
     var i = zInfo(e);
-    v.classList.toggle('zon', !i.skip); v.classList.toggle('zl', i.l > 0);
+    var gg = exLib ? null : findGroup(curId), gm = !!(gg && gg.zl > 0);   // grup zorlaştırıldıysa tek tek zorlaştırma kapalı
+    v.classList.toggle('zon', !i.skip && !gm); v.classList.toggle('zl', i.l > 0);
     $('#exZun').hidden = i.l <= 0; $('#exZbd').hidden = i.l <= 0; $('#exZbd').textContent = i.l;
     $('#exZup').classList.toggle('max', !i.skip && i.l >= i.n);
   }
@@ -5971,12 +6098,14 @@
     var grp = $('#group'); if (!grp || !$('#gZw')) return;
     var mx = 0, ok = 0, L = 0, N = 0;
     g.exercises.forEach(function (e) { if (zSkip(e)) return; var i = zInfo(e); ok++; L += i.l; N += i.n; mx = Math.max(mx, i.l); });
+    if (mx <= 0 && g.zl) delete g.zl;
+    var gm = mx > 0 && g.zl > 0;
     grp.classList.toggle('zon', !!g.exercises.length); grp.classList.toggle('zl', mx > 0);
     $('#gZun').hidden = mx <= 0;
-    $('#gZbd').hidden = mx <= 0; $('#gZbd').textContent = mx;
+    var bd = $('#gZbd'); bd.hidden = mx <= 0; bd.classList.toggle('dot', mx > 0 && !gm); bd.textContent = gm ? g.zl : '';
+    bd.title = gm ? 'Grup seviyesi ' + g.zl : 'Bazı hareketler ayrı ayrı zorlaştırıldı';
     $('#gZup').classList.toggle('max', !!ok && L >= N);
   }
-
 
   // Tek hareket: dokunma bir seviye zorlaştırır (sessiz), basılı tutma değişimleri listeler, sıfırla ilk değerlere döndürür
   function zBump(id) { var b = $(id); b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }
@@ -6016,13 +6145,13 @@
   function zGrRun(g) {
     var list = zGrList(g); if (!list.length) return;
     list.forEach(function (e) { zMove(e, 1); zStamp(e, 1); });
-    zStamp(g, 1); save(); homePend = 1; gzKeep = true; renderGroup(false); gzKeep = false; vib(14); zBump('#gZup');
+    g.zl = (g.zl || 0) + 1; zStamp(g, 1); save(); homePend = 1; gzKeep = true; renderGroup(false); gzKeep = false; vib(14); zBump('#gZup');
   }
   // Tüm hareketleri ilk değerlerine döndürür
   function zGrReset(g) {
     var n = 0;
     g.exercises.forEach(function (e) { if (e.zb) { zSet(e, 0); n++; } delete e.zt; });
-    delete g.zt;
+    delete g.zt; delete g.zl;
     if (!n) return;
     save(); homePend = 1; gzKeep = true; renderGroup(false); gzKeep = false; vib(10);
   }
@@ -6044,6 +6173,11 @@
     var g = findGroup(curId); if (!g || !g.exercises.length) return;
     var el = g.exercises.filter(function (e) { return !zSkip(e); });
     if (!el.length) { zOpen({ eb: g.name, t: 'Zorlaştırılamaz', d: 'Bu gruptaki hareketler esneme ve mobilite hareketleri. Bunlar süre uzatılarak zorlaştırılmaz; ağrısız ve kontrollü yapmak yeterli.', ok: { t: 'Tamam' } }); return; }
+    if (!(g.zl > 0) && el.some(function (e) { return zInfo(e).l > 0; })) {
+      vib(8);
+      zOpen({ ic: 'warn', eb: g.name, t: 'Tek tek zorlaştırılmış', d: 'Bazı hareketleri ayrı ayrı zorlaştırdın. Grubu birlikte zorlaştırmak için önce sıfırla.', ok: { t: 'Tamam' }, no: { t: 'Sıfırla', red: true, fn: function () { zClose(); zGrReset(g); } } });
+      return;
+    }
     if (!zGrList(g).length) {
       var up = el.filter(function (e) { return zNextName(e); }).map(function (e) { return { name: e.name, note: 'Bir üst adım: ' + zNextName(e) }; });
       vib(8);
@@ -6319,15 +6453,259 @@
     var sec = 0, kc = 0; list.forEach(function (h) { sec += h.sec; kc += h.kcal; });
     return '<div class="hs"><div><b>' + list.length + '</b><span>Antrenman</span></div><div>' + hDurLong(sec) + '<span>Toplam süre</span></div><div><b>' + kc + '<small>kcal</small></b><span>Harcanan</span></div></div>';
   }
-  function renderAna() {   // Ana sayfa bilerek boş: geçmiş, hareketler ve ayarlar Profil sekmesinden açılır
-    var el = $('#anaBody'); if (el) el.innerHTML = '';
-    return;
-    var all = state.hist.slice().reverse();
-    if (!all.length) { el.innerHTML = hEmpty('<p>Bir antrenmanı bitirdiğinde süresi, kalorisi ve zorluğu burada görünür.</p>'); return; }
-    var wk = skMon(new Date()).getTime(), week = all.filter(function (h) { return h.t >= wk; });
-    el.innerHTML = '<div class="ana-sec" style="margin-top:6px"><h2>Bu hafta</h2></div>' + histSummary(week) +
-      '<div class="ana-sec"><h2>Son antrenman</h2><button type="button" id="anaAll">Tümü<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button></div>' + hCardHTML(all[0], 0);
+  /* ----- Adım sayar: elle girilir; günlük değer + hedef state.steps içinde saklanır ----- */
+  var ST_FOOT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3.5c1.7 0 2.7 1.7 2.7 4 0 1.8-.8 3-2.2 3S6 9.2 6 7.5C6 5 6.6 3.5 8 3.5z"/><path d="M6.6 13.2h3.8v1.4a1.9 1.9 0 01-3.8 0z"/><path d="M16 9c1.5 0 2.3 1.5 2.3 3.5 0 1.7-.8 2.8-2 2.8s-2.2-1.2-2.2-2.7C14.1 10.5 14.6 9 16 9z"/><path d="M14.8 17.5h3.4v1.2a1.7 1.7 0 01-3.4 0z"/></svg>';
+  var ST_FLAG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4M6 5h11l-2.2 3.8L17 12.6H6"/></svg>';
+  var ST_OK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  var ST_PEN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2.1 2.1 0 00-4-4L4 16z"/></svg>';
+  if (!state.steps || typeof state.steps !== 'object') state.steps = { goal: 10000, d: {} };
+  if (!(state.steps.goal > 0)) state.steps.goal = 10000;
+  function stGoal() { return pfVal('st') || state.steps.goal; }   // tek kaynak: Bilgilerim > Günlük adım hedefi
+  if (!state.steps.d) state.steps.d = {};
+  function stKey() { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+  function stToday() { return state.steps.d[stKey()] || 0; }
+  function stFmt(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+  function stPaint() {
+    var c = $('#stCard'); if (!c) return;
+    var n = stToday(), g = stGoal(), r = Math.min(1, n / g);
+    c.classList.toggle('done', n >= g);
+    c.querySelector('.pg').style.strokeDashoffset = (527.8 * (1 - r)).toFixed(1);
+    c.querySelector('.st-n').textContent = stFmt(n);
+    c.querySelector('.st-g').textContent = n >= g ? 'Hedef tamamlandı' : 'Hedef ' + stFmt(g);
   }
+  /* ----- Su takibi: günlük içilen miktar state.water'da; hedef Bilgilerim ile ortak (profile.wt, ml) ----- */
+  var WA_GL = '<svg class="wa-gl" viewBox="0 0 64 88" aria-hidden="true"><defs><clipPath id="waClip"><path d="M8 4h48l-4.5 74a6 6 0 0 1-6 6H18.5a6 6 0 0 1-6-6z"/></clipPath></defs><path d="M8 4h48l-4.5 74a6 6 0 0 1-6 6H18.5a6 6 0 0 1-6-6z" fill="rgba(74,168,255,.07)"/><g clip-path="url(#waClip)"><g class="wa-w" style="transform:translateY(92px)"><path class="wa-wv" d="M0 4Q8 2 16 4T32 4T48 4T64 4T80 4T96 4T112 4T128 4V120H0z" fill="#4aa8ff" fill-opacity=".92"/></g></g><path d="M8 4h48l-4.5 74a6 6 0 0 1-6 6H18.5a6 6 0 0 1-6-6z" fill="none" stroke="var(--line2)" stroke-width="2.4" stroke-linejoin="round"/></svg>';
+  var WA_PL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
+  if (!state.water || typeof state.water !== 'object') state.water = { d: {} };
+  if (!state.water.d) state.water.d = {};
+  function waToday() { return state.water.d[stKey()] || 0; }
+  function waQ() { return state.water.q > 0 ? state.water.q : 250; }   // hızlı ekleme miktarı (ml)
+  function waGoal() { return pfVal('wt') || pfWaterSug() || 2500; }
+  function waL(ml) { return ml ? pfL(ml) : '0'; }
+  function waPaint() {
+    var c = $('#waCard'); if (!c) return;
+    var n = waToday(), g = waGoal(), r = Math.min(1, n / g);
+    c.classList.toggle('done', n >= g);
+    c.querySelector('.wa-w').style.transform = 'translateY(' + (n <= 0 ? 92 : r >= 1 ? -4 : 4 + 80 * (1 - r)).toFixed(1) + 'px)';
+    c.querySelector('.st-n').textContent = waL(n);
+    c.querySelector('.st-g').textContent = n >= g ? 'Hedef tamamlandı' : 'Hedef ' + pfL(g) + ' L';
+    var ad = c.querySelector('.wa-add'), q = waQ(); ad.innerHTML = WA_PL + q + ' ml'; ad.setAttribute('aria-label', q + ' mililitre ekle');
+  }
+  var WA_BK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>';
+  var waSh = $('#waSh'), waMode = 's', waWas = false, waQDirect = false, waLP = false, waAt = 0;
+  function waVal() { return waMode === 's' ? waToday() : waMode === 'q' ? waQ() : waGoal(); }
+  function waSet(v) {
+    var lo = waMode === 's' ? 0 : 500, hi = waMode === 's' ? 10000 : 6000;
+    v = Math.max(lo, Math.min(hi, Math.round(v / 250) * 250));
+    if (v === waVal()) return;
+    if (waMode === 's') state.water.d[stKey()] = v; else { (state.profile = state.profile || {}).wt = v; inPaint(); }
+    save(); waShow(true); waPaint(); vib(4);
+  }
+  function waShow(pop) {
+    var v = waVal(), g = waGoal(), t = waToday(), n = $('#waNum');
+    $('#waUn').textContent = waMode === 'q' ? 'ml' : 'litre';
+    $('#waDone').innerHTML = waMode === 'q' && !waQDirect ? WA_BK + 'Su takibine dön' : 'Tamam'; waSh.classList.toggle('bk', waMode === 'q' && !waQDirect); $('#waTt').textContent = waMode === 'q' ? 'Hızlı ekleme' : 'Su takibi';
+    if (waMode === 'q') {
+      n.textContent = v;
+      if (pop && !RM) { n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop'); }
+      $('#waPct').textContent = 'Karttaki düğmeye her basışta eklenir';
+      $('#waSub').textContent = 'Tek dokunuşla eklenen miktar';
+      $('#waMi').style.opacity = v <= 50 ? .35 : 1;
+      [].forEach.call($('#waQp').children, function (b) { b.classList.toggle('on', +b.getAttribute('data-v') === v); });
+      return;
+    }
+    n.textContent = waL(v);
+    if (pop && !RM) { n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop'); }
+    $('#waPct').textContent = waMode === 's' ? (t >= g ? 'Hedefi tamamladın' : Math.round(t / 250) + ' / ' + Math.ceil(g / 250) + ' bardak') : '≈ ' + Math.round(g / 250) + ' bardak';
+    $('#waSub').textContent = waMode === 's' ? 'Bugün içtiğin su' : 'Günlük hedefin';
+    $('#waMi').style.opacity = v <= (waMode === 's' ? 0 : 500) ? .35 : 1;
+    var cnt = Math.min(32, Math.max(1, Math.ceil(Math.max(g, t) / 250))), h = '', i, on = Math.floor(t / 250);
+    for (i = 0; i < cnt; i++) h += '<button type="button" data-i="' + i + '" aria-label="' + (i + 1) + '. bardak" class="' + (i < on ? 'on' : '') + '"></button>';
+    $('#waCups').innerHTML = h;
+    [].forEach.call($('#waCh').children, function (b) { b.classList.toggle('on', waMode === 'g' && +b.getAttribute('data-v') === g); });
+  }
+  function waBuild() {
+    waSh.classList.toggle('g', waMode === 'g'); waSh.classList.toggle('q', waMode === 'q');
+    var seg = $('#waSeg'); seg.classList.toggle('g', waMode === 'g');
+    [].forEach.call(seg.querySelectorAll('button'), function (b) { b.classList.toggle('on', b.getAttribute('data-m') === waMode); });
+    $('#waCh').innerHTML = [2000, 2500, 3000, 3500].map(function (x) { return '<button type="button" data-v="' + x + '">' + pfL(x) + ' L</button>'; }).join('');
+    $('#waQp').innerHTML = [150, 200, 250, 330, 500, 750].map(function (x) { return '<button type="button" data-v="' + x + '">' + x + ' ml</button>'; }).join('');
+    waShow(false);
+  }
+  function waSwap(fn) { fn(); }   // geçişler animasyonsuz, ilk haldeki gibi anında
+  function waQSet(v) {
+    v = Math.max(50, Math.min(2000, Math.round(v / 50) * 50)); if (v === waQ()) return;
+    state.water.q = v; save(); waPaint(); waShow(true); vib(4);
+  }
+  function waQStep(d) { var v = waQ(); waQSet(d > 0 ? (Math.floor(v / 100) + 1) * 100 : Math.max(50, (Math.ceil(v / 100) - 1) * 100)); }   // 100'er adım, önce yuvarlak sayıya oturur
+  $('#waMi').onclick = function () { if (waMode === 'q') waQStep(-1); else waSet(waVal() - 250); };
+  $('#waPl').onclick = function () { if (waMode === 'q') waQStep(1); else waSet(waVal() + 250); };
+  $('#waQp').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) waQSet(+b.getAttribute('data-v')); });
+  $('#waPen').onclick = function () { vib(4); waSwap(function () { waQDirect = false; waMode = 'q'; waBuild(); }); };
+  $('#waCups').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    var i = +b.getAttribute('data-i'), t = (i + 1) * 250; waSet(waToday() === t ? i * 250 : t);
+  });
+  $('#waCh').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) waSet(+b.getAttribute('data-v')); });
+  $('#waSeg').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b || b.getAttribute('data-m') === waMode) return;
+    var nm = b.getAttribute('data-m'); vib(4); waSwap(function () { waMode = nm; waBuild(); });
+  });
+  function waOpen(q) { waQDirect = !!q; waMode = q ? 'q' : 's'; waWas = waToday() >= waGoal(); waAt = Date.now(); waBuild(); waSh.classList.add('open'); vib(q ? 12 : 6); }
+  function waClose() {
+    waSh.classList.remove('open'); save(); waPaint();
+    if (!waWas && waToday() >= waGoal()) { waWas = true; setTimeout(function () { stConfetti(); vib([20, 40, 20]); }, 350); }
+  }
+  function waQuick() {
+    var was = waToday() >= waGoal(); state.water.d[stKey()] = waToday() + waQ(); save(); waPaint(); vib(6);
+    if (!was && waToday() >= waGoal()) setTimeout(function () { stConfetti(); vib([20, 40, 20]); }, 500);
+  }
+  $('#waDone').onclick = function () { if (waMode === 'q' && !waQDirect) { vib(4); waSwap(function () { waMode = 's'; waBuild(); }); } else waClose(); };
+  waSh.addEventListener('click', function (e) { if (e.target === waSh && Date.now() - waAt > 500) waClose(); });
+  /* karta basılı tut: hızlı ekleme düzenleyicisi doğrudan açılır */
+  (function () {
+    var b = $('#anaBody'), tm = 0, sx = 0, sy = 0;
+    function cancel() { clearTimeout(tm); tm = 0; }
+    b.addEventListener('pointerdown', function (e) {
+      if (!e.target.closest('.wa-card')) return;
+      sx = e.clientX; sy = e.clientY; clearTimeout(tm);
+      tm = setTimeout(function () { tm = 0; waLP = true; setTimeout(function () { waLP = false; }, 700); waOpen(true); }, 550);
+    });
+    b.addEventListener('pointermove', function (e) { if (tm && (Math.abs(e.clientX - sx) > 8 || Math.abs(e.clientY - sy) > 8)) cancel(); });
+    ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (t) { b.addEventListener(t, cancel); });
+    b.addEventListener('contextmenu', function (e) { if (e.target.closest('.wa-card')) e.preventDefault(); });
+  })();
+  function renderAna() {
+    var el = $('#anaBody'); if (!el) return;
+    if (!$('#stCard')) {
+      var d = new Date();
+      el.innerHTML = '<div class="st-hd"><h1>Bugün</h1><p>' + d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + DAYS_L[(d.getDay() + 6) % 7] + '</p></div>' +
+        '<button type="button" class="st-card" id="stCard" aria-label="Adım sayısını düzenle">' +
+        '<div class="st-ring"><svg class="rg" viewBox="0 0 200 200" aria-hidden="true"><circle class="tr" cx="100" cy="100" r="84"/><circle class="pg" cx="100" cy="100" r="84"/></svg><i class="st-ic">' + ST_FOOT + '</i></div>' +
+        '<div class="st-tx"><span class="st-lb">Adımlar</span><div class="st-nr"><b class="st-n">0</b><span>adım</span></div><span class="st-g"></span></div>' +
+        '<i class="st-pen">' + ST_PEN + '</i></button>' +
+        '<div class="wa-card" id="waCard" role="button" tabindex="0" aria-label="Su takibini aç">' + WA_GL +
+        '<div class="st-tx"><span class="st-lb">Su</span><div class="st-nr"><b class="st-n">0</b><span>litre</span></div><span class="st-g"></span></div>' +
+        '<button type="button" class="wa-add" aria-label="250 mililitre ekle">' + WA_PL + '250 ml</button></div>';
+      waPaint();
+      stPaint();   // halka ilk açılışta 0'dan dolar
+      var pg = el.querySelector('.pg'); pg.style.transition = 'none'; pg.style.strokeDashoffset = '527.8'; void pg.getBoundingClientRect(); pg.style.transition = '';
+      requestAnimationFrame(stPaint);
+    } else { stPaint(); waPaint(); }
+  }
+  var stSh = $('#stSh'), stMode = 's', stPos = 0, stDrag = false, stRaf = 0, stTk = [], stCur = -1;
+  var ST_CFG = {
+    s: { min: 0, max: 30000, step: 100, major: 10, lab: 10, S: 10, sub: 'Bugünkü adımını gir' },
+    g: { min: 1000, max: 30000, step: 500, major: 2, lab: 4, S: 18, sub: 'Günlük hedefini seç' }
+  };
+  var ST_CHIPS = { s: [-500, 500, 1000, 2500], g: [6000, 8000, 10000, 12000] };
+  function stCfg() { return ST_CFG[stMode]; }
+  function stN() { var c = stCfg(); return Math.round((c.max - c.min) / c.step); }
+  function stClamp(p) { return Math.max(0, Math.min(stN(), p)); }
+  function stVal() { return stMode === 's' ? stToday() : stGoal(); }
+  function stSet(v) {
+    var c = stCfg(); v = Math.max(c.min, Math.min(c.max, Math.round(v / c.step) * c.step));
+    if (v === stVal()) return;
+    if (stMode === 's') state.steps.d[stKey()] = v; else { state.steps.goal = v; (state.profile = state.profile || {}).st = v; inPaint(); }
+    stShow(true); stPaint(); vib(3);
+  }
+  function stShow(pop) {
+    var c = stCfg(), v = stVal(), n = $('#stNum'), t = stGoal(), today = stToday();
+    n.textContent = stFmt(v);
+    if (pop && !RM) { n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop'); }
+    $('#stPct').textContent = stMode === 's' ? (today >= t ? 'Hedefi geçtin' : '%' + Math.floor(today / t * 100) + ' · hedef ' + stFmt(t)) : 'Bugün ' + stFmt(today) + ' adım';
+    var sl = $('#stSl'); sl.setAttribute('aria-valuemin', c.min); sl.setAttribute('aria-valuemax', c.max); sl.setAttribute('aria-valuenow', v); sl.setAttribute('aria-valuetext', stFmt(v) + ' adım');
+    if (!stDrag && !stRaf) { stPos = (v - c.min) / c.step; stMove(); }
+  }
+  function stBuild() {
+    var c = stCfg(), n = stN(), h = '', i, pad = 22;
+    for (i = -pad; i <= n + pad; i++) { var inr = i >= 0 && i <= n, w = inr && i % c.major === 0; h += '<i data-k="' + i + '" class="' + (w ? 'w' : '') + '" style="--k:' + i + (inr ? '' : ';opacity:0') + '"><u></u>' + (inr && i % c.lab === 0 ? '<s>' + stFmt(c.min + i * c.step) + '</s>' : '') + '</i>'; }
+    var rl = $('#stRl'); rl.style.setProperty('--s', c.S + 'px'); rl.innerHTML = h;
+    stTk = [].slice.call(rl.querySelectorAll('i')); stCur = -1;
+    $('#stCh').innerHTML = ST_CHIPS[stMode].map(function (x) { return '<button type="button" data-v="' + x + '">' + (stMode === 's' ? (x > 0 ? '+' : '−') + stFmt(Math.abs(x)) : stFmt(x)) + '</button>'; }).join('');
+    $('#stSub').textContent = c.sub;
+    var seg = $('#stSeg'); seg.classList.toggle('g', stMode === 'g');
+    [].forEach.call(seg.querySelectorAll('button'), function (b) { b.classList.toggle('on', b.getAttribute('data-m') === stMode); });
+    stShow(false);
+  }
+  function stMove() {
+    var c = stCfg(); $('#stRl').style.transform = 'translate3d(' + (-stPos * c.S).toFixed(1) + 'px,0,0)';
+    var ci = Math.round(stClamp(stPos));
+    if (ci !== stCur) { var a = stTk[stCur + 22], b = stTk[ci + 22]; if (a) a.classList.remove('cur'); if (b) b.classList.add('cur'); stCur = ci; }
+  }
+  function stFromPos() { var c = stCfg(); stSet(c.min + Math.round(stClamp(stPos)) * c.step); }
+  (function () {
+    var sl = $('#stSl'), sx = 0, sp = 0, smp = [];
+    function stop() { if (stRaf) { cancelAnimationFrame(stRaf); stRaf = 0; } }
+    sl.addEventListener('pointerdown', function (e) { stop(); stDrag = true; sx = e.clientX; sp = stPos; smp = [{ t: performance.now(), p: stPos }]; sl.classList.add('drag'); try { sl.setPointerCapture(e.pointerId); } catch (x) {} e.preventDefault(); });
+    sl.addEventListener('pointermove', function (e) {
+      if (!stDrag) return;
+      var now = performance.now(); stPos = stClamp(sp - (e.clientX - sx) / stCfg().S);
+      smp.push({ t: now, p: stPos }); while (smp.length > 2 && now - smp[0].t > 100) smp.shift();
+      stMove(); stFromPos(); e.preventDefault();
+    });
+    function end() {
+      if (!stDrag) return; stDrag = false; sl.classList.remove('drag');
+      var n = smp.length, now = performance.now(), v = 0;
+      if (n > 1 && now - smp[n - 1].t < 70) { var dt = smp[n - 1].t - smp[0].t; if (dt > 8) v = (smp[n - 1].p - smp[0].p) / dt; }
+      if (RM || Math.abs(v) < .004) { stPos = Math.round(stPos); stMove(); stFromPos(); stShow(false); save(); return; }
+      var t0 = performance.now(), last = t0;   // bırakış hızıyla sürtünmeli kayma
+      (function loop(t) {
+        var dt2 = Math.min(32, t - last); last = t; stPos = stClamp(stPos + v * dt2); v *= Math.pow(.994, dt2);
+        stMove(); stFromPos();
+        if (Math.abs(v) > .004 && stPos > 0 && stPos < stN()) stRaf = requestAnimationFrame(loop);
+        else { stRaf = 0; stPos = Math.round(stPos); stMove(); stFromPos(); stShow(false); save(); }
+      })(t0 + 16);
+    }
+    sl.addEventListener('pointerup', end); sl.addEventListener('pointercancel', end);
+    sl.addEventListener('keydown', function (e) {
+      var c = stCfg(), v = stVal(), k = e.key;
+      if (k === 'ArrowLeft' || k === 'ArrowDown') v -= c.step; else if (k === 'ArrowRight' || k === 'ArrowUp') v += c.step; else if (k === 'Home') v = c.min; else if (k === 'End') v = c.max; else return;
+      e.preventDefault(); stSet(v); save();
+    });
+  })();
+  $('#stCh').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    var x = +b.getAttribute('data-v'); stSet(stMode === 's' ? stToday() + x : x); save();
+  });
+  $('#stSeg').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b || b.getAttribute('data-m') === stMode) return;
+    stMode = b.getAttribute('data-m'); vib(4); stBuild();
+  });
+  /* konfeti: hedef tamamlanınca ekranın iki yanından patlar */
+  function stConfetti() {
+    if (RM) return;
+    var cv = document.createElement('canvas'), W = window.innerWidth, H = window.innerHeight, dpr = Math.min(2, window.devicePixelRatio || 1);
+    cv.width = W * dpr; cv.height = H * dpr;
+    cv.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:999';
+    document.body.appendChild(cv);
+    var cx = cv.getContext('2d'); cx.scale(dpr, dpr);
+    var acc = (getComputedStyle(document.documentElement).getPropertyValue('--accent') || '#ffb938').trim() || '#ffb938';
+    var cols = [acc, acc, '#ffffff', '#ff5a4d', '#5ac8fa', '#7ee081', '#f7d774'], ps = [], i;
+    for (i = 0; i < 120; i++) {
+      var left = i % 2 === 0, a = (left ? -1 : 1) * 0, ang = (Math.random() * 50 + 25) * Math.PI / 180, sp = 9 + Math.random() * 11;
+      ps.push({ x: left ? -6 : W + 6, y: H * (.55 + Math.random() * .2), vx: (left ? 1 : -1) * Math.cos(ang) * sp, vy: -Math.sin(ang) * sp * 1.15,
+        w: 6 + Math.random() * 6, h: 3 + Math.random() * 4, r: Math.random() * 6.28, vr: (Math.random() - .5) * .4, c: cols[(Math.random() * cols.length) | 0], ph: Math.random() * 6.28, d: Math.random() * 120 });
+    }
+    var t0 = performance.now(), last = t0, TOT = 2800;
+    (function loop(t) {
+      var dt = Math.min(2, (t - last) / 16.67); last = t;
+      var el = t - t0; cx.clearRect(0, 0, W, H);
+      ps.forEach(function (q) {
+        if (el < q.d) return;
+        q.vx *= Math.pow(.985, dt); q.vy = q.vy * Math.pow(.985, dt) + .32 * dt; q.x += q.vx * dt; q.y += q.vy * dt; q.r += q.vr * dt; q.ph += .15 * dt;
+        cx.save(); cx.globalAlpha = Math.max(0, Math.min(1, (TOT - el) / 900)); cx.translate(q.x, q.y); cx.rotate(q.r); cx.scale(1, Math.cos(q.ph));
+        cx.fillStyle = q.c; cx.fillRect(-q.w / 2, -q.h / 2, q.w, q.h); cx.restore();
+      });
+      if (el < TOT) requestAnimationFrame(loop); else cv.remove();
+    })(t0);
+  }
+  var stWas = false;
+  function stOpen() { stMode = 's'; stWas = stToday() >= stGoal(); stBuild(); stSh.classList.add('open'); vib(6); }
+  function stClose() { if (stRaf) { cancelAnimationFrame(stRaf); stRaf = 0; } stDrag = false; stSh.classList.remove('open'); save(); stPaint();
+    if (!stWas && stToday() >= stGoal()) { stWas = true; setTimeout(function () { stConfetti(); vib([20, 40, 20]); }, 350); } }
+  $('#stDone').onclick = stClose;
+  stSh.addEventListener('click', function (e) { if (e.target === stSh) stClose(); });
   function renderHist() {
     var el = $('#histBody'); if (!el) return;
     var all = state.hist.slice().reverse(), ny = new Date().getFullYear();
@@ -6362,6 +6740,10 @@
     if (g) { vib(8); setTimeout(function () { openPlayer(g); }, 280); }
   };
   $('#anaBody').addEventListener('click', function (e) {
+    if (waLP) { waLP = false; return; }
+    if (e.target.closest('.wa-add')) { waQuick(); return; }
+    if (e.target.closest('#waCard')) { waOpen(); return; }
+    if (e.target.closest('#stCard')) { stOpen(); return; }
     if (e.target.closest('#anaAll')) { openHist(); return; }
     histRepeat(e);
   });
