@@ -8164,10 +8164,30 @@
 
     /* ----- Harita: MapLibre GL (vektör) + OpenFreeMap; kütüphane ilk kullanımda yüklenir ----- */
     var ML = 'https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.1/dist/maplibre-gl', ST = 'https://tiles.openfreemap.org/styles/liberty';
-    var SAT = { version: 8, sources: {
-      sat: { type: 'raster', tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'], tileSize: 256, maxzoom: 19, attribution: 'Esri, Maxar, Earthstar Geographics' },
-      lbl: { type: 'raster', tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}'], tileSize: 256, maxzoom: 19 }
-    }, layers: [{ id: 'sat', type: 'raster', source: 'sat' }, { id: 'lbl', type: 'raster', source: 'lbl' }] };
+    /* Uydu: Esri görüntü + OpenFreeMap'in VEKTÖR etiketleri (retina'da keskin) + 3B arazi + gökyüzü */
+    var satP = null;
+    function getSat() {
+      if (satP) return satP;
+      satP = fetch(ST).then(function (r) { return r.json(); }).then(function (j) {
+        var hi = (window.devicePixelRatio || 1) >= 2;
+        var src = Object.assign({}, j.sources, {
+          sat: { type: 'raster', tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'], tileSize: hi ? 128 : 256, maxzoom: 19, attribution: 'Esri, Maxar, Earthstar Geographics' },
+          dem: { type: 'raster-dem', tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'], encoding: 'terrarium', tileSize: 256, maxzoom: 14, attribution: 'Mapzen / AWS Terrain Tiles' }
+        });
+        var ly = [{ id: 'sat', type: 'raster', source: 'sat', paint: { 'raster-resampling': 'linear', 'raster-fade-duration': 150 } }];
+        j.layers.forEach(function (l) {
+          if (l.type !== 'symbol' || !l.layout || !l.layout['text-field'] || /shield|oneway|poi/i.test(l.id)) return;
+          var c = JSON.parse(JSON.stringify(l)); delete c.layout['icon-image']; delete c.layout['icon-size'];
+          c.paint = Object.assign({}, c.paint, { 'text-color': '#ffffff', 'text-halo-color': 'rgba(0,0,0,.9)', 'text-halo-width': 1.7, 'text-halo-blur': 0, 'text-opacity': 1 });
+          ly.push(c);
+        });
+        return { version: 8, glyphs: j.glyphs, sources: src, layers: ly, terrain: { source: 'dem', exaggeration: 1.25 },
+          sky: { 'sky-color': '#7fb4ee', 'horizon-color': '#dbe8f5', 'fog-color': '#dbe8f5', 'sky-horizon-blend': .6, 'horizon-fog-blend': .7, 'fog-ground-blend': .25 } };
+      });
+      satP.catch(function () { satP = null; });
+      return satP;
+    }
+    function styleFor(sat) { return sat ? getSat() : Promise.resolve(ST); }
     var satOn = ls('antrenman.trkSat') === '1';
     function paintSat() { $('#trkSatT').textContent = satOn ? 'Harita' : 'Uydu'; }
     var map = null, mapBusy = false, curAcc = 0, follow = true, camInit = 0, fitNeed = false, styleK = '';
@@ -8180,14 +8200,23 @@
     }
     function ensureMap() {
       var k = satOn ? 's' : 'l';
-      if (map) { if (k !== styleK) { styleK = k; map.setStyle(satOn ? SAT : ST, { diff: false }); } return; }
+      if (map) {
+        if (k !== styleK) {
+          styleK = k;
+          styleFor(satOn).then(function (st) { if ((satOn ? 's' : 'l') === k) map.setStyle(st, { diff: false }); }).catch(function () { sub('Uydu görünümü yüklenemedi'); });
+        }
+        return;
+      }
       if (mapBusy) return; mapBusy = true;
       loadML(function () {
-        map = new maplibregl.Map({ container: 'trkMap', style: satOn ? SAT : ST, center: [35, 39], zoom: 5, attributionControl: { compact: true }, fadeDuration: 150 });
-        styleK = k;
-        map.addControl(new maplibregl.NavigationControl({ showZoom: false, visualizePitch: true }), 'top-right');
-        map.on('style.load', function () { addLayers(); upd(); });
-        map.on('dragstart', function (e) { if (e.originalEvent && mode === 'rec' && follow) { follow = false; $('#trkLoc').style.display = 'grid'; } });
+        styleFor(satOn).catch(function () { satOn = false; paintSat(); return ST; }).then(function (st) {
+          map = new maplibregl.Map({ container: 'trkMap', style: st, center: [35, 39], zoom: 5, maxPitch: 70, attributionControl: { compact: true }, fadeDuration: 150, pixelRatio: Math.min(window.devicePixelRatio || 1, 3) });
+          styleK = satOn ? 's' : 'l';
+          map.addControl(new maplibregl.NavigationControl({ showZoom: false, visualizePitch: true }), 'top-right');
+          map.on('style.load', function () { addLayers(); upd(); });
+          map.on('dragstart', function (e) { if (e.originalEvent && mode === 'rec' && follow) { follow = false; $('#trkLoc').style.display = 'grid'; } });
+          upd();
+        });
       });
     }
     function smooth(a) { if (a.length < 3) return a; var o = [a[0]], i; for (i = 0; i < a.length - 1; i++) { var p = a[i], q = a[i + 1]; o.push([.75 * p[0] + .25 * q[0], .75 * p[1] + .25 * q[1]], [.25 * p[0] + .75 * q[0], .25 * p[1] + .75 * q[1]]); } o.push(a[a.length - 1]); return o; }
