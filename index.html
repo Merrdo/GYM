@@ -1795,9 +1795,12 @@
   #trk.s-rec .trk-m, #trk.s-sum .trk-m, #trk.s-rec .trk-p, #trk.s-sum .trk-p { display: block; }
   #trk:not(.s-idle) #trkIdle, #trk:not(.s-idle) #trkBar { display: none; }
   .trk-m { flex: 1; position: relative; min-height: 0; background: var(--surface2); overflow: hidden; }
-  .trk-m canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
-  #trk.dk #trkCv { filter: invert(1) hue-rotate(180deg) brightness(.82) contrast(.92); }
-  .trk-at { position: absolute; left: 8px; bottom: 6px; font-size: .62rem; padding: 2px 6px; border-radius: 6px; background: rgba(255,255,255,.78); color: #333; pointer-events: none; }
+  #trkMap { position: absolute; inset: 0; }
+  .trk-u { width: 20px; height: 20px; border-radius: 50%; background: #2f7bff; border: 3px solid #fff; box-shadow: 0 0 0 0 rgba(47,123,255,.5), 0 2px 6px rgba(0,0,0,.35); animation: trkp 2s infinite; }
+  @keyframes trkp { 70% { box-shadow: 0 0 0 16px rgba(47,123,255,0), 0 2px 6px rgba(0,0,0,.35); } 100% { box-shadow: 0 0 0 0 rgba(47,123,255,0), 0 2px 6px rgba(0,0,0,.35); } }
+  .trk-s, .trk-e { width: 18px; height: 18px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.4); }
+  .trk-s { background: #2fbf71; } .trk-e { background: #ff5a4d; }
+  .trk-loc { position: absolute; right: 12px; bottom: 36px; z-index: 2; box-shadow: 0 2px 10px rgba(0,0,0,.35); }
   .trk-p { flex: none; padding: 16px 20px calc(var(--pb) + 4px); background: var(--bg); border-top: 1px solid var(--line); }
   .trk-st { display: flex; gap: 8px; margin-bottom: 16px; }
   .trk-st > div { flex: 1; text-align: center; min-width: 0; }
@@ -2326,7 +2329,7 @@
       <div class="ttl"><h1 id="trkT">Rota takibi</h1><div class="sub" id="trkSub"></div></div>
     </div>
     <div class="scroll" id="trkIdle"><div class="trk-types" id="trkTypes"></div><div id="trkRes"></div><div id="trkList"></div></div>
-    <div class="trk-m"><canvas id="trkCv"></canvas><canvas id="trkRt"></canvas><div class="trk-at">© OpenStreetMap</div></div>
+    <div class="trk-m"><div id="trkMap"></div><button type="button" class="icon-btn trk-loc" id="trkLoc" aria-label="Konumuma dön" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.5"/><path d="M12 2.5v4M12 17.5v4M2.5 12h4M17.5 12h4"/></svg></button></div>
     <div class="trk-p"><div class="trk-st"><div><b id="tkA">0:00</b><span>Süre</span></div><div><b id="tkB">0,00</b><span>km</span></div><div><b id="tkC">–</b><span id="tkCl">dk/km</span></div></div><div class="trk-ac" id="trkAc"></div></div>
     <div class="bar" id="trkBar"><button type="button" class="primary" id="trkGo">Başlat</button></div>
   </section>
@@ -8148,8 +8151,8 @@
       bike: '<svg viewBox="0 0 24 24" ' + SV + '><circle cx="6" cy="16" r="3.5"/><circle cx="18" cy="16" r="3.5"/><path d="M6 16l3.5-7h5l3.5 7M9.5 9l4.5 7M14.5 9l-.7-2H16"/></svg>'
     };
     var LK = 'antrenman.trkLive', RK = 'antrenman.rt.', TE = 'cubic-bezier(.27,.1,.2,1)';
-    var v = $('#trk'), cv = $('#trkCv'), rc = $('#trkRt');
-    var mode = 'idle', typ = 'run', rec = null, sel = null, sumNew = null, sumP = [], cur = null, wid = null, tm = 0, wl = null, isOpen = false, TC = {}, np = 0, raf = 0, shown = null, ca = null;
+    var v = $('#trk');
+    var mode = 'idle', typ = 'run', rec = null, sel = null, sumNew = null, sumP = [], cur = null, wid = null, tm = 0, wl = null, isOpen = false, ca = null;
 
     function ls(k, x) { try { if (x === undefined) return localStorage.getItem(k); if (x === null) localStorage.removeItem(k); else localStorage.setItem(k, x); } catch (e) {} return null; }
     function sub(t) { $('#trkSub').textContent = t; }
@@ -8160,39 +8163,58 @@
     function pu(ty) { return TY[ty].sp ? 'km/sa' : 'dk/km'; }
     function el(a) { return a.ms + (a.seg ? Date.now() - a.seg : 0); }
 
-    /* ----- Harita (Web Mercator, OSM karoları, tuval üzerinde) ----- */
-    function mp(lat, lon, z) { var s = 256 * Math.pow(2, z), r = Math.max(-85.05, Math.min(85.05, lat)) * Math.PI / 180; return [(lon + 180) / 360 * s, (1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2 * s]; }
-    function fit(P) {
-      var W = cv.clientWidth, H = cv.clientHeight, a = 90, b = -90, c = 180, d = -180, z;
-      P.forEach(function (p) { a = Math.min(a, p[0]); b = Math.max(b, p[0]); c = Math.min(c, p[1]); d = Math.max(d, p[1]); });
-      for (z = 17; z > 3; z--) { var s = mp(b, c, z), e = mp(a, d, z); if (e[0] - s[0] < W - 80 && e[1] - s[1] < H - 80) break; }
-      return { p: P, c: [(a + b) / 2, (c + d) / 2], z: z };
+    /* ----- Harita: MapLibre GL (vektör) + OpenFreeMap; kütüphane ilk kullanımda yüklenir ----- */
+    var ML = 'https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.1/dist/maplibre-gl', ST = { l: 'https://tiles.openfreemap.org/styles/liberty', d: 'https://tiles.openfreemap.org/styles/dark' };
+    var map = null, mapBusy = false, follow = true, camInit = 0, fitNeed = false, styleK = '', mU = null, mS = null, mE = null;
+    function loadML(cb) {
+      if (window.maplibregl) { cb(); return; }
+      var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = ML + '.css'; document.head.appendChild(l);
+      var j = document.createElement('script'); j.src = ML + '.js'; j.onload = cb;
+      j.onerror = function () { mapBusy = false; sub('Harita yüklenemedi (internet?)'); };
+      document.head.appendChild(j);
     }
-    function view() {
-      if (mode === 'sum') shown = sumP.length ? fit(sumP) : { p: [], c: [39, 35], z: 5 };
-      else if (mode === 'rec') { var l = cur || rec.pts[rec.pts.length - 1]; shown = { p: rec.pts, c: l || [39, 35], z: l ? (TY[rec.ty].sp ? 16 : 17) : 5 }; }
+    function ensureMap() {
+      var k = v.classList.contains('dk') ? 'd' : 'l';
+      if (map) { if (k !== styleK) { styleK = k; map.setStyle(ST[k]); } return; }
+      if (mapBusy) return; mapBusy = true;
+      loadML(function () {
+        map = new maplibregl.Map({ container: 'trkMap', style: ST[k], center: [35, 39], zoom: 5, attributionControl: { compact: true }, fadeDuration: 150 });
+        styleK = k;
+        map.addControl(new maplibregl.NavigationControl({ showZoom: false, visualizePitch: true }), 'top-right');
+        map.on('style.load', function () { addLayers(); upd(); });
+        map.on('dragstart', function (e) { if (e.originalEvent && mode === 'rec' && follow) { follow = false; $('#trkLoc').style.display = 'grid'; } });
+      });
     }
-    function sched() { if (!raf) raf = requestAnimationFrame(paint); }
-    function paint() {
-      raf = 0; if (!isOpen || mode === 'idle' || !shown) return;
-      var W = cv.clientWidth, H = cv.clientHeight; if (!W || !H) return;
-      var d = window.devicePixelRatio || 1, g = cv.getContext('2d'), r = rc.getContext('2d');
-      [cv, rc].forEach(function (k) { if (k.width !== Math.round(W * d) || k.height !== Math.round(H * d)) { k.width = Math.round(W * d); k.height = Math.round(H * d); } });
-      g.setTransform(d, 0, 0, d, 0, 0); r.setTransform(d, 0, 0, d, 0, 0); g.clearRect(0, 0, W, H); r.clearRect(0, 0, W, H);
-      var z = shown.z, n = Math.pow(2, z), o = mp(shown.c[0], shown.c[1], z), ox = o[0] - W / 2, oy = o[1] - H / 2, x, y;
-      for (x = Math.floor(ox / 256); x <= Math.floor((ox + W) / 256); x++) for (y = Math.floor(oy / 256); y <= Math.floor((oy + H) / 256); y++) {
-        if (y < 0 || y >= n) continue;
-        var u = 'https://tile.openstreetmap.org/' + z + '/' + (((x % n) + n) % n) + '/' + y + '.png', im = TC[u];
-        if (!im) { if (np > 400) { TC = {}; np = 0; } np++; im = TC[u] = new Image(); im.onload = function () { this.ok = 1; sched(); }; im.src = u; }
-        if (im.ok) g.drawImage(im, x * 256 - ox, y * 256 - oy);
+    function smooth(a) { if (a.length < 3) return a; var o = [a[0]], i; for (i = 0; i < a.length - 1; i++) { var p = a[i], q = a[i + 1]; o.push([.75 * p[0] + .25 * q[0], .75 * p[1] + .25 * q[1]], [.25 * p[0] + .75 * q[0], .25 * p[1] + .75 * q[1]]); } o.push(a[a.length - 1]); return o; }
+    function rtData() {
+      var P = mode === 'sum' ? sumP : (rec ? rec.pts : []), L = [], c = null;
+      P.forEach(function (p) { if (!c || p[3]) { c = []; L.push(c); } c.push([p[1], p[0]]); });
+      return { type: 'Feature', properties: {}, geometry: { type: 'MultiLineString', coordinates: L.filter(function (a) { return a.length > 1; }).map(smooth) } };
+    }
+    function addLayers() {
+      var ac = (getComputedStyle(v).getPropertyValue('--accent') || '').trim() || '#ffb938', dk = v.classList.contains('dk'), ly = { 'line-cap': 'round', 'line-join': 'round' };
+      map.addSource('rt', { type: 'geojson', data: rtData() });
+      map.addLayer({ id: 'rt-c', type: 'line', source: 'rt', layout: ly, paint: { 'line-color': dk ? '#000' : '#fff', 'line-width': 9.5, 'line-opacity': .85 } });
+      map.addLayer({ id: 'rt-l', type: 'line', source: 'rt', layout: ly, paint: { 'line-color': ac, 'line-width': 5.5 } });
+    }
+    function mk(c) { var e = document.createElement('div'); e.className = c; return new maplibregl.Marker({ element: e }); }
+    function upd() {
+      ensureMap(); if (!map) return;
+      var s = null; try { s = map.getSource('rt'); } catch (e) {}
+      if (!s) return;
+      s.setData(rtData());
+      var P = mode === 'sum' ? sumP : (rec ? rec.pts : []), end = P[P.length - 1], u = mode === 'rec' ? (cur || end) : null;
+      if (u) { mU = mU || mk('trk-u').addTo(map); mU.setLngLat([u[1], u[0]]); } else if (mU) { mU.remove(); mU = null; }
+      if (mode === 'sum' && P.length > 1) { mS = mS || mk('trk-s').addTo(map); mS.setLngLat([P[0][1], P[0][0]]); mE = mE || mk('trk-e').addTo(map); mE.setLngLat([end[1], end[0]]); }
+      else { if (mS) { mS.remove(); mS = null; } if (mE) { mE.remove(); mE = null; } }
+      if (mode === 'sum' && fitNeed) {
+        fitNeed = false; map.resize();
+        if (P.length > 1) { var b = new maplibregl.LngLatBounds(); P.forEach(function (p) { b.extend([p[1], p[0]]); }); map.fitBounds(b, { padding: { top: 70, bottom: 50, left: 50, right: 50 }, maxZoom: 17, duration: 0 }); }
       }
-      var P = shown.p, ac = (getComputedStyle(v).getPropertyValue('--accent') || '').trim() || '#ffb938';
-      function pt(p) { var q = mp(p[0], p[1], z); return [q[0] - ox, q[1] - oy]; }
-      function dot(p, f, rr) { var q = pt(p); r.beginPath(); r.arc(q[0], q[1], rr, 0, 7); r.fillStyle = '#fff'; r.fill(); r.beginPath(); r.arc(q[0], q[1], rr - 3, 0, 7); r.fillStyle = f; r.fill(); }
-      r.lineJoin = r.lineCap = 'round';
-      [['#fff', 9], [ac, 5]].forEach(function (s) { r.strokeStyle = s[0]; r.lineWidth = s[1]; r.beginPath(); P.forEach(function (p, i) { var q = pt(p); if (i && !p[3]) r.lineTo(q[0], q[1]); else r.moveTo(q[0], q[1]); }); r.stroke(); });
-      if (mode === 'sum' && P.length > 1) { dot(P[0], '#2fbf71', 9); dot(P[P.length - 1], '#ff5a4d', 9); }
-      if (mode === 'rec' && (cur || P.length)) dot(cur || P[P.length - 1], '#2f7bff', 10);
+      if (mode === 'rec' && u && follow) {
+        if (camInit) map.easeTo({ center: [u[1], u[0]], duration: 900 });
+        else { camInit = 1; map.resize(); map.jumpTo({ center: [u[1], u[0]], zoom: TY[rec.ty].sp ? 16 : 17 }); }
+      }
     }
 
     /* ----- Kayıt ----- */
@@ -8207,8 +8229,8 @@
     function stopW() { if (wid != null && navigator.geolocation) navigator.geolocation.clearWatch(wid); wid = null; clearInterval(tm); tm = 0; if (wl) { try { wl.release(); } catch (e) {} wl = null; } }
     function liveSave() { if (rec && mode === 'rec') { if (rec.seg) { rec.ms += Date.now() - rec.seg; rec.seg = Date.now(); } ls(LK, JSON.stringify(rec)); } }
     function begin(r) {
-      rec = r; cur = null; sumNew = null; setMode('rec'); $('#trkT').textContent = TY[rec.ty].n; sub('Konum aranıyor…');
-      acts(); showStats(rec); view(); sched();
+      rec = r; cur = null; sumNew = null; follow = true; camInit = 0; $('#trkLoc').style.display = 'none'; setMode('rec'); $('#trkT').textContent = TY[rec.ty].n; sub('Konum aranıyor…');
+      acts(); showStats(rec); upd();
       if (!navigator.geolocation) { sub('Bu cihaz konumu desteklemiyor'); return; }
       wid = navigator.geolocation.watchPosition(onPos, onErr, { enableHighAccuracy: true, maximumAge: 0, timeout: 30000 });
       tm = setInterval(function () { showStats(rec); }, 1000); lock(); vib(10);
@@ -8221,10 +8243,10 @@
       if (rec.seg) {
         var L = rec.pts[rec.pts.length - 1];
         if (rec.brk) { pt[3] = 1; rec.brk = 0; }
-        else if (L) { var d = hv(L, pt), dt = (pt[2] - L[2]) / 1000; if (d < Math.max(3, a * .4) || (dt > 0 && d / dt > (TY[rec.ty].sp ? 25 : 12))) { view(); sched(); return; } rec.dist += d; }
+        else if (L) { var d = hv(L, pt), dt = (pt[2] - L[2]) / 1000; if (d < Math.max(3, a * .4) || (dt > 0 && d / dt > (TY[rec.ty].sp ? 25 : 12))) { upd(); return; } rec.dist += d; }
         rec.pts.push(pt); if (++rec.n % 5 === 0) liveSave();
       }
-      view(); sched(); showStats(rec);
+      upd(); showStats(rec);
     }
     function onErr(e) { sub(e.code === 1 ? 'Konum izni verilmedi. Ayarlardan izin ver.' : 'GPS sinyali bekleniyor…'); }
     function arm(b, txt, fn) { if (b.dataset.a) { fn(); return; } b.dataset.a = 1; var o = b.textContent; b.textContent = txt; setTimeout(function () { if (b.isConnected) { delete b.dataset.a; b.textContent = o; } }, 3000); }
@@ -8236,8 +8258,8 @@
       var P = rec.pts; rec = null; showSum(a, P, true); vib([10, 30, 10]);
     }
     function showSum(a, P, isNew) {
-      sumNew = isNew ? a : null; sel = a; sumP = P; setMode('sum'); $('#trkT').textContent = TY[a.ty].n;
-      sub(hDayLabel(a.t) + ' ' + hTime(a.t) + ' · ' + a.kcal + ' kcal'); showStats(a); acts(); view(); sched();
+      sumNew = isNew ? a : null; sel = a; sumP = P; fitNeed = true; $('#trkLoc').style.display = 'none'; setMode('sum'); $('#trkT').textContent = TY[a.ty].n;
+      sub(hDayLabel(a.t) + ' ' + hTime(a.t) + ' · ' + a.kcal + ' kcal'); showStats(a); acts(); upd();
     }
     function save() {
       var a = sumNew, P = sumP, k = Math.ceil(P.length / 500);
@@ -8281,6 +8303,7 @@
     }
 
     $('#prTrk').onclick = function () { vib(4); openTrk(); };
+    $('#trkLoc').onclick = function () { follow = true; this.style.display = 'none'; if (map && cur) map.easeTo({ center: [cur[1], cur[0]], zoom: Math.max(map.getZoom(), 16), duration: 500 }); vib(4); };
     $('#trkBack').onclick = function () { if (mode === 'idle') closeTrk(); else if (!rec && !sumNew) idle(); };
     $('#trkGo').onclick = function () { begin({ ty: typ, pts: [], dist: 0, ms: 0, seg: Date.now(), t0: Date.now(), n: 0 }); };
     $('#trkTypes').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) { typ = b.dataset.t; paintTypes(); vib(4); } });
@@ -8301,9 +8324,8 @@
       else if (b.id === 'tkS') save();
       else if (b.id === 'tkD') arm(b, sumNew ? 'Atmak için tekrar dokun' : 'Silmek için tekrar dokun', del);
     });
-    document.addEventListener('visibilitychange', function () { if (document.hidden) liveSave(); else if (rec) { lock(); sched(); } });
+    document.addEventListener('visibilitychange', function () { if (document.hidden) liveSave(); else if (rec) lock(); });
     window.addEventListener('pagehide', liveSave);
-    window.addEventListener('resize', sched);
     prSub();
   })();
 
