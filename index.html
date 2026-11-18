@@ -8160,7 +8160,7 @@
     function el(a) { return a.ms + (a.seg ? Date.now() - a.seg : 0); }
 
     /* ----- Harita: MapLibre GL (vektör) + OpenFreeMap; kütüphane ilk kullanımda yüklenir ----- */
-    var ML = 'https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.1/dist/maplibre-gl', ST = { l: 'https://tiles.openfreemap.org/styles/liberty', d: 'https://tiles.openfreemap.org/styles/dark' };
+    var ML = 'https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.1/dist/maplibre-gl', ST = 'https://tiles.openfreemap.org/styles/liberty';
     var map = null, mapBusy = false, curAcc = 0, follow = true, camInit = 0, fitNeed = false, styleK = '';
     function loadML(cb) {
       if (window.maplibregl) { cb(); return; }
@@ -8170,11 +8170,11 @@
       document.head.appendChild(j);
     }
     function ensureMap() {
-      var k = v.classList.contains('dk') ? 'd' : 'l';
-      if (map) { if (k !== styleK) { styleK = k; map.setStyle(ST[k]); } return; }
+      var k = 'l';
+      if (map) { if (k !== styleK) { styleK = k; map.setStyle(ST); } return; }
       if (mapBusy) return; mapBusy = true;
       loadML(function () {
-        map = new maplibregl.Map({ container: 'trkMap', style: ST[k], center: [35, 39], zoom: 5, attributionControl: { compact: true }, fadeDuration: 150 });
+        map = new maplibregl.Map({ container: 'trkMap', style: ST, center: [35, 39], zoom: 5, attributionControl: { compact: true }, fadeDuration: 150 });
         styleK = k;
         map.addControl(new maplibregl.NavigationControl({ showZoom: false, visualizePitch: true }), 'top-right');
         map.on('style.load', function () { addLayers(); upd(); });
@@ -8188,15 +8188,15 @@
       return { type: 'Feature', properties: {}, geometry: { type: 'MultiLineString', coordinates: L.filter(function (a) { return a.length > 1; }).map(smooth) } };
     }
     function addLayers() {
-      var ac = (getComputedStyle(v).getPropertyValue('--accent') || '').trim() || '#ffb938', dk = v.classList.contains('dk'), ly = { 'line-cap': 'round', 'line-join': 'round' };
+      var ac = '#fc4c02', ly = { 'line-cap': 'round', 'line-join': 'round' };
       map.addSource('acc', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
       map.addLayer({ id: 'acc-f', type: 'fill', source: 'acc', paint: { 'fill-color': '#2f7bff', 'fill-opacity': .16 } });
       map.addSource('rt', { type: 'geojson', data: rtData() });
-      map.addLayer({ id: 'rt-c', type: 'line', source: 'rt', layout: ly, paint: { 'line-color': dk ? '#000' : '#fff', 'line-width': 9.5, 'line-opacity': .85 } });
+      map.addLayer({ id: 'rt-c', type: 'line', source: 'rt', layout: ly, paint: { 'line-color': '#ffffff', 'line-width': 9.5, 'line-opacity': .95 } });
       map.addLayer({ id: 'rt-l', type: 'line', source: 'rt', layout: ly, paint: { 'line-color': ac, 'line-width': 5.5 } });
       map.addSource('pts', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
       map.addLayer({ id: 'pt-o', type: 'circle', source: 'pts', paint: { 'circle-radius': 11, 'circle-color': '#ffffff', 'circle-pitch-alignment': 'map' } });
-      map.addLayer({ id: 'pt-i', type: 'circle', source: 'pts', paint: { 'circle-radius': 8, 'circle-color': ['match', ['get', 'k'], 's', '#2fbf71', 'e', '#ff5a4d', '#2f7bff'] } });
+      map.addLayer({ id: 'pt-i', type: 'circle', source: 'pts', paint: { 'circle-radius': 8, 'circle-color': ['match', ['get', 'k'], 's', '#2fbf71', 'e', '#1c1c1e', '#2f7bff'] } });
     }
     function circ(u, r) { var o = [], i, k = Math.PI / 16, dy = r / 111320, dx = r / (111320 * Math.cos(u[0] * Math.PI / 180)); for (i = 0; i <= 32; i++) o.push([u[1] + dx * Math.cos(i * k), u[0] + dy * Math.sin(i * k)]); return { type: 'Feature', properties: {}, geometry: { type: 'Polygon', coordinates: [o] } }; }
     function pf(p, k) { return { type: 'Feature', properties: { k: k }, geometry: { type: 'Point', coordinates: [p[1], p[0]] } }; }
