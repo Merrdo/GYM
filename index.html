@@ -8165,7 +8165,7 @@
 
     /* ----- Harita: MapLibre GL (vektör) + OpenFreeMap; kütüphane ilk kullanımda yüklenir ----- */
     var ML = 'https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.1/dist/maplibre-gl', ST = { l: 'https://tiles.openfreemap.org/styles/liberty', d: 'https://tiles.openfreemap.org/styles/dark' };
-    var map = null, mapBusy = false, follow = true, camInit = 0, fitNeed = false, styleK = '', mU = null, mS = null, mE = null;
+    var map = null, mapBusy = false, curAcc = 0, follow = true, camInit = 0, fitNeed = false, styleK = '', mU = null, mS = null, mE = null;
     function loadML(cb) {
       if (window.maplibregl) { cb(); return; }
       var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = ML + '.css'; document.head.appendChild(l);
@@ -8193,10 +8193,13 @@
     }
     function addLayers() {
       var ac = (getComputedStyle(v).getPropertyValue('--accent') || '').trim() || '#ffb938', dk = v.classList.contains('dk'), ly = { 'line-cap': 'round', 'line-join': 'round' };
+      map.addSource('acc', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+      map.addLayer({ id: 'acc-f', type: 'fill', source: 'acc', paint: { 'fill-color': '#2f7bff', 'fill-opacity': .16 } });
       map.addSource('rt', { type: 'geojson', data: rtData() });
       map.addLayer({ id: 'rt-c', type: 'line', source: 'rt', layout: ly, paint: { 'line-color': dk ? '#000' : '#fff', 'line-width': 9.5, 'line-opacity': .85 } });
       map.addLayer({ id: 'rt-l', type: 'line', source: 'rt', layout: ly, paint: { 'line-color': ac, 'line-width': 5.5 } });
     }
+    function circ(u, r) { var o = [], i, k = Math.PI / 16, dy = r / 111320, dx = r / (111320 * Math.cos(u[0] * Math.PI / 180)); for (i = 0; i <= 32; i++) o.push([u[1] + dx * Math.cos(i * k), u[0] + dy * Math.sin(i * k)]); return { type: 'Feature', properties: {}, geometry: { type: 'Polygon', coordinates: [o] } }; }
     function mk(c) { var e = document.createElement('div'); e.className = c; return new maplibregl.Marker({ element: e }); }
     function upd() {
       ensureMap(); if (!map) return;
@@ -8204,6 +8207,8 @@
       if (!s) return;
       s.setData(rtData());
       var P = mode === 'sum' ? sumP : (rec ? rec.pts : []), end = P[P.length - 1], u = mode === 'rec' ? (cur || end) : null;
+      var sa = null; try { sa = map.getSource('acc'); } catch (e) {}
+      if (sa) sa.setData(u && curAcc > 0 ? circ(u, Math.min(curAcc, 1000)) : { type: 'FeatureCollection', features: [] });
       if (u) { mU = mU || mk('trk-u').addTo(map); mU.setLngLat([u[1], u[0]]); } else if (mU) { mU.remove(); mU = null; }
       if (mode === 'sum' && P.length > 1) { mS = mS || mk('trk-s').addTo(map); mS.setLngLat([P[0][1], P[0][0]]); mE = mE || mk('trk-e').addTo(map); mE.setLngLat([end[1], end[0]]); }
       else { if (mS) { mS.remove(); mS = null; } if (mE) { mE.remove(); mE = null; } }
@@ -8213,7 +8218,7 @@
       }
       if (mode === 'rec' && u && follow) {
         if (camInit) map.easeTo({ center: [u[1], u[0]], duration: 900 });
-        else { camInit = 1; map.resize(); map.jumpTo({ center: [u[1], u[0]], zoom: TY[rec.ty].sp ? 16 : 17 }); }
+        else { camInit = 1; map.resize(); map.jumpTo({ center: [u[1], u[0]], zoom: curAcc > 200 ? 13 : (TY[rec.ty].sp ? 16 : 17) }); }
       }
     }
 
@@ -8232,23 +8237,30 @@
       rec = r; cur = null; sumNew = null; follow = true; camInit = 0; $('#trkLoc').style.display = 'none'; setMode('rec'); $('#trkT').textContent = TY[rec.ty].n; sub('Konum aranıyor…');
       acts(); showStats(rec); upd();
       if (!navigator.geolocation) { sub('Bu cihaz konumu desteklemiyor'); return; }
+      if (!window.isSecureContext) sub('Konum için güvenli bağlantı (https) gerekir');
       wid = navigator.geolocation.watchPosition(onPos, onErr, { enableHighAccuracy: true, maximumAge: 0, timeout: 30000 });
       tm = setInterval(function () { showStats(rec); }, 1000); lock(); vib(10);
     }
     function onPos(p) {
       if (!rec) return;
-      var c = p.coords, a = c.accuracy; sub(rec.seg ? 'GPS ±' + Math.round(a) + ' m' : 'Duraklatıldı');
-      if (a > 35) return;
-      var pt = [+c.latitude.toFixed(5), +c.longitude.toFixed(5), p.timestamp]; cur = pt;
-      if (rec.seg) {
+      var c = p.coords, a = c.accuracy, pt = [+c.latitude.toFixed(5), +c.longitude.toFixed(5), p.timestamp];
+      cur = pt; curAcc = a;   // gösterge her konumda güncellenir; iz yalnızca yeterince doğru noktalarla çizilir
+      sub(!rec.seg ? 'Duraklatıldı' : a > 50 ? 'GPS zayıf (±' + Math.round(a) + ' m) · açık alana çık' : 'GPS ±' + Math.round(a) + ' m');
+      if (rec.seg && a <= 50) {
         var L = rec.pts[rec.pts.length - 1];
-        if (rec.brk) { pt[3] = 1; rec.brk = 0; }
-        else if (L) { var d = hv(L, pt), dt = (pt[2] - L[2]) / 1000; if (d < Math.max(3, a * .4) || (dt > 0 && d / dt > (TY[rec.ty].sp ? 25 : 12))) { upd(); return; } rec.dist += d; }
-        rec.pts.push(pt); if (++rec.n % 5 === 0) liveSave();
+        if (rec.brk) { pt[3] = 1; rec.brk = 0; rec.pts.push(pt); }
+        else if (!L) rec.pts.push(pt);
+        else {
+          var d = hv(L, pt), dt = (pt[2] - L[2]) / 1000;
+          if (d >= Math.max(3, a * .4) && !(dt > 0 && d / dt > (TY[rec.ty].sp ? 25 : 12))) { rec.dist += d; rec.pts.push(pt); }
+        }
+        if (++rec.n % 5 === 0) liveSave();
       }
       upd(); showStats(rec);
     }
-    function onErr(e) { sub(e.code === 1 ? 'Konum izni verilmedi. Ayarlardan izin ver.' : 'GPS sinyali bekleniyor…'); }
+    function onErr(e) {
+      sub(!window.isSecureContext ? 'Konum için güvenli bağlantı (https) gerekir' : e.code === 1 ? 'Konum izni kapalı · Ayarlar › Gizlilik › Konum Servisleri' : e.code === 3 ? 'GPS sinyali bekleniyor…' : 'Konum alınamıyor · cihazın konumu kapalı olabilir');
+    }
     function arm(b, txt, fn) { if (b.dataset.a) { fn(); return; } b.dataset.a = 1; var o = b.textContent; b.textContent = txt; setTimeout(function () { if (b.isConnected) { delete b.dataset.a; b.textContent = o; } }, 3000); }
     function finish() {
       if (rec.seg) { rec.ms += Date.now() - rec.seg; rec.seg = 0; }
