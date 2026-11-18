@@ -1795,7 +1795,8 @@
   #trk.s-rec .trk-m, #trk.s-sum .trk-m, #trk.s-rec .trk-p, #trk.s-sum .trk-p { display: block; }
   #trk:not(.s-idle) #trkIdle, #trk:not(.s-idle) #trkBar { display: none; }
   .trk-m { flex: 1; position: relative; min-height: 0; background: var(--surface2); overflow: hidden; }
-  #trkMap { position: absolute; inset: 0; }
+  #trkMap { position: absolute; inset: 0; touch-action: none; overscroll-behavior: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+  #trkMap .maplibregl-canvas { touch-action: none; outline: none; }
   .trk-sat { position: absolute; left: 12px; top: 12px; z-index: 2; height: 36px; padding: 0 14px 0 11px; border-radius: 18px; display: flex; align-items: center; gap: 7px; background: var(--surface); color: var(--text, inherit); font-weight: 600; font-size: .82rem; box-shadow: 0 2px 10px rgba(0,0,0,.35); transition: transform .15s var(--ease); }
   .trk-sat:active { transform: scale(.95); }
   .trk-sat svg { width: 18px; height: 18px; }
@@ -8164,28 +8165,74 @@
 
     /* ----- Harita: MapLibre GL (vektör) + OpenFreeMap; kütüphane ilk kullanımda yüklenir ----- */
     var ML = 'https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.1/dist/maplibre-gl', ST = 'https://tiles.openfreemap.org/styles/liberty';
-    /* Uydu: Esri görüntü + OpenFreeMap'in VEKTÖR etiketleri (retina'da keskin) + 3B arazi + gökyüzü */
-    var satP = null;
-    function getSat() {
-      if (satP) return satP;
-      satP = fetch(ST).then(function (r) { return r.json(); }).then(function (j) {
-        var src = Object.assign({}, j.sources, {
-          sat: { type: 'raster', tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'], tileSize: 256, maxzoom: 18, attribution: 'Esri, Maxar, Earthstar Geographics' }
-        });
-        var ly = [{ id: 'bg', type: 'background', paint: { 'background-color': '#26301f' } }, { id: 'sat', type: 'raster', source: 'sat', paint: { 'raster-resampling': 'linear', 'raster-fade-duration': 120 } }];
+    /* ----- Stil üretici: OpenFreeMap tabanı + Apple benzeri 3B binalar, renkli POI noktaları, uydu katmanı ----- */
+    var FJ = 'https://tiles.openfreemap.org/styles/fiord', DJ = 'https://tiles.openfreemap.org/styles/dark';
+    var HI = (window.devicePixelRatio || 1) >= 2, stc = {};
+    function isDark() { var m = document.querySelector('meta[name=color-scheme]'); return !m || m.content !== 'light'; }
+    function jget(u) { return fetch(u).then(function (r) { if (!r.ok) throw new Error(u); return r.json(); }); }
+    function okFont(f) { return Array.isArray(f) && f.length && f.every(function (x) { return typeof x === 'string'; }) && !/^(step|case|match|literal|coalesce|interpolate|get)$/.test(f[0]); }
+    function decorate(j, sat, dark) {
+      var vs = null; Object.keys(j.sources).forEach(function (n) { if (!vs && j.sources[n].type === 'vector') vs = n; });
+      var font = ['Noto Sans Regular'];
+      j.layers.some(function (l) { var f = l.type === 'symbol' && l.layout && l.layout['text-font']; if (okFont(f)) { font = f; return true; } });
+      var src = Object.assign({}, j.sources), ly, i;
+      if (sat) {
+        src.sat = { type: 'raster', tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'], tileSize: HI ? 128 : 256, maxzoom: 19, attribution: 'Esri, Maxar, Earthstar Geographics' };
+        ly = [{ id: 'bg', type: 'background', paint: { 'background-color': '#26301f' } }, { id: 'sat', type: 'raster', source: 'sat', paint: { 'raster-resampling': 'linear', 'raster-fade-duration': 200 } }];
         j.layers.forEach(function (l) {
           if (l.type !== 'symbol' || !l.layout || !l.layout['text-field'] || /shield|oneway|poi/i.test(l.id)) return;
           var c = JSON.parse(JSON.stringify(l)); delete c.layout['icon-image']; delete c.layout['icon-size'];
           c.paint = Object.assign({}, c.paint, { 'text-color': '#ffffff', 'text-halo-color': 'rgba(0,0,0,.9)', 'text-halo-width': 1.7, 'text-halo-blur': 0, 'text-opacity': 1 });
           ly.push(c);
         });
-        return { version: 8, glyphs: j.glyphs, sources: src, layers: ly,
-          sky: { 'sky-color': '#7fb4ee', 'horizon-color': '#dbe8f5', 'fog-color': '#dbe8f5', 'sky-horizon-blend': .6, 'horizon-fog-blend': .7, 'fog-ground-blend': .25 } };
-      });
-      satP.catch(function () { satP = null; });
-      return satP;
+      } else {
+        ly = j.layers.filter(function (l) { return l.type !== 'fill-extrusion' && !(l.type === 'symbol' && /poi/i.test(l.id)); });
+        if (vs) {
+          for (i = 0; i < ly.length && ly[i].type !== 'symbol'; i++);
+          ly.splice(i, 0, { id: 'bld3d', type: 'fill-extrusion', source: vs, 'source-layer': 'building', minzoom: 15,
+            filter: ['!=', ['get', 'hide_3d'], true],
+            paint: { 'fill-extrusion-color': dark ? '#55648a' : '#e6e1d8', 'fill-extrusion-opacity': dark ? .95 : .97, 'fill-extrusion-vertical-gradient': true,
+              'fill-extrusion-height': ['interpolate', ['linear'], ['zoom'], 15, 0, 16, ['coalesce', ['get', 'render_height'], 6]],
+              'fill-extrusion-base': ['interpolate', ['linear'], ['zoom'], 15, 0, 16, ['coalesce', ['get', 'render_min_height'], 0]] } });
+        }
+      }
+      if (vs) {
+        var cm = ['match', ['get', 'class'],
+          ['park', 'garden', 'playground', 'pitch', 'stadium', 'sports_centre', 'golf', 'zoo', 'camping'], '#30d158',
+          ['shop', 'grocery', 'clothing_store', 'convenience', 'department_store', 'bakery', 'supermarket', 'mall'], '#ffb020',
+          ['restaurant', 'fast_food', 'cafe', 'bar', 'ice_cream', 'pub', 'food_court', 'biergarten'], '#ff8a3d',
+          ['hospital', 'pharmacy', 'doctor', 'dentist', 'veterinary', 'police', 'fire_station'], '#ff453a',
+          ['school', 'college', 'university', 'library', 'kindergarten', 'bank', 'post', 'town_hall', 'lodging', 'hotel', 'museum', 'attraction'], '#0a84ff',
+          '#98989f'];
+        var rk = ['<=', ['get', 'rank'], ['step', ['zoom'], 6, 16, 25, 17, 70, 18, 400]], dim = dark || sat;
+        ly.push({ id: 'poi-dot', type: 'circle', source: vs, 'source-layer': 'poi', minzoom: 15, filter: ['all', ['has', 'name'], rk],
+          paint: { 'circle-color': cm, 'circle-radius': ['interpolate', ['linear'], ['zoom'], 15, 4, 18, 7], 'circle-stroke-width': 1.6, 'circle-stroke-color': dim ? 'rgba(20,20,24,.9)' : '#ffffff' } });
+        ly.push({ id: 'poi-name', type: 'symbol', source: vs, 'source-layer': 'poi', minzoom: 16, filter: ['all', ['has', 'name'], rk],
+          layout: { 'text-field': ['get', 'name'], 'text-font': font, 'text-size': 12.5, 'text-anchor': 'left', 'text-offset': [.9, 0], 'text-max-width': 7, 'text-optional': true },
+          paint: { 'text-color': cm, 'text-halo-color': dim ? 'rgba(0,0,0,.85)' : 'rgba(255,255,255,.95)', 'text-halo-width': 1.5 } });
+      }
+      return sat ? { version: 8, glyphs: j.glyphs, sprite: j.sprite, sources: src, layers: ly } : Object.assign({}, j, { sources: src, layers: ly });
     }
-    function styleFor(sat) { return sat ? getSat() : Promise.resolve(ST); }
+    function styleFor(sat) {
+      var dark = isDark(), k = (sat ? 's' : 'l') + (dark ? 'd' : '');
+      if (!stc[k]) {
+        var base = (!sat && dark) ? jget(FJ).catch(function () { return jget(DJ); }).catch(function () { return jget(ST); }) : jget(ST);
+        stc[k] = base.then(function (j) { return decorate(j, sat, dark); });
+        stc[k].catch(function () { delete stc[k]; });
+      }
+      return stc[k].then(function (x) { return JSON.parse(JSON.stringify(x)); }).catch(function (e) { if (sat) throw e; return ST; });
+    }
+    function applyEnv() {
+      if (!map) return;
+      try {
+        var d = isDark();
+        map.setMaxZoom(satOn ? (HI ? 18.5 : 19) : 20); map.setMaxPitch(satOn ? 55 : 65);
+        if (map.setSky) map.setSky(satOn
+          ? { 'sky-color': '#6fa8e8', 'horizon-color': '#cfdcea', 'fog-color': '#cfdcea', 'sky-horizon-blend': .5, 'horizon-fog-blend': .65, 'fog-ground-blend': .2 }
+          : d ? { 'sky-color': '#10162a', 'horizon-color': '#2b3556', 'fog-color': '#2b3556', 'sky-horizon-blend': .5, 'horizon-fog-blend': .7, 'fog-ground-blend': .25 }
+              : { 'sky-color': '#9cc4f0', 'horizon-color': '#eef1f4', 'fog-color': '#eef1f4', 'sky-horizon-blend': .5, 'horizon-fog-blend': .7, 'fog-ground-blend': .25 });
+      } catch (e) {}
+    }
     var satOn = ls('antrenman.trkSat') === '1';
     function paintSat() { $('#trkSatT').textContent = satOn ? 'Harita' : 'Uydu'; }
     var map = null, mapBusy = false, curAcc = 0, follow = true, camInit = 0, fitNeed = false, styleK = '';
@@ -8197,21 +8244,23 @@
       document.head.appendChild(j);
     }
     function ensureMap() {
-      var k = satOn ? 's' : 'l';
+      var k = (satOn ? 's' : 'l') + (isDark() ? 'd' : '');
       if (map) {
         if (k !== styleK) {
           styleK = k;
-          styleFor(satOn).then(function (st) { if ((satOn ? 's' : 'l') === k) map.setStyle(st, { diff: false }); }).catch(function () { sub('Uydu görünümü yüklenemedi'); });
+          styleFor(satOn).then(function (st) { if ((satOn ? 's' : 'l') + (isDark() ? 'd' : '') === k) map.setStyle(st, { diff: false }); }).catch(function () { sub('Uydu görünümü yüklenemedi'); });
         }
         return;
       }
       if (mapBusy) return; mapBusy = true;
       loadML(function () {
-        styleFor(satOn).catch(function () { satOn = false; paintSat(); return ST; }).then(function (st) {
-          map = new maplibregl.Map({ container: 'trkMap', style: st, center: [35, 39], zoom: 5, maxPitch: 60, attributionControl: { compact: true }, fadeDuration: 150, pixelRatio: Math.min(window.devicePixelRatio || 1, 3) });
-          styleK = satOn ? 's' : 'l';
+        styleFor(satOn).catch(function () { satOn = false; paintSat(); return styleFor(false); }).then(function (st) {
+          map = new maplibregl.Map({ container: 'trkMap', style: st, center: [35, 39], zoom: 5, maxPitch: 60, attributionControl: { compact: true }, fadeDuration: 120,
+            pixelRatio: Math.min(window.devicePixelRatio || 1, 3), maxTileCacheZoomLevels: 6, renderWorldCopies: false,
+            dragPan: { linearity: .22, deceleration: 2600, maxSpeed: 2000 }, touchPitch: true });
+          styleK = (satOn ? 's' : 'l') + (isDark() ? 'd' : '');
           map.addControl(new maplibregl.NavigationControl({ showZoom: false, visualizePitch: true }), 'top-right');
-          map.on('style.load', function () { addLayers(); upd(); });
+          map.on('style.load', function () { addLayers(); applyEnv(); upd(); });
           map.on('dragstart', function (e) { if (e.originalEvent && mode === 'rec' && follow) { follow = false; $('#trkLoc').style.display = 'grid'; } });
           upd();
         });
